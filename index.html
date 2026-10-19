@@ -49,6 +49,12 @@ button { font: 500 13.5px/1 var(--ui); color: var(--ink); cursor: pointer; }
 #save { border: 0; background: var(--accent); color: var(--accent-ink); border-radius: 8px; padding: 11px 12px; font-weight: 600; }
 button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 #panel-toggle { display: none; }
+#hq-btn { grid-column: 1 / -1; border: 1px solid var(--line); background: var(--chip); color: var(--ink); border-radius: 8px; padding: 10px 12px; font-weight: 600; }
+#hq { position: fixed; inset: 0; display: grid; place-items: center; background: rgba(20, 20, 18, 0.45); z-index: 5; }
+#hq[hidden] { display: none; }
+#hq div { background: var(--sheet); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; width: min(320px, calc(100vw - 32px)); }
+#hq p { margin: 0 0 10px; font-size: 14px; }
+#hq progress { width: 100%; accent-color: var(--accent); }
 #walk-btn { border: 1px solid var(--accent); background: transparent; color: var(--accent); border-radius: 8px; padding: 10px 12px; font-weight: 600; }
 .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
@@ -145,9 +151,12 @@ body.walking #panel, body.walking .title, body.walking #info { display: none; }
   <div class="actions">
     <button id="walk-btn" type="button">Jalan-jalan</button>
     <button id="save" type="button">Simpan gambar</button>
+    <button id="hq-btn" type="button" title="Gambar 2560 px, tepi halus, bayangan lembut">Render kualitas tinggi</button>
   </div>
   <p class="hint">Seret untuk memutar, dua jari untuk geser, cubit untuk zoom. Ketuk ruangan untuk lihat ukurannya.</p>
 </section>
+
+<section id="hq" hidden aria-live="polite"><div><p id="hq-text">Merender gambar kualitas tinggi…</p><progress id="hq-bar" max="1" value="0"></progress></div></section>
 
 <section id="info" hidden aria-live="polite">
   <div><h2 id="info-name"></h2><p id="info-size"></p></div>

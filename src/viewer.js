@@ -6,6 +6,7 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { GTAOPass } from 'three/addons/postprocessing/GTAOPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { FullScreenQuad } from 'three/addons/postprocessing/Pass.js';
 
 // Day: sun high in the east-south-east (Depok sits near the equator); night: moonlight + the house's own lights.
 const SUN_DIR = new THREE.Vector3(17.5, 30, 19).normalize();
@@ -156,7 +157,9 @@ export function createViewer(container) {
   const draw = () => (quality === 'high' ? composer.render() : renderer.render(scene, camera));
   const hooks = [], clock = new THREE.Clock();
   let orbit = true;
+  let busy = false;                                        // true while a high-quality still is being rendered
   renderer.setAnimationLoop(() => {
+    if (busy) return;
     const dt = clock.getDelta();
     for (const f of hooks) f(dt);
     if (orbit) controls.update();
@@ -183,6 +186,67 @@ export function createViewer(container) {
   }
   function clearHighlight() { if (mark) { scene.remove(mark); mark.traverse((o) => o.geometry && o.geometry.dispose()); mark = null; } }
 
+  // High-quality still: render off-screen at up to 2560 px, average many frames with sub-pixel camera jitter
+  // (clean edges) and a slightly moved sun each frame (soft shadow edges), ambient occlusion on, then tone-map once.
+  async function renderHQ({ long = 2560, frames = 32, onProgress = () => {} } = {}) {
+    busy = true;
+    const cw = container.clientWidth, ch = Math.max(container.clientHeight, 1), aspect = cw / ch;
+    const W = aspect >= 1 ? long : Math.round(long * aspect), H = aspect >= 1 ? Math.round(long / aspect) : long;
+    const prevPR = renderer.getPixelRatio();
+    renderer.setPixelRatio(1); renderer.setSize(W, H, false);
+    camera.aspect = W / H; camera.updateProjectionMatrix();
+    const shadowSize = sun.shadow.mapSize.x;
+    if (shadowSize < 4096) { sun.shadow.mapSize.set(4096, 4096); if (sun.shadow.map) { sun.shadow.map.dispose(); sun.shadow.map = null; } }
+
+    const rtA = new THREE.WebGLRenderTarget(W, H, { type: THREE.HalfFloatType, samples: 4 });
+    const chain = new EffectComposer(renderer, rtA);
+    chain.renderToScreen = false; chain.setPixelRatio(1); chain.setSize(W, H);
+    chain.addPass(new RenderPass(scene, camera));
+    const aoHQ = new HouseAO(scene, camera, W, H);
+    aoHQ.updateGtaoMaterial({ radius: 0.55, distanceExponent: 1.2, thickness: 1.2, scale: 1.15, samples: 24, distanceFallOff: 1 });
+    aoHQ.updatePdMaterial({ lumaPhi: 10, depthPhi: 2, normalPhi: 3, radius: 6, rings: 3, samples: 24 });
+    aoHQ.blendIntensity = 0.9;
+    aoHQ.setSceneClipBox(new THREE.Box3(new THREE.Vector3(-8, -1, -6), new THREE.Vector3(18, 12, 24)));
+    chain.addPass(aoHQ);
+
+    const accum = new THREE.WebGLRenderTarget(W, H, { type: THREE.HalfFloatType });
+    const add = new FullScreenQuad(new THREE.ShaderMaterial({
+      uniforms: { tex: { value: null }, w: { value: 1 / frames } },
+      vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }',
+      fragmentShader: 'uniform sampler2D tex; uniform float w; varying vec2 vUv; void main(){ gl_FragColor = vec4(texture2D(tex, vUv).rgb * w, w); }',
+      blending: THREE.CustomBlending, blendSrc: THREE.OneFactor, blendDst: THREE.OneFactor, blendEquation: THREE.AddEquation,
+      blendSrcAlpha: THREE.OneFactor, blendDstAlpha: THREE.OneFactor, depthTest: false, depthWrite: false, transparent: true,
+    }));
+    const prevClear = renderer.getClearAlpha();
+    renderer.setRenderTarget(accum); renderer.setClearColor(0x000000, 0); renderer.clear();
+    const sunBase = sun.position.clone();
+    try {
+      for (let i = 0; i < frames; i++) {
+        camera.setViewOffset(W, H, halton(i + 1, 2) - 0.5, halton(i + 1, 3) - 0.5, W, H);
+        if (!night) sun.position.copy(sunBase).add(new THREE.Vector3(halton(i + 1, 5) - 0.5, 0, halton(i + 1, 7) - 0.5).multiplyScalar(0.9));
+        chain.render();
+        add.material.uniforms.tex.value = chain.readBuffer.texture;
+        renderer.setRenderTarget(accum);
+        const ac = renderer.autoClear; renderer.autoClear = false; add.render(renderer); renderer.autoClear = ac;
+        onProgress(i + 1, frames);
+        await new Promise((r) => setTimeout(r, 0));
+      }
+      camera.clearViewOffset(); sun.position.copy(sunBase);
+      const out = new OutputPass(); out.renderToScreen = true;
+      out.render(renderer, null, accum);
+      const blob = await new Promise((res) => renderer.domElement.toBlob(res, 'image/png'));
+      out.dispose();
+      return blob;
+    } finally {
+      camera.clearViewOffset(); sun.position.copy(sunBase);
+      chain.dispose(); aoHQ.dispose(); rtA.dispose(); accum.dispose(); add.material.dispose(); add.dispose();
+      renderer.setRenderTarget(null); renderer.setClearColor(0x000000, prevClear);
+      if (shadowSize < 4096) { sun.shadow.mapSize.set(shadowSize, shadowSize); if (sun.shadow.map) { sun.shadow.map.dispose(); sun.shadow.map = null; } }
+      renderer.setPixelRatio(prevPR); resize();
+      busy = false;
+    }
+  }
+
   function snapshot() {
     draw();
     return new Promise((res) => renderer.domElement.toBlob(res, 'image/png'));
@@ -191,7 +255,10 @@ export function createViewer(container) {
   setNight(false);
   setQuality('high');
   return { scene, camera, controls, renderer, setModel, setCamera, snapshot, setQuality, setNight,
-    onFrame, setOrbit, highlight, clearHighlight, getModel: () => model };
+    onFrame, setOrbit, highlight, clearHighlight, renderHQ, getModel: () => model };
+}
+
+function halton(i, b) { let f = 1, r = 0; while (i > 0) { f /= b; r += f * (i % b); i = Math.floor(i / b); } return r;
 }
 
 // GTAO, but glass, labels and the sky don't count as occluders.

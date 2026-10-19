@@ -124,6 +124,25 @@ function openInfo(f) {
 function closeInfo() { $('#info').hidden = true; viewer.clearHighlight(); }
 $('#info-close').addEventListener('click', closeInfo);
 
+// ---- high-quality still ----
+$('#hq-btn').addEventListener('click', async () => {
+  const frames = phone ? 16 : 32, long = phone ? 1920 : 2560;
+  $('#hq').hidden = false; $('#hq-bar').max = frames; $('#hq-bar').value = 0;
+  $('#hq-text').textContent = 'Merender gambar kualitas tinggi…';
+  try {
+    const blob = await viewer.renderHQ({ long, frames, onProgress: (i, n) => { $('#hq-bar').value = i; $('#hq-text').textContent = `Merender gambar kualitas tinggi… ${i}/${n}`; } });
+    download(blob, `house3d-hq-${state.view}-${state.camera}${state.night ? '-malam' : ''}.png`);
+  } catch (e) {
+    console.error(e); alert('Render gagal: ' + e.message);
+  } finally { $('#hq').hidden = true; }
+});
+function download(blob, name) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+}
+
 $('#panel-toggle').addEventListener('click', () => {
   const p = $('#panel'); const open = p.dataset.open !== 'true';
   p.dataset.open = String(open); $('#panel-toggle').setAttribute('aria-expanded', String(open));

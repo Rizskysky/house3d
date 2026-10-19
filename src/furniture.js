@@ -477,21 +477,27 @@ export function buildCar(c, M) {
   const L = c.length || 4.75, Wd = c.width || 1.85, H = c.height || 1.8;
   // profile in (z along length, y up); front of the car points to −z (toward the house in the carport)
   const s = new THREE.Shape();
-  const p = [[-L / 2, 0.32], [-L / 2, 0.75], [-L / 2 + 0.25, 0.95], [-L / 2 + 1.0, 1.05], [-L / 2 + 1.75, H - 0.02],
-             [L / 2 - 0.25, H], [L / 2 - 0.05, H - 0.2], [L / 2, 0.85], [L / 2, 0.32]];
+  const p = [[-L / 2, 0.32], [-L / 2, 0.78], [-L / 2 + 0.12, 0.92], [-L / 2 + 1.05, 1.02], [-L / 2 + 1.9, H - 0.05],
+             [L / 2 - 0.3, H - 0.02], [L / 2 - 0.05, H - 0.3], [L / 2, 0.9], [L / 2, 0.32]];
   s.moveTo(p[0][0], p[0][1]); for (const q of p.slice(1)) s.lineTo(q[0], q[1]); s.closePath();
   const body = new THREE.Mesh(new THREE.ExtrudeGeometry(s, { depth: Wd - 0.12, bevelEnabled: true, bevelSize: 0.06, bevelThickness: 0.06, bevelSegments: 3 }), paint);
   body.rotation.y = -Math.PI / 2; body.position.x = (Wd - 0.12) / 2; g.add(body);   // shape x (length) → world z, front at −z
   // side windows (one long glass band each side) and windscreens
   const w = new THREE.Shape();
-  const wp = [[-L / 2 + 1.12, 1.12], [-L / 2 + 1.78, H - 0.1], [L / 2 - 0.3, H - 0.1], [L / 2 - 0.12, 1.12]];
+  const wp = [[-L / 2 + 1.2, 1.1], [-L / 2 + 1.92, H - 0.13], [L / 2 - 0.35, H - 0.13], [L / 2 - 0.14, 1.1]];
   w.moveTo(wp[0][0], wp[0][1]); for (const q of wp.slice(1)) w.lineTo(q[0], q[1]); w.closePath();
   for (const sx of [-1, 1]) {
     const win = new THREE.Mesh(new THREE.ExtrudeGeometry(w, { depth: 0.01, bevelEnabled: false }), glassM);
     win.rotation.y = -Math.PI / 2; win.position.x = sx > 0 ? Wd / 2 + 0.012 : -Wd / 2 - 0.002; g.add(win);
   }
+  for (const sx of [-1, 1]) for (const zc of [-L / 2 + 2.25, L / 2 - 1.05]) {         // B and C pillars split the glass band
+    const pil = new THREE.Mesh(new THREE.BoxGeometry(0.02, H - 1.12, 0.1), paint);
+    pil.position.set(sx * (Wd / 2 + 0.014), (1.1 + H - 0.13) / 2, zc); g.add(pil);
+  }
+  const skirt = new THREE.Mesh(new THREE.BoxGeometry(Wd + 0.01, 0.12, L - 0.2), dark);  // dark lower trim
+  skirt.position.set(0, 0.36, 0); g.add(skirt);
   const ws = new THREE.Mesh(new THREE.BoxGeometry(Wd - 0.22, 0.98, 0.02), glassM);         // windscreen on the sloped front
-  ws.position.set(0, (1.05 + H) / 2 + 0.05, -L / 2 + 1.375 - 0.05); ws.rotation.x = 0.8; g.add(ws);
+  ws.position.set(0, (1.02 + H) / 2 + 0.04, -L / 2 + 1.47 - 0.04); ws.rotation.x = 0.82; g.add(ws);
   const rw = new THREE.Mesh(new THREE.BoxGeometry(Wd - 0.25, 0.5, 0.02), glassM);          // rear window
   rw.position.set(0, H - 0.42, L / 2 + 0.03); rw.rotation.x = -0.07; g.add(rw);
   for (const sx of [-1, 1]) {                                                        // lights

@@ -79,9 +79,11 @@ Opening `type` values: `door` (gap; with `hinge` `start`/`end`, `side` ±1 and o
 - **Simpan gambar** saves the current view as PNG.
 - **Jalan-jalan**: first-person walk. Joystick (phone) or W A S D / arrows (desktop), drag to look, Shift to run; the menu jumps to a room. Walls, doors, furniture and stairs come from the data (fixed glass panes stay solid).
 - Tap or click a room to see its name, size and area.
+- **Render kualitas tinggi**: a 2560 px still (1920 px on phones) averaged over 32 frames (16 on phones) with sub-pixel jitter, a slightly moving sun for soft shadows and ambient occlusion; downloads as PNG.
 - Deep links: `#<view>-<camera>[-malam]`, for example `#lt1-top`, `#all-corner-malam`.
 
 ## Roadmap
 
 - v2 (done): material textures, sky and environment light, ambient occlusion, night mode with lamps, door leaves.
-- v3: glTF furniture and plants, first-person walk mode, optional path-traced high-quality render on desktop.
+- v3 (done): modeled furniture, cars and plants; first-person walk; tap-a-room; high-quality still render.
+- Later: path-traced renders, glTF hero pieces, measured 2D plan export.
