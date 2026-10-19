@@ -26,6 +26,7 @@ index.html          page, controls, import map
 data/house.json     the house: single source of truth
 src/main.js         loads the data, wires the controls, deep links
 src/geometry.js     house.json → three.js meshes (walls, openings, stairs, roofs, furniture, plants)
+src/furniture.js    parametric furniture, fixtures, cars and plants, sized from each item's rect
 src/textures.js     procedural material patterns (wood, plaster, stone, terrazzo, grass…), drawn on canvas
 src/viewer.js       renderer, sky, lights, shadows, ambient occlusion, day/night, camera, PNG snapshot
 ```
@@ -53,13 +54,15 @@ A `rect` is always `[x0, y0, x1, y1]`. In three.js, `x → X`, `z → Y` (up), `
 | `walls` | centerline `a → b`, `kind` (`ext`, `int`, `boundary`, `low`), optional `h`, and `open` | move a wall |
 | `walls[].open` | `at` (m from the wall's lower-coordinate end), `w`, `type`, `sill`, `head` | move or resize a door/window |
 | `stairs` | flights (`dir`, `steps`, `z0`, `z1`), landings, rails | change the stair |
-| `boxes` | furniture and small objects: `rect`, `z` (above the level), `h`, `mat` | move furniture |
+| `boxes` | furniture and small objects: `rect`, `z` (above the level), `h`, `mat`; with `type` (and `face`: `+y`/`-y`/`+x`/`-x`, the side its front points to) it is modeled by `src/furniture.js`, otherwise drawn as a plain box | move furniture |
 | `prayerMats` | center, size, rotation toward qibla (degrees) | |
 | `roofs` | `gable`, `flat` (with optional `posts` and one `skylight` strip), `glass` canopy | change roof pitch or overhang |
 | `lights` | `level`, `at` [x, y], `z`, `kind` (`down`, `pendant`, `up`), `power`, optional `color`; on in **Malam** | add a lamp |
 | `cars`, `plants` | position and size | |
 | `context.houses` | simple neighbor blocks (toggle "Tetangga") | |
 | `cameras` | camera presets (`pos`, `target`, optional `fov`) shown as buttons | add a viewpoint |
+
+Furniture `type` values: `bed`, `wardrobe`, `openWardrobe`, `kitchen` (with worktop, optional `backsplash`), `wallCabinet`, `lowCabinet`, `tvConsole`, `tv`, `sofa`, `coffeeTable`, `diningTable`, `diningChair`, `desk`, `monitor`, `officeChair`, `shelf`, `bench`, `toilet`, `vanity`, `fridge`, `cooktop`, `sink`, `hood`, `microwave`, `riceCooker`, `nightstand`, `sideTable`, `loungeChair`, `washer`, `laundrySink`, `dryingRack`, `mihrab`, `faucet`, `steppingStone`, `railing`.
 
 Opening `type` values: `door` (gap; with `hinge` `start`/`end`, `side` ±1 and optional `leaf` material it gets a leaf drawn open 90°), `slide` (`panel`: `glass` or a material), `bifold` (`panels`, `out`: +1/−1 side the folded stack swings to), `sliding` (`leaves`: list of `fixed`/`slide` panes; fixed panes on the outer track toward `out`, slide panes drawn open behind the neighbouring fixed pane), `swing` (`leaves`: list of `fixed`/`swing` panes; swing leaves are drawn opened 180° toward `out`, flat against the neighbouring fixed pane), `window` (glass between `sill` and `head`; a `note` containing "kisi" adds wooden louvers), `gate` (wooden slats), `opening` (plain gap).
 

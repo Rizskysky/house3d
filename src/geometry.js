@@ -6,6 +6,8 @@ import * as THREE from 'three';
 
 const bust = new URL(import.meta.url).search;
 const { patternTexture } = await import(`./textures.js${bust}`);
+const { buildItem, buildCar, buildPlant } = await import(`./furniture.js${bust}`);
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 
 const CUT_HEIGHT = 1.3;          // wall height when "Potong dinding" is on
 const THICK = { ext: 0.15, int: 0.1, boundary: 0.15, low: 0.12, roster: 0.12 };
@@ -82,6 +84,16 @@ export function buildHouse(data, state) {
   for (const b of data.boxes || []) {
     if (!show.level(b.level)) continue;
     const z = lz(b.level) + (b.z || 0);
+    if (b.type) {                                          // modeled furniture (src/furniture.js)
+      let item = b;
+      if (show.cutLevel === b.level) {                     // cut view: trim tall pieces like the walls
+        if ((b.z || 0) >= CUT_HEIGHT) continue;
+        if ((b.z || 0) + (b.h ?? 0.75) > CUT_HEIGHT) item = { ...b, h: CUT_HEIGHT - (b.z || 0) };
+      }
+      const g = buildItem(item, lz(b.level), M, meterUV);
+      if (g) root.add(g);
+      continue;
+    }
     const mat = M(b.mat, b.opacity);
     if (b.legs) { tableLegs(b.rect, z, b.h, mat, box); continue; }
     if (b.slats) { slatWall(b.rect, z, b.h, mat, box); continue; }
@@ -145,12 +157,14 @@ export function buildHouse(data, state) {
   }
 
   // ---------- cars, plants, context ----------
-  for (const c of data.cars || []) car(c, add);
-  for (const p of data.plants || []) plant(p, M, add);
+  for (const c of data.cars || []) root.add(buildCar(c, M));
+  for (const p of data.plants || []) root.add(buildPlant(p, M));
   if (state.context) for (const h of (data.context && data.context.houses) || []) {
     box(h.rect, 0, h.eave, M('neighbor'));
     gable({ rect: h.rect, eave: h.eave, rise: h.rise, over: { side: 0.4, end: 0.5 } }, M('neighborRoof'), null, M('neighbor'), root, add, box);
   }
+
+  mergeStatic(root);
 
   // ---------- labels ----------
   root.userData.labels = [];
@@ -178,6 +192,33 @@ function visibility(state) {
       return true;
     },
   };
+}
+
+// Thousands of small parts → one mesh per material, so phones draw a few dozen meshes instead of thousands.
+function mergeStatic(root) {
+  root.updateMatrixWorld(true);
+  const buckets = new Map(), done = [];
+  root.traverse((o) => {
+    if (!o.isMesh || o.userData.lamp || Array.isArray(o.material)) return;
+    let geo = o.geometry.index ? o.geometry.toNonIndexed() : o.geometry.clone();
+    for (const name of Object.keys(geo.attributes)) if (!['position', 'normal', 'uv'].includes(name)) geo.deleteAttribute(name);
+    if (!geo.attributes.uv) geo.setAttribute('uv', new THREE.BufferAttribute(new Float32Array(geo.attributes.position.count * 2), 2));
+    geo.clearGroups();
+    geo.applyMatrix4(o.matrixWorld);
+    const key = `${o.material.uuid}|${o.castShadow}|${o.receiveShadow}`;
+    if (!buckets.has(key)) buckets.set(key, { mat: o.material, cast: o.castShadow, recv: o.receiveShadow, list: [] });
+    buckets.get(key).list.push(geo);
+    done.push(o);
+  });
+  for (const o of done) { o.parent.remove(o); o.geometry.dispose(); }
+  for (const b of buckets.values()) {
+    const merged = mergeGeometries(b.list, false);
+    b.list.forEach((x) => x.dispose());
+    if (!merged) continue;
+    const mesh = new THREE.Mesh(merged, b.mat);
+    mesh.castShadow = b.cast; mesh.receiveShadow = b.recv;
+    root.add(mesh);
+  }
 }
 
 // one shared glowing material for light fixtures; the viewer turns its glow on at night
@@ -430,50 +471,6 @@ function glassCanopy(r, M, box) {
   box([x1 - f, y0, x1, y1], r.z - 0.04, 0.06, blk);
   for (let y = y0 + (r.frame || 1); y < y1 - 0.2; y += (r.frame || 1)) box([x0, y - 0.025, x1, y + 0.025], r.z - 0.04, 0.05, blk);
   for (let x = x0 + 0.2; x < x1 - 0.1; x += 0.22) box([x, y0 + 0.05, x + 0.04, y1 - 0.05], r.z - 0.09, 0.04, M('teak'));
-}
-
-function car(c, add) {
-  const g = new THREE.Group();
-  const paint = new THREE.MeshStandardMaterial({ color: c.color, roughness: 0.35, metalness: 0.5 });
-  const glassM = new THREE.MeshStandardMaterial({ color: '#2B3036', roughness: 0.1, metalness: 0.3 });
-  const tyre = new THREE.MeshStandardMaterial({ color: '#1C1C1C', roughness: 0.9 });
-  const body = new THREE.Mesh(new THREE.BoxGeometry(1.82, 0.72, 4.6), paint); body.position.y = 0.62; g.add(body);
-  const cab = new THREE.Mesh(new THREE.BoxGeometry(1.62, 0.55, 2.5), glassM); cab.position.set(0, 1.25, -0.25); g.add(cab);
-  const roof = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.06, 2.3), paint); roof.position.set(0, 1.55, -0.3); g.add(roof);
-  for (const [x, z] of [[-0.82, 1.45], [0.82, 1.45], [-0.82, -1.5], [0.82, -1.5]]) {
-    const w = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.34, 0.24, 18), tyre);
-    w.rotation.z = Math.PI / 2; w.position.set(x, 0.34, z); g.add(w);
-  }
-  g.position.set(c.c[0], 0, c.c[1]);
-  g.traverse((o) => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
-  add(g);
-}
-
-function plant(p, M, add) {
-  const g = new THREE.Group();
-  if (p.type === 'tree') {
-    const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.1, p.h * 0.62, 8), M('trunk'));
-    trunk.position.y = p.h * 0.31; g.add(trunk);
-    const blobs = [[0, p.h * 0.78, 0, 1], [p.r * 0.45, p.h * 0.72, p.r * 0.2, 0.7], [-p.r * 0.4, p.h * 0.74, -p.r * 0.25, 0.75], [0.1, p.h * 0.92, -0.1, 0.6]];
-    blobs.forEach(([x, y, z, s], i) => {
-      const m = new THREE.Mesh(new THREE.IcosahedronGeometry(p.r * s, 1), M(i % 2 ? 'leafLight' : 'leaf'));
-      m.position.set(x, y, z); m.scale.y = 0.75; g.add(m);
-    });
-  } else if (p.type === 'bamboo') {
-    for (let i = 0; i < 4; i++) {
-      const hh = 2.4 + (i % 3) * 0.35, dx = (i - 1.5) * 0.06, dz = ((i * 37) % 5 - 2) * 0.04;
-      const s = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.022, hh, 6), M('leafLight'));
-      s.position.set(dx, hh / 2, dz); g.add(s);
-      const lf = new THREE.Mesh(new THREE.IcosahedronGeometry(0.22, 0), M('leaf'));
-      lf.position.set(dx, hh - 0.25, dz); lf.scale.set(0.8, 1.6, 0.8); g.add(lf);
-    }
-  } else {
-    const m = new THREE.Mesh(new THREE.IcosahedronGeometry(p.r || 0.3, 1), M('leaf'));
-    m.position.y = (p.r || 0.3) * 0.75; m.scale.y = 0.8; g.add(m);
-  }
-  g.position.set(p.c[0], 0, p.c[1]);
-  g.traverse((o) => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
-  add(g);
 }
 
 function label(text) {
