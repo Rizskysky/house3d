@@ -103,6 +103,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 </section>
 
 <p id="status" hidden></p>
-<script type="module" src="src/main.js"></script>
+<!-- the query string makes every visit load the latest code instead of a cached copy -->
+<script type="module">import(`./src/main.js?v=${Date.now()}`);</script>
 </body>
 </html>

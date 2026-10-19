@@ -1,6 +1,8 @@
 // Entry point: loads data/house.json, wires the controls, rebuilds the model on every change.
-import { createViewer } from './viewer.js';
-import { buildHouse } from './geometry.js';
+// Same cache-busting query as index.html, so a new deploy never mixes fresh data with stale code.
+const bust = new URL(import.meta.url).search;
+const { createViewer } = await import(`./viewer.js${bust}`);
+const { buildHouse } = await import(`./geometry.js${bust}`);
 
 const $ = (s) => document.querySelector(s);
 const state = { view: 'all', roof: true, cut: true, labels: false, context: true, camera: 'iso' };
