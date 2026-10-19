@@ -1,7 +1,7 @@
 {
   "meta": {
     "name": "House 3D",
-    "version": "v1 · 2026-10-19",
+    "version": "v1.1 · 2026-10-19 · KM tamu pindah, lemari genkan",
     "units": "meter",
     "coords": "x = barat→timur (0 = sisi jalan samping), y = belakang→depan (0 = batas belakang, 14 = jalan depan), z = tinggi. Semua rect = [x0, y0, x1, y1].",
     "lb": { "lt1": 56, "lt2": 49, "total": 105 }
@@ -66,7 +66,9 @@
 
     { "level": "lt1", "rect": [0, 1.5, 2, 4], "mat": "oakFloor", "name": "Studio" },
     { "level": "lt1", "rect": [0, 4, 2, 7], "mat": "tile", "name": "Tangga" },
-    { "level": "lt1", "rect": [1, 5.5, 2, 7], "mat": "terrazzo", "name": "KM tamu" },
+    { "level": "lt1", "rect": [1, 4, 2, 5.5], "mat": "terrazzo", "name": "KM tamu" },
+    { "level": "lt1", "rect": [1, 5.5, 2, 7], "mat": "oakFloor", "name": "Lemari genkan" },
+    { "level": "lt1", "rect": [0, 4, 1, 5], "mat": "oakFloor" },
     { "level": "lt1", "rect": [0, 7, 2, 8.5], "mat": "stone", "name": "Genkan" },
     { "level": "lt1", "rect": [2, 1.5, 7, 4.5], "mat": "tile", "name": "Dapur + makan" },
     { "level": "lt1", "rect": [2, 4.5, 7, 8.5], "mat": "tile", "name": "Ruang keluarga" },
@@ -119,12 +121,14 @@
 
     { "level": "lt1", "kind": "int", "a": [2, 1.5], "b": [2, 8.5],
       "open": [ { "at": 1.55, "w": 0.8, "type": "door", "head": 2.1, "note": "P3 studio" },
+                { "at": 3.1, "w": 0.7, "type": "door", "head": 2.1, "note": "P4 KM tamu (dari sisi ruang keluarga/dapur)" },
                 { "at": 5.65, "w": 1.2, "type": "slide", "head": 2.2, "panel": "oak", "note": "P2 genkan" } ] },
     { "level": "lt1", "kind": "int", "a": [0, 4], "b": [2, 4] },
     { "level": "lt1", "kind": "int", "a": [1, 5.5], "b": [2, 5.5] },
     { "level": "lt1", "kind": "int", "a": [1, 5.5], "b": [1, 7] },
     { "level": "lt1", "kind": "int", "a": [1, 7], "b": [2, 7],
-      "open": [ { "at": 0.15, "w": 0.75, "type": "door", "head": 2.1, "note": "P4 KM tamu" } ] },
+      "open": [ { "at": 0.08, "w": 0.84, "type": "slide", "head": 2.4, "panel": "oak", "note": "pintu lemari genkan" } ] },
+    { "level": "lt1", "kind": "int", "a": [1, 4], "b": [1, 5.5], "h": 1.8, "note": "dinding KM tamu / gudang bawah bordes" },
 
     { "level": "lt2", "kind": "ext", "a": [0, 1.5], "b": [0, 8.5],
       "open": [ { "at": 1.0, "w": 0.5, "type": "window", "sill": 0.9, "head": 2.3, "note": "J6 kamar 2, kisi" },
@@ -167,7 +171,7 @@
         { "rect": [1.0, 4.07, 2.0, 4.97], "dir": "+x", "steps": 5, "z0": 1.8, "z1": 3.45 }
       ],
       "landings": [ { "rect": [0.07, 4.07, 1.0, 5.0], "z": 1.8 } ],
-      "rails": [ { "rect": [0.95, 5.0, 1.0, 7.0], "z0": 0, "h": 2.8 } ] }
+      "rails": [] }
   ],
 
   "boxes": [
@@ -198,7 +202,9 @@
     { "level": "lt1", "rect": [3.2, 5.3, 5.2, 7.7], "z": 0.02, "h": 0.01, "mat": "jute", "note": "karpet" },
     { "level": "lt1", "rect": [3.95, 6.1, 4.65, 6.8], "h": 0.38, "mat": "teak", "note": "meja kopi" },
     { "level": "lt1", "rect": [0.08, 7.1, 0.42, 8.35], "h": 0.9, "mat": "oak", "note": "lemari sepatu" },
-    { "level": "lt1", "rect": [1.4, 6.3, 1.8, 6.85], "h": 0.42, "mat": "white", "note": "kloset" },
+    { "level": "lt1", "rect": [1.5, 4.1, 1.95, 4.5], "h": 0.42, "mat": "white", "note": "kloset KM tamu (menghadap selatan, tidak menghadap kiblat)" },
+    { "level": "lt1", "rect": [1.05, 5.05, 1.5, 5.45], "h": 0.85, "mat": "white", "note": "wastafel KM tamu" },
+    { "level": "lt1", "rect": [1.05, 5.58, 1.95, 6.9], "h": 2.4, "mat": "oak", "note": "lemari genkan setinggi plafon" },
 
     { "level": "site", "rect": [5.0, 0.12, 5.6, 0.72], "h": 0.85, "mat": "white", "note": "mesin cuci" },
     { "level": "site", "rect": [5.75, 0.12, 6.3, 0.62], "h": 0.85, "mat": "white", "note": "bak cuci" },
