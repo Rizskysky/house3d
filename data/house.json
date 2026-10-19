@@ -1,7 +1,7 @@
 {
   "meta": {
     "name": "House 3D",
-    "version": "v1.2 · 2026-10-19 · dapur bentuk L tanpa island",
+    "version": "v1.3 · 2026-10-19 · roster di depan taman",
     "units": "meter",
     "coords": "x = barat→timur (0 = sisi jalan samping), y = belakang→depan (0 = batas belakang, 14 = jalan depan), z = tinggi. Semua rect = [x0, y0, x1, y1].",
     "lb": { "lt1": 56, "lt2": 49, "total": 105 }
@@ -116,6 +116,7 @@
       "open": [ { "at": 0.2, "w": 1.0, "type": "gate", "head": 2.1, "note": "PK1 pintu servis" } ] },
     { "level": "site", "kind": "boundary", "a": [9, 3.5], "b": [9, 8.5], "h": 3.0 },
     { "level": "site", "kind": "boundary", "a": [9, 8.5], "b": [9, 14], "h": 1.0 },
+    { "level": "site", "kind": "roster", "a": [7, 8.5], "b": [9, 8.5], "h": 2.8, "plinth": 0.6, "note": "roster taman: dinding masif 60 cm + roster sampai bawah kanopi carport" },
     { "level": "site", "kind": "low", "a": [0, 14], "b": [2, 14], "h": 0.45 },
     { "level": "site", "kind": "low", "a": [0, 8.5], "b": [0, 14], "h": 0.45 },
 
@@ -299,7 +300,8 @@
     "iso":     { "label": "Isometrik", "pos": [-8.5, 15.5, 21.5], "target": [4.6, 1.2, 6.8] },
     "top":     { "label": "Atas",      "pos": [4.5, 26, 7.3], "target": [4.5, 0, 7.1], "fov": 40 },
     "corner":  { "label": "Tikungan",  "pos": [-5.5, 1.65, 19.5], "target": [4.5, 3.4, 6.5] },
-    "garden":  { "label": "Taman",     "pos": [8.15, 1.65, 9.4], "target": [7.75, 1.25, 1.5] },
+    "garden":  { "label": "Taman",     "pos": [8.4, 1.6, 8.3], "target": [7.6, 1.2, 2.0] },
+    "carport": { "label": "Carport",   "pos": [8.55, 1.6, 10.6], "target": [7.4, 1.4, 8.5], "fov": 70 },
     "living":  { "label": "R. keluarga", "pos": [2.9, 1.55, 8.15], "target": [6.6, 1.1, 3.0] }
   }
 }

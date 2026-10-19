@@ -5,7 +5,7 @@
 import * as THREE from 'three';
 
 const CUT_HEIGHT = 1.3;          // wall height when "Potong dinding" is on
-const THICK = { ext: 0.15, int: 0.1, boundary: 0.15, low: 0.12 };
+const THICK = { ext: 0.15, int: 0.1, boundary: 0.15, low: 0.12, roster: 0.12 };
 
 export function buildHouse(data, state) {
   const root = new THREE.Group();
@@ -44,8 +44,9 @@ export function buildHouse(data, state) {
   for (const w of data.walls || []) {
     if (!show.level(w.level)) continue;
     const full = w.h || (L[w.level] && L[w.level].h) || 2.4;
-    const cut = show.cutLevel === w.level && w.kind !== 'boundary' && w.kind !== 'low';
+    const cut = show.cutLevel === w.level && w.kind !== 'boundary' && w.kind !== 'low' && w.kind !== 'roster';
     const h = cut ? Math.min(full, CUT_HEIGHT) : full;
+    if (w.kind === 'roster') { rosterWall(w, lz(w.level), h, M, box); continue; }
     buildWall(w, lz(w.level), h, THICK[w.kind] || 0.15, wallMat(w.kind), M, box);
   }
   function wallMat(kind) {
@@ -218,6 +219,23 @@ function buildWall(w, z, h, t, mat, M, box) {
     cur = p1;
   }
   seg(cur, len, 0, h);
+}
+
+// Breeze-block (roster) screen: solid plinth, a grid of open blocks above, a top beam.
+function rosterWall(w, z, h, M, box) {
+  const horiz = Math.abs(w.a[1] - w.b[1]) < 1e-6;
+  const s0 = horiz ? Math.min(w.a[0], w.b[0]) : Math.min(w.a[1], w.b[1]);
+  const len = horiz ? Math.abs(w.b[0] - w.a[0]) : Math.abs(w.b[1] - w.a[1]);
+  const c = horiz ? w.a[1] : w.a[0], t = THICK.roster;
+  const rect = (p0, p1) => horiz ? [s0 + p0, c - t / 2, s0 + p1, c + t / 2] : [c - t / 2, s0 + p0, c + t / 2, s0 + p1];
+  const plinth = w.plinth ?? 0.6, beam = 0.15, cell = w.cell ?? 0.2, bar = 0.07;
+  const mat = M(w.mat || 'plasterExt'), base = M(w.baseMat || 'plasterExt');
+  box(rect(0, len), z, plinth, base);
+  box(rect(0, len), z + h - beam, beam, mat);
+  const top = h - beam;
+  for (let p = 0; p <= len - bar + 1e-6; p += cell) box(rect(p, Math.min(p + bar, len)), z + plinth, top - plinth, mat);
+  box(rect(len - bar, len), z + plinth, top - plinth, mat);
+  for (let zz = plinth + cell; zz < top - bar / 2; zz += cell) box(rect(0, len), z + zz - bar / 2, bar, mat);
 }
 
 function tableLegs(rect, z, h, mat, box) {
