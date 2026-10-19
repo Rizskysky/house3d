@@ -202,6 +202,26 @@ function buildWall(w, z, h, t, mat, M, box) {
     } else if (o.type === 'gate') {
       for (let p = p0 + 0.04; p < p1 - 0.02; p += 0.13) box(rect(p, p + 0.07, 0.05), z, top, M('teak'));
       box(rect(p0, p1, 0.06), z + top - 0.05, 0.05, M('black'));
+    } else if (o.type === 'sliding') {
+      // aluminium sliding: 'fixed' panes on the outer track, 'slide' panes on the inner track,
+      // drawn open, i.e. parked behind the neighbouring fixed pane.
+      const kinds = o.leaves || ['fixed', 'slide'], n = kinds.length, pw = o.w / n, out = o.out || 1;
+      const frame = M('black'), glass = M('glass'), outer = out * 0.03, inner = -out * 0.03;
+      box(rect(p0, p1, 0.1), z + top - 0.05, 0.05, frame);
+      box(rect(p0, p1, 0.1), z, 0.03, frame);
+      const pane = (r0, r1, off) => {
+        box(rect(r0, r1, 0.02, off), z + 0.03, top - 0.08, glass);
+        for (const e of [r0, r1 - 0.04]) box(rect(e, e + 0.04, 0.04, off), z + 0.03, top - 0.08, frame);
+        box(rect(r0, r1, 0.04, off), z + 0.03, 0.05, frame);
+        box(rect(r0, r1, 0.04, off), z + top - 0.1, 0.05, frame);
+      };
+      kinds.forEach((k, i) => {
+        const q0 = p0 + i * pw;
+        if (k === 'fixed') { pane(q0, q0 + pw, outer); return; }
+        const j = kinds[i - 1] === 'fixed' ? i - 1 : i + 1;
+        const lap = (i > j ? 1 : -1) * 0.04;                    // overlaps the fixed pane's edge (interlock)
+        pane(p0 + j * pw + lap, p0 + (j + 1) * pw + lap, inner);
+      });
     } else if (o.type === 'swing') {
       // aluminium glass doors: 'fixed' panes stay in the wall plane; 'swing' leaves are drawn
       // opened 180° outward, lying flat in front of the neighbouring fixed pane (hooked open).

@@ -1,7 +1,7 @@
 {
   "meta": {
     "name": "House 3D",
-    "version": "v1.6 · 2026-10-19 · bifold diganti pintu kaca aluminium ayun keluar",
+    "version": "v1.7 · 2026-10-19 · pintu taman: sliding aluminium, daun geser di sisi dalam",
     "units": "meter",
     "coords": "x = barat→timur (0 = sisi jalan samping), y = belakang→depan (0 = batas belakang, 14 = jalan depan), z = tinggi. Semua rect = [x0, y0, x1, y1].",
     "lb": { "lt1": 56, "lt2": 49, "total": 105 }
@@ -101,7 +101,7 @@
                 { "at": 3.3, "w": 1.5, "type": "window", "sill": 1.15, "head": 1.95, "note": "J1 dapur, di atas sink (dinding di atas kompor untuk cooker hood)" },
                 { "at": 6.0, "w": 0.85, "type": "door", "head": 2.1, "note": "P5 dapur → service yard" } ] },
     { "level": "lt1", "kind": "ext", "a": [7, 1.5], "b": [7, 8.5],
-      "open": [ { "at": 3.3, "w": 3.4, "type": "swing", "head": 2.4, "leaves": ["fixed", "swing", "swing", "fixed"], "out": 1, "note": "PL1 kusen aluminium slim frame hitam doff + kaca polos: 2 daun engsel biasa ayun keluar di tengah (buka 180°, dikait ke kaca mati, pegangan tarik panjang vertikal) + 2 kaca mati" } ] },
+      "open": [ { "at": 3.3, "w": 3.4, "type": "sliding", "head": 2.4, "leaves": ["fixed", "slide", "slide", "fixed"], "out": 1, "note": "PL1 sliding aluminium slim frame hitam doff + kaca polos: 2 kaca mati di rel luar, 2 daun geser di rel dalam (parkir di belakang kaca mati); ambang dengan lubang buang air, kunci tanam + grendel" } ] },
     { "level": "lt1", "kind": "ext", "a": [0, 8.5], "b": [7, 8.5],
       "open": [ { "at": 0.3, "w": 0.9, "type": "door", "head": 2.2, "note": "P1 pintu utama" } ] },
     { "level": "lt1", "kind": "ext", "a": [7, 0], "b": [7, 1.5], "h": 3.2,

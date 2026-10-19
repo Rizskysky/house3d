@@ -59,7 +59,7 @@ A `rect` is always `[x0, y0, x1, y1]`. In three.js, `x → X`, `z → Y` (up), `
 | `context.houses` | simple neighbor blocks (toggle "Tetangga") | |
 | `cameras` | camera presets (`pos`, `target`, optional `fov`) shown as buttons | add a viewpoint |
 
-Opening `type` values: `door` (gap), `slide` (`panel`: `glass` or a material), `bifold` (`panels`, `out`: +1/−1 side the folded stack swings to), `swing` (`leaves`: list of `fixed`/`swing` panes; swing leaves are drawn opened 180° toward `out`, flat against the neighbouring fixed pane), `window` (glass between `sill` and `head`; a `note` containing "kisi" adds wooden louvers), `gate` (wooden slats), `opening` (plain gap).
+Opening `type` values: `door` (gap), `slide` (`panel`: `glass` or a material), `bifold` (`panels`, `out`: +1/−1 side the folded stack swings to), `sliding` (`leaves`: list of `fixed`/`slide` panes; fixed panes on the outer track toward `out`, slide panes drawn open behind the neighbouring fixed pane), `swing` (`leaves`: list of `fixed`/`swing` panes; swing leaves are drawn opened 180° toward `out`, flat against the neighbouring fixed pane), `window` (glass between `sill` and `head`; a `note` containing "kisi" adds wooden louvers), `gate` (wooden slats), `opening` (plain gap).
 
 ## Viewer controls
 
