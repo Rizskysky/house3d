@@ -1,7 +1,7 @@
 {
   "meta": {
     "name": "House 3D",
-    "version": "v1.1 · 2026-10-19 · KM tamu pindah, lemari genkan",
+    "version": "v1.2 · 2026-10-19 · dapur bentuk L tanpa island",
     "units": "meter",
     "coords": "x = barat→timur (0 = sisi jalan samping), y = belakang→depan (0 = batas belakang, 14 = jalan depan), z = tinggi. Semua rect = [x0, y0, x1, y1].",
     "lb": { "lt1": 56, "lt2": 49, "total": 105 }
@@ -98,7 +98,7 @@
       "open": [ { "at": 1.0, "w": 0.5, "type": "window", "sill": 0.9, "head": 2.3, "note": "J3 studio, kisi" } ] },
     { "level": "lt1", "kind": "ext", "a": [0, 1.5], "b": [7, 1.5],
       "open": [ { "at": 0.4, "w": 1.2, "type": "window", "sill": 1.0, "head": 2.2, "note": "J2 studio" },
-                { "at": 2.3, "w": 2.4, "type": "window", "sill": 1.15, "head": 1.95, "note": "J1 dapur" },
+                { "at": 3.3, "w": 1.5, "type": "window", "sill": 1.15, "head": 1.95, "note": "J1 dapur, di atas sink (dinding di atas kompor untuk cooker hood)" },
                 { "at": 6.0, "w": 0.85, "type": "door", "head": 2.1, "note": "P5 dapur → service yard" } ] },
     { "level": "lt1", "kind": "ext", "a": [7, 1.5], "b": [7, 8.5],
       "open": [ { "at": 3.3, "w": 3.4, "type": "bifold", "head": 2.4, "panels": 4, "out": 1, "note": "PL1 bifold, terbuka penuh" } ] },
@@ -183,8 +183,11 @@
     { "level": "lt1", "rect": [2.1, 1.62, 5.0, 2.22], "h": 0.88, "mat": "oak", "note": "kitchen set" },
     { "level": "lt1", "rect": [2.1, 1.62, 5.0, 2.24], "z": 0.88, "h": 0.04, "mat": "white" },
     { "level": "lt1", "rect": [5.05, 1.62, 5.75, 2.25], "h": 1.8, "mat": "white", "note": "kulkas" },
-    { "level": "lt1", "rect": [2.35, 3.25, 3.65, 3.95], "h": 0.88, "mat": "oak", "note": "island" },
-    { "level": "lt1", "rect": [2.35, 3.25, 3.65, 3.95], "z": 0.88, "h": 0.04, "mat": "white" },
+    { "level": "lt1", "rect": [2.1, 2.24, 2.72, 2.95], "h": 0.88, "mat": "oak", "note": "kitchen set kaki L (sepanjang dinding studio, berhenti sebelum pintu studio)" },
+    { "level": "lt1", "rect": [2.1, 2.22, 2.74, 2.95], "z": 0.88, "h": 0.04, "mat": "white" },
+    { "level": "lt1", "rect": [2.45, 1.7, 3.1, 2.15], "z": 0.92, "h": 0.02, "mat": "black", "note": "kompor 2 tungku" },
+    { "level": "lt1", "rect": [2.4, 1.62, 3.15, 2.1], "z": 1.75, "h": 0.45, "mat": "steel", "note": "cooker hood" },
+    { "level": "lt1", "rect": [3.95, 1.75, 4.7, 2.12], "z": 0.915, "h": 0.01, "mat": "steel", "note": "sink, di bawah jendela" },
     { "level": "lt1", "rect": [5.2, 3.3, 6.4, 4.15], "z": 0.72, "h": 0.04, "mat": "teak", "note": "meja makan" },
     { "level": "lt1", "rect": [5.25, 3.35, 6.35, 4.1], "h": 0.72, "mat": "teak", "legs": true },
     { "level": "lt1", "rect": [5.35, 2.92, 5.75, 3.28], "h": 0.46, "mat": "rattan", "chair": "+y" },
