@@ -252,7 +252,9 @@ function slatWall(rect, z, h, mat, box) {
 }
 function chairBack(b, z, mat, box) {
   const [x0, y0, x1, y1] = norm(b.rect);
-  const r = b.chair === '+y' ? [x0, y0, x1, y0 + 0.05] : [x0, y1 - 0.05, x1, y1];
+  // back sits opposite the direction the chair faces
+  const r = { '+y': [x0, y0, x1, y0 + 0.05], '-y': [x0, y1 - 0.05, x1, y1],
+              '+x': [x0, y0, x0 + 0.05, y1], '-x': [x1 - 0.05, y0, x1, y1] }[b.chair];
   box(r, z + b.h, 0.4, mat);
 }
 function deckLines(rect, ztop, mat, box) {

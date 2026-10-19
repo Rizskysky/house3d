@@ -1,7 +1,7 @@
 {
   "meta": {
     "name": "House 3D",
-    "version": "v1.4 · 2026-10-19 · cek akses: pintu & tangga bebas halangan",
+    "version": "v1.5 · 2026-10-19 · meja makan ke tengah, pantry di sisi musholla",
     "units": "meter",
     "coords": "x = barat→timur (0 = sisi jalan samping), y = belakang→depan (0 = batas belakang, 14 = jalan depan), z = tinggi. Semua rect = [x0, y0, x1, y1].",
     "lb": { "lt1": 56, "lt2": 49, "total": 105 }
@@ -189,12 +189,16 @@
     { "level": "lt1", "rect": [2.45, 1.7, 3.1, 2.15], "z": 0.92, "h": 0.02, "mat": "black", "note": "kompor 2 tungku" },
     { "level": "lt1", "rect": [2.4, 1.62, 3.15, 2.1], "z": 1.75, "h": 0.45, "mat": "steel", "note": "cooker hood" },
     { "level": "lt1", "rect": [3.95, 1.75, 4.7, 2.12], "z": 0.915, "h": 0.01, "mat": "steel", "note": "sink, di bawah jendela" },
-    { "level": "lt1", "rect": [5.2, 3.3, 6.4, 4.15], "z": 0.72, "h": 0.04, "mat": "teak", "note": "meja makan" },
-    { "level": "lt1", "rect": [5.25, 3.35, 6.35, 4.1], "h": 0.72, "mat": "teak", "legs": true },
-    { "level": "lt1", "rect": [5.35, 2.92, 5.75, 3.28], "h": 0.46, "mat": "rattan", "chair": "+y" },
-    { "level": "lt1", "rect": [5.9, 2.92, 6.3, 3.28], "h": 0.46, "mat": "rattan", "chair": "+y" },
-    { "level": "lt1", "rect": [5.35, 4.17, 5.75, 4.53], "h": 0.46, "mat": "rattan", "chair": "-y" },
-    { "level": "lt1", "rect": [5.9, 4.17, 6.3, 4.53], "h": 0.46, "mat": "rattan", "chair": "-y" },
+    { "level": "lt1", "rect": [3.45, 3.25, 4.3, 4.45], "z": 0.72, "h": 0.04, "mat": "teak", "note": "meja makan di tengah, memanjang dapur → ruang keluarga" },
+    { "level": "lt1", "rect": [3.5, 3.3, 4.25, 4.4], "h": 0.72, "mat": "teak", "legs": true },
+    { "level": "lt1", "rect": [3.03, 3.45, 3.39, 3.85], "h": 0.46, "mat": "rattan", "chair": "+x" },
+    { "level": "lt1", "rect": [3.03, 3.95, 3.39, 4.35], "h": 0.46, "mat": "rattan", "chair": "+x" },
+    { "level": "lt1", "rect": [4.36, 3.45, 4.72, 3.85], "h": 0.46, "mat": "rattan", "chair": "-x" },
+    { "level": "lt1", "rect": [4.36, 3.95, 4.72, 4.35], "h": 0.46, "mat": "rattan", "chair": "-x" },
+    { "level": "lt1", "rect": [6.4, 2.45, 6.9, 3.25], "h": 2.4, "mat": "oak", "note": "pantry: lemari tinggi (beras, galon, sapu)" },
+    { "level": "lt1", "rect": [6.4, 3.25, 6.9, 4.45], "h": 0.88, "mat": "oak", "note": "pantry: kabinet bawah" },
+    { "level": "lt1", "rect": [6.38, 3.25, 6.92, 4.45], "z": 0.88, "h": 0.04, "mat": "white", "note": "pantry: meja untuk microwave, rice cooker, dispenser" },
+    { "level": "lt1", "rect": [6.55, 3.25, 6.9, 4.45], "z": 1.5, "h": 0.9, "mat": "oak", "note": "pantry: kabinet atas" },
 
     { "level": "lt1", "rect": [2.1, 5.5, 2.18, 7.05], "h": 2.7, "mat": "teak", "slats": true, "note": "dinding kisi TV" },
     { "level": "lt1", "rect": [2.18, 5.6, 2.6, 6.95], "h": 0.42, "mat": "oak", "note": "rak TV" },
