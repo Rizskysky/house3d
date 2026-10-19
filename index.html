@@ -84,11 +84,12 @@ body.walking #panel, body.walking .title, body.walking #info { display: none; }
 #status { position: fixed; inset: auto 16px 50% 16px; text-align: center; background: var(--sheet); border: 1px solid var(--line);
   border-radius: 10px; padding: 14px; font-size: 14px; }
 .hint { font-size: 11.5px; color: var(--muted); margin: 0; }
+.doclink { font-size: 12.5px; font-weight: 600; color: var(--accent); text-decoration: none; }
 
 @media (max-width: 640px) {
   #panel { left: max(12px, env(safe-area-inset-left)); right: max(12px, env(safe-area-inset-right)); width: auto;
     bottom: max(12px, env(safe-area-inset-bottom)); padding: 10px 12px 12px; gap: 10px; }
-  #panel[data-open="false"] .group, #panel[data-open="false"] .pair, #panel[data-open="false"] .actions, #panel[data-open="false"] .hint { display: none; }
+  #panel[data-open="false"] .group, #panel[data-open="false"] .pair, #panel[data-open="false"] .actions, #panel[data-open="false"] .doclink, #panel[data-open="false"] .hint { display: none; }
   #panel-toggle { display: flex; justify-content: space-between; align-items: center; border: 0; background: transparent; padding: 2px 0; font-weight: 600; }
   .title { right: max(16px, env(safe-area-inset-right)); max-width: none; }
 }
@@ -154,6 +155,7 @@ body.walking #panel, body.walking .title, body.walking #info { display: none; }
     <button id="hq-btn" type="button" title="Gambar 2560 px, tepi halus, bayangan lembut">Render kualitas tinggi</button>
   </div>
   <p class="hint">Seret untuk memutar, dua jari untuk geser, cubit untuk zoom. Ketuk ruangan untuk lihat ukurannya.</p>
+  <a class="doclink" href="docs.html">Dokumen kontraktor (denah, pintu & jendela, catatan) →</a>
 </section>
 
 <section id="hq" hidden aria-live="polite"><div><p id="hq-text">Merender gambar kualitas tinggi…</p><progress id="hq-bar" max="1" value="0"></progress></div></section>

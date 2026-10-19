@@ -132,7 +132,7 @@
     {"level": "lt2", "kind": "ext", "a": [0, 1.5], "b": [0, 8.5], "open": [{"at": 1.0, "w": 0.5, "type": "window", "sill": 0.9, "head": 2.3, "note": "J6 kamar 2, kisi"}, {"at": 5.85, "w": 0.8, "type": "window", "sill": 1.6, "head": 2.1, "note": "J11 KM dalam"}]},
     {"level": "lt2", "kind": "ext", "a": [0, 1.5], "b": [7, 1.5], "open": [{"at": 0.6, "w": 2.0, "type": "window", "sill": 0.9, "head": 2.2, "note": "J5 kamar 2"}, {"at": 4.2, "w": 2.1, "type": "window", "sill": 0.9, "head": 2.2, "note": "J7 kamar 3"}]},
     {"level": "lt2", "kind": "ext", "a": [7, 1.5], "b": [7, 8.5], "open": [{"at": 0.6, "w": 1.5, "type": "window", "sill": 0.9, "head": 2.2, "note": "J8 kamar 3"}, {"at": 2.85, "w": 0.8, "type": "window", "sill": 1.6, "head": 2.1, "note": "J9 KM"}, {"at": 4.5, "w": 1.6, "type": "window", "sill": 0.9, "head": 2.2, "note": "J10 kamar utama"}]},
-    {"level": "lt2", "kind": "ext", "a": [0, 8.5], "b": [7, 8.5], "open": [{"at": 0.7, "w": 0.6, "type": "window", "sill": 1.6, "head": 2.2, "note": "jendela kisi KM dalam"}, {"at": 3.7, "w": 3.1, "type": "slide", "head": 2.4, "panel": "glass", "note": "PG3 balkon"}]},
+    {"level": "lt2", "kind": "ext", "a": [0, 8.5], "b": [7, 8.5], "open": [{"at": 0.7, "w": 0.6, "type": "window", "sill": 1.6, "head": 2.2, "note": "J12 KM dalam, kisi"}, {"at": 3.7, "w": 3.1, "type": "slide", "head": 2.4, "panel": "glass", "note": "PG3 balkon"}]},
     {"level": "lt2", "kind": "int", "a": [3.5, 1.5], "b": [3.5, 4]},
     {"level": "lt2", "kind": "int", "a": [0, 4], "b": [7, 4], "open": [{"at": 2.55, "w": 0.8, "type": "door", "head": 2.1, "note": "P6 kamar 2", "hinge": "end", "side": -1}, {"at": 3.6, "w": 0.8, "type": "door", "head": 2.1, "note": "P7 kamar 3", "hinge": "start", "side": -1}]},
     {"level": "lt2", "kind": "int", "a": [5, 4], "b": [5, 5.5], "open": [{"at": 0.75, "w": 0.7, "type": "door", "head": 2.1, "note": "P8 KM", "hinge": "end", "side": 1, "leaf": "white"}]},
@@ -226,6 +226,17 @@
     {"c": [7.62, 1.9], "size": [1.0, 0.6], "rot": 25},
     {"c": [8.45, 2.05], "size": [1.0, 0.6], "rot": 25},
     {"c": [8.12, 2.72], "size": [1.0, 0.6], "rot": 25}
+  ],
+
+  "notes": [
+    {"topic": "Lantai & level", "items": ["Lantai dalam rumah ±10–15 cm lebih tinggi dari deck dan taman, supaya air hujan tidak masuk lewat pintu taman.", "Deck kayu menerus dari ujung roster sampai area wudhu, lalu ke pintu musholla (P11)."]},
+    {"topic": "Pintu taman PL1", "items": ["Sliding aluminium slim frame hitam doff, kaca polos: 2 kaca mati di rel luar, 2 daun geser di rel dalam.", "Ambang bawah dengan lubang buang air (weep hole); kunci tanam + grendel atas-bawah."]},
+    {"topic": "Musholla", "items": ["Dak beton biasa dengan skylight 1 garis ±30 cm menempel dinding kiblat: kaca laminated + film penahan panas, bibir beton keliling.", "Dinding kiblat sisi service yard: roster 12–20 cm (lubang miring/bertingkat) + kaca mati buram di sisi dalam; sisi dapur tetap masif dengan panel mihrab.", "Arah kiblat: sajadah diputar ±25° dari dinding barat (cek ulang dengan kompas kiblat di lokasi)."]},
+    {"topic": "Taman & privasi", "items": ["Roster di depan taman: dinding masif 60 cm + roster sampai bawah kanopi carport (±2,8 m).", "Kanopi kaca di atas deck: tempered laminated dengan rangka hitam dan kisi kayu di bawahnya."]},
+    {"topic": "Dapur", "items": ["Kitchen set bentuk L tanpa island; jendela J1 di atas sink, dinding di atas kompor untuk cooker hood + cerobong.", "Meja makan di tengah (85 × 120 cm, 4 kursi) sekaligus meja bantu masak; lemari pantry tinggi + kabinet bawah/atas di dinding musholla."]},
+    {"topic": "Kamar mandi & pintu", "items": ["KM tamu: daun pintu P4 buka keluar (ruangnya 1 × 1,5 m); kloset menghadap selatan, tidak menghadap kiblat.", "Semua pintu engsel dicek bebas halangan 80 cm di depannya; arah buka sesuai denah."]},
+    {"topic": "Kamar", "items": ["Kamar 2 dan 3: kasur 160 × 200, lemari 150 cm; sandaran kasur 85 cm supaya tidak menutup ambang jendela samping (90 cm)."]},
+    {"topic": "Tangga", "items": ["Tangga melayang seperempat putaran: 9 anak tangga + bordes + 5 anak tangga; railing di sisi void lantai 2."]}
   ],
 
   "lights": [

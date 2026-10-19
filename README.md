@@ -28,6 +28,8 @@ src/main.js         loads the data, wires the controls, deep links
 src/geometry.js     house.json → three.js meshes (walls, openings, stairs, roofs, furniture, plants)
 src/furniture.js    parametric furniture, fixtures, cars and plants, sized from each item's rect
 src/textures.js     procedural material patterns (wood, plaster, stone, terrazzo, grass…), drawn on canvas
+src/plan.js         2D floor plans (SVG, 1:100 on A4) and the door/window schedule
+docs.html           contractor documents: summary, plans, door/window schedule, technical notes, renders (print to PDF)
 src/walk.js         first-person walk: collision and floor heights from house.json
 src/viewer.js       renderer, sky, lights, shadows, ambient occlusion, day/night, camera, PNG snapshot
 ```
@@ -62,6 +64,7 @@ A `rect` is always `[x0, y0, x1, y1]`. In three.js, `x → X`, `z → Y` (up), `
 | `lights` | `level`, `at` [x, y], `z`, `kind` (`down`, `pendant`, `up`), `power`, optional `color`; on in **Malam** | add a lamp |
 | `cars`, `plants` | position and size | |
 | `context.houses` | simple neighbor blocks (toggle "Tetangga") | |
+| `notes` | technical notes for the contractor, grouped by `topic`, shown in docs.html | add a note |
 | `cameras` | camera presets (`pos`, `target`, optional `fov`) shown as buttons | add a viewpoint |
 | `walk` | walk-mode `start` and `spots` (`label`, `level`, `at` [x, y], `yaw` in degrees, 0 = facing the back, −90 = facing east) | add a place to jump to |
 
@@ -86,4 +89,5 @@ Opening `type` values: `door` (gap; with `hinge` `start`/`end`, `side` ±1 and o
 
 - v2 (done): material textures, sky and environment light, ambient occlusion, night mode with lamps, door leaves.
 - v3 (done): modeled furniture, cars and plants; first-person walk; tap-a-room; high-quality still render.
-- Later: path-traced renders, glTF hero pieces, measured 2D plan export.
+- Documents (done): docs.html draws the plans and schedule from the same data. The renders in docs/img are still images: re-render them after a design change.
+- Later: path-traced renders, glTF hero pieces.

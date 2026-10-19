@@ -8,7 +8,7 @@ import { GTAOPass } from 'three/addons/postprocessing/GTAOPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { FullScreenQuad } from 'three/addons/postprocessing/Pass.js';
 
-// Day: sun high in the east-south-east (Depok sits near the equator); night: moonlight + the house's own lights.
+// Day: sun high in the east-south-east (the site sits near the equator); night: moonlight + the house's own lights.
 const SUN_DIR = new THREE.Vector3(17.5, 30, 19).normalize();
 const DAY = { fog: '#DCE4EA', hemi: ['#F5EFE4', '#AE9876', 0.5], sun: ['#FFF0D8', 2.9], exposure: 0.82, env: true };
 const NIGHT = { fog: '#0D1420', hemi: ['#3A4A66', '#141414', 0.22], sun: ['#9FB4D8', 0.3], exposure: 1.0, env: false };
