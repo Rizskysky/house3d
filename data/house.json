@@ -1,0 +1,296 @@
+{
+  "meta": {
+    "name": "House 3D",
+    "version": "v1 · 2026-10-19",
+    "units": "meter",
+    "coords": "x = barat→timur (0 = sisi jalan samping), y = belakang→depan (0 = batas belakang, 14 = jalan depan), z = tinggi. Semua rect = [x0, y0, x1, y1].",
+    "lb": { "lt1": 56, "lt2": 49, "total": 105 }
+  },
+
+  "lot": { "w": 9, "d": 14 },
+
+  "levels": {
+    "site": { "z": 0, "name": "Tapak" },
+    "lt1": { "z": 0, "h": 3.3, "name": "Lantai 1" },
+    "lt2": { "z": 3.45, "h": 3.0, "name": "Lantai 2" }
+  },
+
+  "materials": {
+    "plaster":    { "color": "#EEE9DF", "rough": 0.92 },
+    "plasterExt": { "color": "#F3EFE7", "rough": 0.9 },
+    "boundary":   { "color": "#CCC7BD", "rough": 0.95 },
+    "andesite":   { "color": "#6F706B", "rough": 0.95 },
+    "tile":       { "color": "#E2DACB", "rough": 0.6 },
+    "oakFloor":   { "color": "#D8BE93", "rough": 0.7 },
+    "oak":        { "color": "#C9A877", "rough": 0.65 },
+    "teak":       { "color": "#98673B", "rough": 0.6 },
+    "linen":      { "color": "#E6DED0", "rough": 0.95 },
+    "white":      { "color": "#F6F4EF", "rough": 0.4 },
+    "black":      { "color": "#262624", "rough": 0.5, "metal": 0.4 },
+    "steel":      { "color": "#BFC2C4", "rough": 0.4, "metal": 0.6 },
+    "glass":      { "color": "#A9CDE4", "rough": 0.05, "opacity": 0.28 },
+    "stone":      { "color": "#A7A9A3", "rough": 0.85 },
+    "grass":      { "color": "#86B05E", "rough": 1 },
+    "gravel":     { "color": "#ECEAE4", "rough": 1 },
+    "concrete":   { "color": "#C8C5BD", "rough": 0.95 },
+    "road":       { "color": "#6E6D6A", "rough": 1 },
+    "curb":       { "color": "#BDBAB2", "rough": 0.95 },
+    "charcoal":   { "color": "#3B3B39", "rough": 0.55, "metal": 0.3 },
+    "terrazzo":   { "color": "#CFCFCA", "rough": 0.5 },
+    "mihrab":     { "color": "#2F6B4F", "rough": 0.7 },
+    "prayerMat":  { "color": "#5E7F5A", "rough": 1 },
+    "jute":       { "color": "#C9AE82", "rough": 1 },
+    "rattan":     { "color": "#C8A36A", "rough": 0.9 },
+    "neighbor":   { "color": "#E9E7E2", "rough": 0.95 },
+    "neighborRoof": { "color": "#5C5E61", "rough": 0.7 },
+    "leaf":       { "color": "#6E9E48", "rough": 1 },
+    "leafLight":  { "color": "#8DBA5E", "rough": 1 },
+    "trunk":      { "color": "#6B5640", "rough": 1 }
+  },
+
+  "ground": [
+    { "rect": [-60, -60, 70, 70], "z": -0.06, "h": 0.04, "mat": "grass" },
+    { "rect": [-7, -24, -0.3, 26], "z": -0.05, "h": 0.04, "mat": "road" },
+    { "rect": [-7, 14.3, 40, 21], "z": -0.05, "h": 0.04, "mat": "road" },
+    { "rect": [-0.3, -24, 0, 14.3], "z": -0.05, "h": 0.12, "mat": "curb" },
+    { "rect": [0, 14, 40, 14.3], "z": -0.05, "h": 0.12, "mat": "curb" }
+  ],
+
+  "floors": [
+    { "level": "site", "rect": [0, 0, 7, 1.5], "mat": "concrete", "name": "Service yard" },
+    { "level": "site", "rect": [2, 8.5, 9, 14], "mat": "concrete", "name": "Carport" },
+    { "level": "site", "rect": [0, 8.5, 2, 14], "mat": "grass", "name": "Taman pojok" },
+    { "level": "site", "rect": [0.25, 8.75, 1.85, 13.8], "mat": "gravel", "z": 0.02 },
+    { "level": "site", "rect": [7, 3.5, 9, 4.5], "mat": "stone", "name": "Wudhu" },
+    { "level": "site", "rect": [7, 4.5, 9, 8.5], "mat": "grass", "name": "Taman" },
+
+    { "level": "lt1", "rect": [0, 1.5, 2, 4], "mat": "oakFloor", "name": "Studio" },
+    { "level": "lt1", "rect": [0, 4, 2, 7], "mat": "tile", "name": "Tangga" },
+    { "level": "lt1", "rect": [1, 5.5, 2, 7], "mat": "terrazzo", "name": "KM tamu" },
+    { "level": "lt1", "rect": [0, 7, 2, 8.5], "mat": "stone", "name": "Genkan" },
+    { "level": "lt1", "rect": [2, 1.5, 7, 4.5], "mat": "tile", "name": "Dapur + makan" },
+    { "level": "lt1", "rect": [2, 4.5, 7, 8.5], "mat": "tile", "name": "Ruang keluarga" },
+    { "level": "lt1", "rect": [7, 0, 9, 3.5], "mat": "oakFloor", "name": "Musholla" },
+
+    { "level": "lt2", "rect": [0, 1.5, 3.5, 4], "mat": "oakFloor", "name": "Kamar 2" },
+    { "level": "lt2", "rect": [3.5, 1.5, 7, 4], "mat": "oakFloor", "name": "Kamar 3" },
+    { "level": "lt2", "rect": [2, 4, 5, 5.5], "mat": "oakFloor", "name": "Hall" },
+    { "level": "lt2", "rect": [5, 4, 7, 5.5], "mat": "terrazzo", "name": "KM" },
+    { "level": "lt2", "rect": [1, 5.5, 2, 7], "mat": "oakFloor" },
+    { "level": "lt2", "rect": [2, 5.5, 3.5, 8.5], "mat": "oakFloor", "name": "Walk-in" },
+    { "level": "lt2", "rect": [3.5, 5.5, 7, 8.5], "mat": "oakFloor", "name": "Kamar utama" },
+    { "level": "lt2", "rect": [0, 7, 2, 8.5], "mat": "terrazzo", "name": "KM dalam" },
+    { "level": "lt2", "rect": [3.5, 8.5, 7, 9.5], "mat": "stone", "name": "Balkon" }
+  ],
+
+  "slabs": [
+    { "level": "lt2", "rect": [2, 1.5, 7, 8.5], "z": 3.3, "t": 0.15 },
+    { "level": "lt2", "rect": [0, 1.5, 2, 4.05], "z": 3.3, "t": 0.15 },
+    { "level": "lt2", "rect": [1, 5.0, 2, 8.5], "z": 3.3, "t": 0.15 },
+    { "level": "lt2", "rect": [0, 7, 1, 8.5], "z": 3.3, "t": 0.15 },
+    { "level": "lt2", "rect": [3.5, 8.5, 7, 9.5], "z": 3.3, "t": 0.15 }
+  ],
+
+  "walls": [
+    { "level": "lt1", "kind": "ext", "a": [0, 1.5], "b": [0, 8.5],
+      "open": [ { "at": 1.0, "w": 0.5, "type": "window", "sill": 0.9, "head": 2.3, "note": "J3 studio, kisi" } ] },
+    { "level": "lt1", "kind": "ext", "a": [0, 1.5], "b": [7, 1.5],
+      "open": [ { "at": 0.4, "w": 1.2, "type": "window", "sill": 1.0, "head": 2.2, "note": "J2 studio" },
+                { "at": 2.3, "w": 2.4, "type": "window", "sill": 1.15, "head": 1.95, "note": "J1 dapur" },
+                { "at": 6.0, "w": 0.85, "type": "door", "head": 2.1, "note": "P5 dapur → service yard" } ] },
+    { "level": "lt1", "kind": "ext", "a": [7, 1.5], "b": [7, 8.5],
+      "open": [ { "at": 3.3, "w": 3.4, "type": "bifold", "head": 2.4, "panels": 4, "out": 1, "note": "PL1 bifold, terbuka penuh" } ] },
+    { "level": "lt1", "kind": "ext", "a": [0, 8.5], "b": [7, 8.5],
+      "open": [ { "at": 0.3, "w": 0.9, "type": "door", "head": 2.2, "note": "P1 pintu utama" } ] },
+    { "level": "lt1", "kind": "ext", "a": [7, 0], "b": [7, 1.5], "h": 3.2,
+      "open": [ { "at": 0.25, "w": 0.8, "type": "window", "sill": 2.0, "head": 2.5, "note": "J4 jendela atas musholla" } ] },
+    { "level": "lt1", "kind": "ext", "a": [7, 3.5], "b": [9, 3.5], "h": 3.2,
+      "open": [ { "at": 0.3, "w": 0.9, "type": "slide", "head": 2.1, "panel": "oak", "note": "P11 musholla" } ] },
+    { "level": "lt1", "kind": "ext", "a": [9, 0], "b": [9, 3.5], "h": 3.2 },
+    { "level": "lt1", "kind": "ext", "a": [7, 0], "b": [9, 0], "h": 3.2 },
+
+    { "level": "site", "kind": "boundary", "a": [0, 0], "b": [7, 0], "h": 2.4 },
+    { "level": "site", "kind": "boundary", "a": [0, 0], "b": [0, 1.5], "h": 2.4,
+      "open": [ { "at": 0.2, "w": 1.0, "type": "gate", "head": 2.1, "note": "PK1 pintu servis" } ] },
+    { "level": "site", "kind": "boundary", "a": [9, 3.5], "b": [9, 8.5], "h": 3.0 },
+    { "level": "site", "kind": "boundary", "a": [9, 8.5], "b": [9, 14], "h": 1.0 },
+    { "level": "site", "kind": "low", "a": [0, 14], "b": [2, 14], "h": 0.45 },
+    { "level": "site", "kind": "low", "a": [0, 8.5], "b": [0, 14], "h": 0.45 },
+
+    { "level": "lt1", "kind": "int", "a": [2, 1.5], "b": [2, 8.5],
+      "open": [ { "at": 1.55, "w": 0.8, "type": "door", "head": 2.1, "note": "P3 studio" },
+                { "at": 5.65, "w": 1.2, "type": "slide", "head": 2.2, "panel": "oak", "note": "P2 genkan" } ] },
+    { "level": "lt1", "kind": "int", "a": [0, 4], "b": [2, 4] },
+    { "level": "lt1", "kind": "int", "a": [1, 5.5], "b": [2, 5.5] },
+    { "level": "lt1", "kind": "int", "a": [1, 5.5], "b": [1, 7] },
+    { "level": "lt1", "kind": "int", "a": [1, 7], "b": [2, 7],
+      "open": [ { "at": 0.15, "w": 0.75, "type": "door", "head": 2.1, "note": "P4 KM tamu" } ] },
+
+    { "level": "lt2", "kind": "ext", "a": [0, 1.5], "b": [0, 8.5],
+      "open": [ { "at": 1.0, "w": 0.5, "type": "window", "sill": 0.9, "head": 2.3, "note": "J6 kamar 2, kisi" },
+                { "at": 5.85, "w": 0.8, "type": "window", "sill": 1.6, "head": 2.1, "note": "J11 KM dalam" } ] },
+    { "level": "lt2", "kind": "ext", "a": [0, 1.5], "b": [7, 1.5],
+      "open": [ { "at": 0.6, "w": 2.0, "type": "window", "sill": 0.9, "head": 2.2, "note": "J5 kamar 2" },
+                { "at": 4.2, "w": 2.1, "type": "window", "sill": 0.9, "head": 2.2, "note": "J7 kamar 3" } ] },
+    { "level": "lt2", "kind": "ext", "a": [7, 1.5], "b": [7, 8.5],
+      "open": [ { "at": 0.6, "w": 1.5, "type": "window", "sill": 0.9, "head": 2.2, "note": "J8 kamar 3" },
+                { "at": 2.85, "w": 0.8, "type": "window", "sill": 1.6, "head": 2.1, "note": "J9 KM" },
+                { "at": 4.5, "w": 1.6, "type": "window", "sill": 0.9, "head": 2.2, "note": "J10 kamar utama" } ] },
+    { "level": "lt2", "kind": "ext", "a": [0, 8.5], "b": [7, 8.5],
+      "open": [ { "at": 0.7, "w": 0.6, "type": "window", "sill": 1.6, "head": 2.2, "note": "jendela kisi KM dalam" },
+                { "at": 3.7, "w": 3.1, "type": "slide", "head": 2.4, "panel": "glass", "note": "PG3 balkon" } ] },
+    { "level": "lt2", "kind": "int", "a": [3.5, 1.5], "b": [3.5, 4] },
+    { "level": "lt2", "kind": "int", "a": [0, 4], "b": [7, 4],
+      "open": [ { "at": 2.2, "w": 0.8, "type": "door", "head": 2.1, "note": "P6 kamar 2" },
+                { "at": 4.0, "w": 0.85, "type": "door", "head": 2.1, "note": "P7 kamar 3" } ] },
+    { "level": "lt2", "kind": "int", "a": [5, 4], "b": [5, 5.5],
+      "open": [ { "at": 0.2, "w": 0.7, "type": "door", "head": 2.1, "note": "P8 KM" } ] },
+    { "level": "lt2", "kind": "int", "a": [2, 5.5], "b": [7, 5.5],
+      "open": [ { "at": 1.7, "w": 0.8, "type": "door", "head": 2.1, "note": "P9 kamar utama" } ] },
+    { "level": "lt2", "kind": "int", "a": [3.5, 5.5], "b": [3.5, 8.5],
+      "open": [ { "at": 2.0, "w": 0.8, "type": "opening", "head": 2.1, "note": "B1 ke walk-in" } ] },
+    { "level": "lt2", "kind": "int", "a": [2, 5.5], "b": [2, 8.5],
+      "open": [ { "at": 1.8, "w": 0.7, "type": "door", "head": 2.1, "note": "P10 KM dalam" } ] },
+    { "level": "lt2", "kind": "int", "a": [0, 7], "b": [2, 7] },
+    { "level": "lt2", "kind": "int", "a": [1, 5.5], "b": [1, 7] },
+    { "level": "lt2", "kind": "int", "a": [1, 5.5], "b": [2, 5.5] }
+  ],
+
+  "facadeBands": [
+    { "note": "dasar andesit dinding barat", "rect": [-0.11, 1.5, -0.07, 8.5], "z": 0, "h": 1.0, "mat": "andesite" }
+  ],
+
+  "stairs": [
+    { "level": "lt1", "mat": "oak",
+      "flights": [
+        { "rect": [0.07, 5.0, 0.97, 7.0], "dir": "-y", "steps": 9, "z0": 0, "z1": 1.8 },
+        { "rect": [1.0, 4.07, 2.0, 4.97], "dir": "+x", "steps": 5, "z0": 1.8, "z1": 3.45 }
+      ],
+      "landings": [ { "rect": [0.07, 4.07, 1.0, 5.0], "z": 1.8 } ],
+      "rails": [ { "rect": [0.95, 5.0, 1.0, 7.0], "z0": 0, "h": 2.8 } ] }
+  ],
+
+  "boxes": [
+    { "level": "lt1", "rect": [0.12, 1.62, 1.52, 2.22], "h": 0.75, "mat": "oak", "note": "meja studio" },
+    { "level": "lt1", "rect": [0.5, 2.0, 0.56, 2.5], "z": 0.75, "h": 0.36, "mat": "black", "note": "monitor" },
+    { "level": "lt1", "rect": [0.55, 2.45, 1.0, 2.9], "h": 0.45, "mat": "charcoal", "note": "kursi" },
+    { "level": "lt1", "rect": [0.12, 3.3, 0.5, 3.9], "h": 1.8, "mat": "oak", "note": "rak" },
+
+    { "level": "lt1", "rect": [2.1, 1.62, 5.0, 2.22], "h": 0.88, "mat": "oak", "note": "kitchen set" },
+    { "level": "lt1", "rect": [2.1, 1.62, 5.0, 2.24], "z": 0.88, "h": 0.04, "mat": "white" },
+    { "level": "lt1", "rect": [5.05, 1.62, 5.75, 2.25], "h": 1.8, "mat": "white", "note": "kulkas" },
+    { "level": "lt1", "rect": [2.35, 3.25, 3.65, 3.95], "h": 0.88, "mat": "oak", "note": "island" },
+    { "level": "lt1", "rect": [2.35, 3.25, 3.65, 3.95], "z": 0.88, "h": 0.04, "mat": "white" },
+    { "level": "lt1", "rect": [5.2, 3.3, 6.4, 4.15], "z": 0.72, "h": 0.04, "mat": "teak", "note": "meja makan" },
+    { "level": "lt1", "rect": [5.25, 3.35, 6.35, 4.1], "h": 0.72, "mat": "teak", "legs": true },
+    { "level": "lt1", "rect": [5.35, 2.92, 5.75, 3.28], "h": 0.46, "mat": "rattan", "chair": "+y" },
+    { "level": "lt1", "rect": [5.9, 2.92, 6.3, 3.28], "h": 0.46, "mat": "rattan", "chair": "+y" },
+    { "level": "lt1", "rect": [5.35, 4.17, 5.75, 4.53], "h": 0.46, "mat": "rattan", "chair": "-y" },
+    { "level": "lt1", "rect": [5.9, 4.17, 6.3, 4.53], "h": 0.46, "mat": "rattan", "chair": "-y" },
+
+    { "level": "lt1", "rect": [2.1, 5.5, 2.18, 7.6], "h": 2.7, "mat": "teak", "slats": true, "note": "dinding kisi TV" },
+    { "level": "lt1", "rect": [2.18, 5.7, 2.6, 7.4], "h": 0.42, "mat": "oak", "note": "rak TV" },
+    { "level": "lt1", "rect": [2.2, 6.0, 2.25, 7.1], "z": 0.9, "h": 0.62, "mat": "black", "note": "TV" },
+    { "level": "lt1", "rect": [5.3, 5.4, 6.1, 7.6], "h": 0.42, "mat": "linen", "note": "sofa" },
+    { "level": "lt1", "rect": [5.85, 5.4, 6.1, 7.6], "h": 0.8, "mat": "linen" },
+    { "level": "lt1", "rect": [5.3, 5.4, 6.1, 5.6], "h": 0.6, "mat": "linen" },
+    { "level": "lt1", "rect": [5.3, 7.4, 6.1, 7.6], "h": 0.6, "mat": "linen" },
+    { "level": "lt1", "rect": [3.2, 5.3, 5.2, 7.7], "z": 0.02, "h": 0.01, "mat": "jute", "note": "karpet" },
+    { "level": "lt1", "rect": [3.95, 6.1, 4.65, 6.8], "h": 0.38, "mat": "teak", "note": "meja kopi" },
+    { "level": "lt1", "rect": [0.08, 7.1, 0.42, 8.35], "h": 0.9, "mat": "oak", "note": "lemari sepatu" },
+    { "level": "lt1", "rect": [1.4, 6.3, 1.8, 6.85], "h": 0.42, "mat": "white", "note": "kloset" },
+
+    { "level": "site", "rect": [5.0, 0.12, 5.6, 0.72], "h": 0.85, "mat": "white", "note": "mesin cuci" },
+    { "level": "site", "rect": [5.75, 0.12, 6.3, 0.62], "h": 0.85, "mat": "white", "note": "bak cuci" },
+    { "level": "site", "rect": [3.2, 0.3, 4.4, 0.7], "h": 1.1, "mat": "steel", "opacity": 0.6, "note": "jemuran" },
+
+    { "level": "lt1", "rect": [7.08, 1.3, 7.2, 2.1], "h": 2.4, "mat": "mihrab", "note": "panel mihrab" },
+    { "level": "lt1", "rect": [7.15, 0.08, 8.6, 0.44], "h": 0.8, "mat": "oak", "note": "lemari mukena" },
+
+    { "level": "site", "rect": [8.86, 3.72, 8.94, 3.8], "z": 0.75, "h": 0.2, "mat": "black", "note": "kran wudhu" },
+    { "level": "site", "rect": [7.4, 3.9, 7.75, 4.25], "h": 0.4, "mat": "teak", "note": "bangku wudhu" },
+    { "level": "site", "rect": [7.15, 5.0, 8.5, 6.6], "h": 0.06, "mat": "teak", "slatsTop": true, "note": "deck" },
+    { "level": "site", "rect": [1.0, 8.85, 1.5, 9.15], "h": 0.04, "mat": "stone" },
+    { "level": "site", "rect": [0.7, 9.4, 1.2, 9.7], "h": 0.04, "mat": "stone" },
+    { "level": "site", "rect": [1.05, 9.95, 1.55, 10.25], "h": 0.04, "mat": "stone" },
+    { "level": "site", "rect": [0.7, 10.5, 1.2, 10.8], "h": 0.04, "mat": "stone" },
+    { "level": "site", "rect": [7.5, 7.05, 7.9, 7.3], "h": 0.04, "mat": "stone" },
+    { "level": "site", "rect": [7.85, 7.6, 8.25, 7.85], "h": 0.04, "mat": "stone" },
+
+    { "level": "lt2", "rect": [0.12, 1.62, 1.12, 3.62], "h": 0.45, "mat": "white", "note": "kasur kamar 2" },
+    { "level": "lt2", "rect": [0.12, 1.62, 1.12, 1.74], "h": 0.9, "mat": "oak" },
+    { "level": "lt2", "rect": [2.1, 1.62, 3.35, 2.17], "h": 0.75, "mat": "oak", "note": "meja belajar" },
+    { "level": "lt2", "rect": [1.6, 3.35, 3.4, 3.9], "h": 2.4, "mat": "oak", "note": "lemari" },
+    { "level": "lt2", "rect": [5.88, 1.62, 6.88, 3.62], "h": 0.45, "mat": "white", "note": "kasur kamar 3" },
+    { "level": "lt2", "rect": [5.88, 1.62, 6.88, 1.74], "h": 0.9, "mat": "oak" },
+    { "level": "lt2", "rect": [3.65, 1.62, 4.9, 2.17], "h": 0.75, "mat": "oak" },
+    { "level": "lt2", "rect": [3.65, 3.35, 5.45, 3.9], "h": 2.4, "mat": "oak" },
+    { "level": "lt2", "rect": [1.05, 5.6, 1.95, 6.9], "h": 2.2, "mat": "oak", "note": "lemari linen" },
+    { "level": "lt2", "rect": [5.1, 4.1, 5.55, 4.65], "h": 0.42, "mat": "white" },
+    { "level": "lt2", "rect": [5.7, 4.08, 6.6, 4.53], "h": 0.85, "mat": "teak" },
+    { "level": "lt2", "rect": [6.2, 4.55, 6.25, 5.45], "h": 2.0, "mat": "glass" },
+    { "level": "lt2", "rect": [2.05, 5.6, 2.45, 8.4], "h": 2.2, "mat": "oak", "note": "rak walk-in" },
+    { "level": "lt2", "rect": [0.1, 7.1, 0.55, 7.65], "h": 0.42, "mat": "white" },
+    { "level": "lt2", "rect": [1.0, 7.08, 1.9, 7.53], "h": 0.85, "mat": "teak" },
+    { "level": "lt2", "rect": [0.1, 7.75, 1.0, 7.8], "h": 2.0, "mat": "glass" },
+    { "level": "lt2", "rect": [4.7, 5.62, 6.5, 7.62], "h": 0.5, "mat": "white", "note": "kasur king" },
+    { "level": "lt2", "rect": [4.7, 5.62, 6.5, 5.76], "h": 1.1, "mat": "linen" },
+    { "level": "lt2", "rect": [4.15, 5.65, 4.6, 6.05], "h": 0.5, "mat": "oak" },
+    { "level": "lt2", "rect": [6.6, 5.65, 6.95, 6.05], "h": 0.5, "mat": "oak" },
+    { "level": "lt2", "rect": [4.3, 7.0, 6.8, 8.3], "z": 0.01, "h": 0.01, "mat": "jute" },
+    { "level": "lt2", "rect": [4.0, 8.75, 4.55, 9.25], "h": 0.45, "mat": "teak" },
+    { "level": "lt2", "rect": [4.8, 8.8, 5.25, 9.25], "h": 0.42, "mat": "rattan" },
+    { "level": "lt2", "rect": [3.5, 9.44, 7.0, 9.5], "h": 1.0, "mat": "glass", "note": "railing balkon" },
+    { "level": "lt2", "rect": [6.94, 8.5, 7.0, 9.5], "h": 1.0, "mat": "glass" },
+    { "level": "lt2", "rect": [0.95, 4.97, 2.0, 5.03], "h": 1.0, "mat": "black", "note": "railing void tangga" }
+  ],
+
+  "prayerMats": [
+    { "c": [7.62, 1.9], "size": [1.0, 0.6], "rot": 25 },
+    { "c": [8.45, 2.05], "size": [1.0, 0.6], "rot": 25 },
+    { "c": [8.12, 2.72], "size": [1.0, 0.6], "rot": 25 }
+  ],
+
+  "roofs": [
+    { "type": "gable", "id": "rumah", "rect": [0, 1.5, 7, 8.5], "ridge": "y", "eave": 6.45, "rise": 3.2,
+      "over": { "side": 0.6, "end": 0.8 }, "mat": "charcoal", "gableFront": "slats" },
+    { "type": "flat", "id": "dak-musholla", "rect": [7, 0, 9, 3.5], "z": 3.2, "t": 0.2, "mat": "concrete" },
+    { "type": "flat", "id": "kanopi-carport", "rect": [2.05, 8.6, 9, 13.9], "z": 2.8, "t": 0.1, "mat": "charcoal",
+      "posts": [ [2.2, 13.75], [8.85, 13.75] ] },
+    { "type": "glass", "id": "kanopi-kaca", "rect": [7.02, 3.5, 8.98, 6.9], "z": 2.85, "frame": 1.1 }
+  ],
+
+  "cars": [
+    { "c": [3.9, 11.3], "color": "#B9BCC0" },
+    { "c": [7.1, 11.3], "color": "#4F5154" }
+  ],
+
+  "plants": [
+    { "type": "tree", "c": [1.0, 12.9], "r": 1.0, "h": 3.4, "note": "kamboja" },
+    { "type": "tree", "c": [8.55, 8.3], "r": 0.45, "h": 2.8 },
+    { "type": "bamboo", "c": [8.8, 6.95] }, { "type": "bamboo", "c": [8.8, 7.35] },
+    { "type": "bamboo", "c": [8.8, 7.75] }, { "type": "bamboo", "c": [8.8, 8.2] },
+    { "type": "shrub", "c": [8.75, 4.8], "r": 0.3 }, { "type": "shrub", "c": [8.75, 5.4], "r": 0.32 },
+    { "type": "shrub", "c": [8.75, 6.1], "r": 0.3 }, { "type": "shrub", "c": [8.75, 6.6], "r": 0.28 },
+    { "type": "shrub", "c": [0.35, 9.0], "r": 0.3 }, { "type": "shrub", "c": [1.65, 13.6], "r": 0.3 },
+    { "type": "shrub", "c": [0.4, 13.4], "r": 0.35 }
+  ],
+
+  "context": {
+    "note": "Bangunan tetangga sederhana untuk konteks; bisa disembunyikan di viewer.",
+    "houses": [
+      { "rect": [9.2, 1.5, 15.0, 8.5], "eave": 6.2, "rise": 2.6 },
+      { "rect": [15.2, 1.5, 21.0, 8.5], "eave": 6.2, "rise": 2.6 },
+      { "rect": [21.2, 1.5, 27.0, 8.5], "eave": 6.2, "rise": 2.6 },
+      { "rect": [0.2, -8.5, 7.0, -1.5], "eave": 6.2, "rise": 2.8 }
+    ]
+  },
+
+  "cameras": {
+    "iso":     { "label": "Isometrik", "pos": [-8.5, 15.5, 21.5], "target": [4.6, 1.2, 6.8] },
+    "top":     { "label": "Atas",      "pos": [4.5, 26, 7.3], "target": [4.5, 0, 7.1], "fov": 40 },
+    "corner":  { "label": "Tikungan",  "pos": [-5.5, 1.65, 19.5], "target": [4.5, 3.4, 6.5] },
+    "garden":  { "label": "Taman",     "pos": [8.15, 1.65, 9.4], "target": [7.75, 1.25, 1.5] },
+    "living":  { "label": "R. keluarga", "pos": [2.9, 1.55, 8.15], "target": [6.6, 1.1, 3.0] }
+  }
+}

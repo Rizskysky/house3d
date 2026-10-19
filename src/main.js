@@ -1,0 +1,81 @@
+// Entry point: loads data/house.json, wires the controls, rebuilds the model on every change.
+import { createViewer } from './viewer.js';
+import { buildHouse } from './geometry.js';
+
+const $ = (s) => document.querySelector(s);
+const state = { view: 'all', roof: true, cut: true, labels: false, context: true, camera: 'iso' };
+
+// deep link: #lt1, #lt2, #all and/or a camera id, e.g. #lt1-top
+for (const part of location.hash.replace('#', '').split('-')) {
+  if (['all', 'lt1', 'lt2'].includes(part)) state.view = part;
+}
+
+const viewer = createViewer($('#stage'));
+if (window.matchMedia('(max-width: 640px)').matches) {
+  $('#panel').dataset.open = 'false'; $('#panel-toggle').setAttribute('aria-expanded', 'false');
+}
+let data;
+
+try {
+  const res = await fetch('data/house.json', { cache: 'no-cache' });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  data = await res.json();
+} catch (e) {
+  $('#status').textContent = `data/house.json gagal dimuat (${e.message}). Buka lewat server lokal atau GitHub Pages, bukan langsung dari file.`;
+  $('#status').hidden = false;
+  throw e;
+}
+
+for (const part of location.hash.replace('#', '').split('-')) if (data.cameras[part]) state.camera = part;
+
+$('#version').textContent = data.meta.version;
+$('#area').textContent = `LB ±${data.meta.lb.total} m² · lantai 1 ±${data.meta.lb.lt1} m² · lantai 2 ±${data.meta.lb.lt2} m²`;
+
+// camera chips from data
+const camWrap = $('#cams');
+for (const [id, c] of Object.entries(data.cameras)) {
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = 'chip'; b.dataset.cam = id; b.textContent = c.label;
+  b.addEventListener('click', () => { state.camera = id; viewer.setCamera(data.cameras[id]); sync(); });
+  camWrap.appendChild(b);
+}
+
+document.querySelectorAll('[data-view]').forEach((b) => b.addEventListener('click', () => {
+  state.view = b.dataset.view; rebuild(); sync();
+}));
+document.querySelectorAll('[data-toggle]').forEach((b) => b.addEventListener('click', () => {
+  const k = b.dataset.toggle; state[k] = !state[k]; rebuild(); sync();
+}));
+
+$('#save').addEventListener('click', async () => {
+  const blob = await viewer.snapshot();
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `house3d-${state.view}-${state.camera}.png`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+});
+
+$('#panel-toggle').addEventListener('click', () => {
+  const p = $('#panel'); const open = p.dataset.open !== 'true';
+  p.dataset.open = String(open); $('#panel-toggle').setAttribute('aria-expanded', String(open));
+});
+
+function rebuild() { viewer.setModel(buildHouse(data, state)); }
+function sync() {
+  document.querySelectorAll('[data-view]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.view === state.view)));
+  document.querySelectorAll('[data-toggle]').forEach((b) => {
+    b.setAttribute('aria-pressed', String(!!state[b.dataset.toggle]));
+    const k = b.dataset.toggle;
+    b.disabled = (k === 'roof' && state.view !== 'all') || (k === 'cut' && state.view === 'all');
+  });
+  document.querySelectorAll('[data-cam]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.cam === state.camera)));
+  const tag = `${state.view}-${state.camera}`;
+  if (location.hash !== `#${tag}`) history.replaceState(null, '', `#${tag}`);
+}
+
+rebuild();
+viewer.setCamera(data.cameras[state.camera]);
+sync();
+window.__house = { data, state, viewer, rebuild };
+document.body.dataset.ready = 'true';

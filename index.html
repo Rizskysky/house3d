@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>House 3D</title>
+<meta name="description" content="Model 3D interaktif rumah Japandi tropis dua lantai, dibangun dari satu file data.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Shippori+Mincho:wght@600&display=swap">
+<style>
+/* Layout: the model fills the screen; a quiet title block top-left and one control sheet (bottom on phones, right on desktop). */
+:root {
+  --ink: #232220; --muted: #6A665F; --paper: #F7F6F3; --line: #DEDAD2; --accent: #2F5D4A; --accent-ink: #FFFFFF;
+  --sheet: rgba(247, 246, 243, 0.94); --chip: #EEEBE5;
+  --display: "Shippori Mincho", "Hiragino Mincho ProN", Georgia, serif;
+  --ui: "Albert Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --ink: #EDEAE4; --muted: #A6A197; --paper: #1B1A18; --line: #393631; --accent: #7FB79B; --accent-ink: #12201A;
+          --sheet: rgba(27, 26, 24, 0.94); --chip: #2A2825; color-scheme: dark; }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--paper); color: var(--ink); font-family: var(--ui); }
+#stage { position: fixed; inset: 0; }
+#stage canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+
+.title { position: fixed; top: max(14px, env(safe-area-inset-top)); left: max(16px, env(safe-area-inset-left));
+  background: var(--sheet); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; max-width: min(78vw, 360px); }
+.title h1 { font-family: var(--display); font-weight: 600; font-size: 20px; line-height: 1.15; margin: 0; letter-spacing: 0.01em; }
+.title p { margin: 3px 0 0; font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+#panel { position: fixed; right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom));
+  width: 300px; background: var(--sheet); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px 14px;
+  display: grid; gap: 12px; }
+.group { display: grid; gap: 6px; }
+.group > span { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.row { display: flex; flex-wrap: wrap; gap: 6px; }
+.seg { display: grid; grid-template-columns: repeat(3, 1fr); background: var(--chip); border-radius: 8px; padding: 3px; gap: 3px; }
+button { font: 500 13.5px/1 var(--ui); color: var(--ink); cursor: pointer; }
+.seg button { border: 0; background: transparent; border-radius: 6px; padding: 9px 4px; }
+.seg button[aria-pressed="true"] { background: var(--paper); box-shadow: 0 0 0 1px var(--line); }
+.chip { border: 1px solid var(--line); background: transparent; border-radius: 999px; padding: 8px 12px; }
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.chip:disabled { opacity: 0.4; cursor: default; }
+#save { border: 0; background: var(--accent); color: var(--accent-ink); border-radius: 8px; padding: 11px 12px; font-weight: 600; }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+#panel-toggle { display: none; }
+#status { position: fixed; inset: auto 16px 50% 16px; text-align: center; background: var(--sheet); border: 1px solid var(--line);
+  border-radius: 10px; padding: 14px; font-size: 14px; }
+.hint { font-size: 11.5px; color: var(--muted); margin: 0; }
+
+@media (max-width: 640px) {
+  #panel { left: max(12px, env(safe-area-inset-left)); right: max(12px, env(safe-area-inset-right)); width: auto;
+    bottom: max(12px, env(safe-area-inset-bottom)); padding: 10px 12px 12px; gap: 10px; }
+  #panel[data-open="false"] .group, #panel[data-open="false"] #save, #panel[data-open="false"] .hint { display: none; }
+  #panel-toggle { display: flex; justify-content: space-between; align-items: center; border: 0; background: transparent; padding: 2px 0; font-weight: 600; }
+  .title { right: max(16px, env(safe-area-inset-right)); max-width: none; }
+}
+</style>
+<script type="importmap">
+{ "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<div id="stage" aria-label="Model 3D rumah, seret untuk memutar, cubit atau scroll untuk zoom"></div>
+
+<header class="title">
+  <h1>House 3D</h1>
+  <p id="area">Memuat model…</p>
+  <p id="version"></p>
+</header>
+
+<section id="panel" data-open="true" aria-label="Kontrol tampilan">
+  <button id="panel-toggle" type="button" aria-expanded="true">Kontrol tampilan <span aria-hidden="true">▾</span></button>
+  <div class="group">
+    <span>Lantai</span>
+    <div class="seg" role="group" aria-label="Pilih lantai">
+      <button type="button" data-view="all">Semua</button>
+      <button type="button" data-view="lt1">Lantai 1</button>
+      <button type="button" data-view="lt2">Lantai 2</button>
+    </div>
+  </div>
+  <div class="group">
+    <span>Tampilkan</span>
+    <div class="row">
+      <button type="button" class="chip" data-toggle="roof">Atap</button>
+      <button type="button" class="chip" data-toggle="cut">Potong dinding</button>
+      <button type="button" class="chip" data-toggle="labels">Label ruang</button>
+      <button type="button" class="chip" data-toggle="context">Tetangga</button>
+    </div>
+  </div>
+  <div class="group">
+    <span>Kamera</span>
+    <div class="row" id="cams"></div>
+  </div>
+  <button id="save" type="button">Simpan gambar (PNG)</button>
+  <p class="hint">Seret untuk memutar, dua jari untuk geser, cubit untuk zoom.</p>
+</section>
+
+<p id="status" hidden></p>
+<script type="module" src="src/main.js"></script>
+</body>
+</html>
