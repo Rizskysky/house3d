@@ -101,7 +101,7 @@
                 { "at": 3.3, "w": 1.5, "type": "window", "sill": 1.15, "head": 1.95, "note": "J1 dapur, di atas sink (dinding di atas kompor untuk cooker hood)" },
                 { "at": 6.0, "w": 0.85, "type": "door", "head": 2.1, "note": "P5 dapur → service yard" } ] },
     { "level": "lt1", "kind": "ext", "a": [7, 1.5], "b": [7, 8.5],
-      "open": [ { "at": 3.3, "w": 3.4, "type": "swing", "head": 2.4, "leaves": ["fixed", "swing", "swing", "fixed"], "out": 1, "note": "PL1 kusen aluminium + kaca: 2 daun ayun keluar di tengah (buka 180°, dikait ke kaca mati) + 2 kaca mati" } ] },
+      "open": [ { "at": 3.3, "w": 3.4, "type": "swing", "head": 2.4, "leaves": ["fixed", "swing", "swing", "fixed"], "out": 1, "note": "PL1 kusen aluminium slim frame hitam doff + kaca polos: 2 daun engsel biasa ayun keluar di tengah (buka 180°, dikait ke kaca mati, pegangan tarik panjang vertikal) + 2 kaca mati" } ] },
     { "level": "lt1", "kind": "ext", "a": [0, 8.5], "b": [7, 8.5],
       "open": [ { "at": 0.3, "w": 0.9, "type": "door", "head": 2.2, "note": "P1 pintu utama" } ] },
     { "level": "lt1", "kind": "ext", "a": [7, 0], "b": [7, 1.5], "h": 3.2,
