@@ -26,7 +26,8 @@ index.html          page, controls, import map
 data/house.json     the house: single source of truth
 src/main.js         loads the data, wires the controls, deep links
 src/geometry.js     house.json → three.js meshes (walls, openings, stairs, roofs, furniture, plants)
-src/viewer.js       renderer, lights, shadows, camera, orbit controls, PNG snapshot
+src/textures.js     procedural material patterns (wood, plaster, stone, terrazzo, grass…), drawn on canvas
+src/viewer.js       renderer, sky, lights, shadows, ambient occlusion, day/night, camera, PNG snapshot
 ```
 
 ## Coordinates
@@ -46,7 +47,7 @@ A `rect` is always `[x0, y0, x1, y1]`. In three.js, `x → X`, `z → Y` (up), `
 | Key | What it holds | Typical edit |
 |---|---|---|
 | `levels` | floor heights | change ceiling height |
-| `materials` | color, roughness, metalness, opacity per material | retune a finish |
+| `materials` | `color`, `rough`, `metal`, `opacity`, plus optional `tex` (procedural pattern), `scale` (m per tile), `bump`, `env` (sky reflection strength) | retune a finish |
 | `floors` | floor surfaces per room (`name` becomes the room label) | resize or rename a room |
 | `slabs` | floor-2 slab pieces (the gaps are the stair void) | move the stair void |
 | `walls` | centerline `a → b`, `kind` (`ext`, `int`, `boundary`, `low`), optional `h`, and `open` | move a wall |
@@ -55,21 +56,24 @@ A `rect` is always `[x0, y0, x1, y1]`. In three.js, `x → X`, `z → Y` (up), `
 | `boxes` | furniture and small objects: `rect`, `z` (above the level), `h`, `mat` | move furniture |
 | `prayerMats` | center, size, rotation toward qibla (degrees) | |
 | `roofs` | `gable`, `flat` (with optional `posts` and one `skylight` strip), `glass` canopy | change roof pitch or overhang |
+| `lights` | `level`, `at` [x, y], `z`, `kind` (`down`, `pendant`, `up`), `power`, optional `color`; on in **Malam** | add a lamp |
 | `cars`, `plants` | position and size | |
 | `context.houses` | simple neighbor blocks (toggle "Tetangga") | |
 | `cameras` | camera presets (`pos`, `target`, optional `fov`) shown as buttons | add a viewpoint |
 
-Opening `type` values: `door` (gap), `slide` (`panel`: `glass` or a material), `bifold` (`panels`, `out`: +1/−1 side the folded stack swings to), `sliding` (`leaves`: list of `fixed`/`slide` panes; fixed panes on the outer track toward `out`, slide panes drawn open behind the neighbouring fixed pane), `swing` (`leaves`: list of `fixed`/`swing` panes; swing leaves are drawn opened 180° toward `out`, flat against the neighbouring fixed pane), `window` (glass between `sill` and `head`; a `note` containing "kisi" adds wooden louvers), `gate` (wooden slats), `opening` (plain gap).
+Opening `type` values: `door` (gap; with `hinge` `start`/`end`, `side` ±1 and optional `leaf` material it gets a leaf drawn open 90°), `slide` (`panel`: `glass` or a material), `bifold` (`panels`, `out`: +1/−1 side the folded stack swings to), `sliding` (`leaves`: list of `fixed`/`slide` panes; fixed panes on the outer track toward `out`, slide panes drawn open behind the neighbouring fixed pane), `swing` (`leaves`: list of `fixed`/`swing` panes; swing leaves are drawn opened 180° toward `out`, flat against the neighbouring fixed pane), `window` (glass between `sill` and `head`; a `note` containing "kisi" adds wooden louvers), `gate` (wooden slats), `opening` (plain gap).
 
 ## Viewer controls
 
 - **Lantai**: Semua, Lantai 1, Lantai 2. Single-floor views hide everything above and, with **Potong dinding**, cut the walls to 1.3 m so the rooms are visible.
 - **Atap**, **Label ruang**, **Tetangga** toggles.
+- **Suasana**: Siang (sun and sky) or Malam (moonlight and the lamps in `lights`).
+- **Kualitas**: Tinggi adds ambient occlusion and sharper shadows; Standar is lighter and is the default on phones.
 - **Kamera** presets come from `cameras` in the data.
 - **Simpan gambar** saves the current view as PNG.
-- Deep links: `#<view>-<camera>`, for example `#lt1-top`, `#all-corner`.
+- Deep links: `#<view>-<camera>[-malam]`, for example `#lt1-top`, `#all-corner-malam`.
 
 ## Roadmap
 
-- v2: PBR textures (wood, plaster, stone), HDRI sky, ambient occlusion.
+- v2 (done): material textures, sky and environment light, ambient occlusion, night mode with lamps, door leaves.
 - v3: glTF furniture and plants, first-person walk mode, optional path-traced high-quality render on desktop.

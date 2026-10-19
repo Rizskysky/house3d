@@ -39,6 +39,8 @@ html, body { margin: 0; height: 100%; background: var(--paper); color: var(--ink
 .row { display: flex; flex-wrap: wrap; gap: 6px; }
 .seg { display: grid; grid-template-columns: repeat(3, 1fr); background: var(--chip); border-radius: 8px; padding: 3px; gap: 3px; }
 button { font: 500 13.5px/1 var(--ui); color: var(--ink); cursor: pointer; }
+.seg.two { grid-template-columns: repeat(2, 1fr); }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .seg button { border: 0; background: transparent; border-radius: 6px; padding: 9px 4px; }
 .seg button[aria-pressed="true"] { background: var(--paper); box-shadow: 0 0 0 1px var(--line); }
 .chip { border: 1px solid var(--line); background: transparent; border-radius: 999px; padding: 8px 12px; }
@@ -54,7 +56,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 @media (max-width: 640px) {
   #panel { left: max(12px, env(safe-area-inset-left)); right: max(12px, env(safe-area-inset-right)); width: auto;
     bottom: max(12px, env(safe-area-inset-bottom)); padding: 10px 12px 12px; gap: 10px; }
-  #panel[data-open="false"] .group, #panel[data-open="false"] #save, #panel[data-open="false"] .hint { display: none; }
+  #panel[data-open="false"] .group, #panel[data-open="false"] .pair, #panel[data-open="false"] #save, #panel[data-open="false"] .hint { display: none; }
   #panel-toggle { display: flex; justify-content: space-between; align-items: center; border: 0; background: transparent; padding: 2px 0; font-weight: 600; }
   .title { right: max(16px, env(safe-area-inset-right)); max-width: none; }
 }
@@ -92,6 +94,22 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
       <button type="button" class="chip" data-toggle="cut">Potong dinding</button>
       <button type="button" class="chip" data-toggle="labels">Label ruang</button>
       <button type="button" class="chip" data-toggle="context">Tetangga</button>
+    </div>
+  </div>
+  <div class="pair">
+    <div class="group">
+      <span>Suasana</span>
+      <div class="seg two" role="group" aria-label="Siang atau malam">
+        <button type="button" data-time="day">Siang</button>
+        <button type="button" data-time="night">Malam</button>
+      </div>
+    </div>
+    <div class="group">
+      <span>Kualitas</span>
+      <div class="seg two" role="group" aria-label="Kualitas tampilan">
+        <button type="button" data-quality="std" title="Lebih ringan untuk HP">Standar</button>
+        <button type="button" data-quality="high" title="Bayangan halus dan oklusi ambien">Tinggi</button>
+      </div>
     </div>
   </div>
   <div class="group">

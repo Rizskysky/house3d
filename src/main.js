@@ -5,15 +5,17 @@ const { createViewer } = await import(`./viewer.js${bust}`);
 const { buildHouse } = await import(`./geometry.js${bust}`);
 
 const $ = (s) => document.querySelector(s);
-const state = { view: 'all', roof: true, cut: true, labels: false, context: true, camera: 'iso' };
+const phone = window.matchMedia('(max-width: 640px)').matches;
+const state = { view: 'all', roof: true, cut: true, labels: false, context: true, camera: 'iso', night: false, quality: phone ? 'std' : 'high' };
 
 // deep link: #lt1, #lt2, #all and/or a camera id, e.g. #lt1-top
 for (const part of location.hash.replace('#', '').split('-')) {
   if (['all', 'lt1', 'lt2'].includes(part)) state.view = part;
+  if (part === 'malam') state.night = true;
 }
 
 const viewer = createViewer($('#stage'));
-if (window.matchMedia('(max-width: 640px)').matches) {
+if (phone) {
   $('#panel').dataset.open = 'false'; $('#panel-toggle').setAttribute('aria-expanded', 'false');
 }
 let data;
@@ -49,6 +51,13 @@ document.querySelectorAll('[data-toggle]').forEach((b) => b.addEventListener('cl
   const k = b.dataset.toggle; state[k] = !state[k]; rebuild(); sync();
 }));
 
+document.querySelectorAll('[data-time]').forEach((b) => b.addEventListener('click', () => {
+  state.night = b.dataset.time === 'night'; viewer.setNight(state.night); sync();
+}));
+document.querySelectorAll('[data-quality]').forEach((b) => b.addEventListener('click', () => {
+  state.quality = b.dataset.quality; viewer.setQuality(state.quality); sync();
+}));
+
 $('#save').addEventListener('click', async () => {
   const blob = await viewer.snapshot();
   const a = document.createElement('a');
@@ -72,10 +81,14 @@ function sync() {
     b.disabled = (k === 'roof' && state.view !== 'all') || (k === 'cut' && state.view === 'all');
   });
   document.querySelectorAll('[data-cam]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.cam === state.camera)));
-  const tag = `${state.view}-${state.camera}`;
+  document.querySelectorAll('[data-time]').forEach((b) => b.setAttribute('aria-pressed', String((b.dataset.time === 'night') === state.night)));
+  document.querySelectorAll('[data-quality]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.quality === state.quality)));
+  const tag = `${state.view}-${state.camera}${state.night ? '-malam' : ''}`;
   if (location.hash !== `#${tag}`) history.replaceState(null, '', `#${tag}`);
 }
 
+viewer.setQuality(state.quality);
+viewer.setNight(state.night);
 rebuild();
 viewer.setCamera(data.cameras[state.camera]);
 sync();

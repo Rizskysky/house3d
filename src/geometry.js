@@ -4,6 +4,9 @@
 
 import * as THREE from 'three';
 
+const bust = new URL(import.meta.url).search;
+const { patternTexture } = await import(`./textures.js${bust}`);
+
 const CUT_HEIGHT = 1.3;          // wall height when "Potong dinding" is on
 const THICK = { ext: 0.15, int: 0.1, boundary: 0.15, low: 0.12, roster: 0.12 };
 
@@ -21,8 +24,10 @@ export function buildHouse(data, state) {
   const box = (rect, z0, h, mat, opts) => {
     const [x0, y0, x1, y1] = norm(rect);
     const w = Math.max(x1 - x0, 0.001), d = Math.max(y1 - y0, 0.001), hh = Math.max(h, 0.001);
-    const m = new THREE.Mesh(new THREE.BoxGeometry(w, hh, d), mat);
+    const geo = new THREE.BoxGeometry(w, hh, d);
+    const m = new THREE.Mesh(geo, mat);
     m.position.set((x0 + x1) / 2, z0 + hh / 2, (y0 + y1) / 2);
+    if (mat.map) meterUV(geo, m.position);
     return add(m, { shadow: mat.userData.castShadow !== false && !(opts && opts.noShadow) });
   };
   const M = (key, override) => {
@@ -84,6 +89,33 @@ export function buildHouse(data, state) {
     if (b.chair) chairBack(b, z, mat, box);
     if (b.slatsTop) deckLines(b.rect, z + b.h, M('teak'), box);
   }
+  // ---------- lights (on in "Malam") ----------
+  for (const l of data.lights || []) {
+    if (!show.level(l.level)) continue;
+    // ceiling fittings would float in a cut view, or under a roof that is hidden
+    const cutAway = l.kind !== 'up' && (show.cutLevel === l.level || (l.level === 'site' && state.view === 'lt1'));
+    const [x, y] = l.at, z = lz(l.level) + l.z;
+    const glow = lampMaterial();
+    if (cutAway) { /* light only */ } else if (l.kind === 'pendant') {
+      const shade = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.2, 0.18, 24, 1, true), M('black'));
+      shade.position.set(x, z + 0.09, y); add(shade, { shadow: false });
+      const bulb = new THREE.Mesh(new THREE.SphereGeometry(0.06, 12, 8), glow);
+      bulb.position.set(x, z + 0.03, y); bulb.userData.lamp = true; add(bulb, { shadow: false });
+      const ceiling = lz(l.level) + (l.ceiling || 3.25);
+      box([x - 0.005, y - 0.005, x + 0.005, y + 0.005], z + 0.18, ceiling - z - 0.18, M('black'), { noShadow: true });
+    } else if (l.kind === 'up') {
+      const m = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.08, 12), glow);
+      m.position.set(x, z, y); m.userData.lamp = true; add(m, { shadow: false });
+    } else {                                                  // ceiling downlight
+      const m = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.015, 16), glow);
+      m.position.set(x, z, y); m.userData.lamp = true; add(m, { shadow: false });
+    }
+    const light = new THREE.PointLight(l.color || '#FFD9A8', l.power || 12, l.range || 7, 2);
+    light.position.set(x, l.kind === 'up' ? z + 0.3 : z - 0.12, y);
+    light.userData.nightOnly = true; light.visible = false;
+    root.add(light);
+  }
+
   if (show.level('lt1')) for (const p of data.prayerMats || []) {
     const [w, d] = p.size;
     const m = new THREE.Mesh(new THREE.BoxGeometry(w, 0.012, d), M('prayerMat'));
@@ -148,9 +180,20 @@ function visibility(state) {
   };
 }
 
+// one shared glowing material for light fixtures; the viewer turns its glow on at night
+let lampMat = null;
+function lampMaterial() {
+  if (!lampMat) lampMat = new THREE.MeshStandardMaterial({ color: '#F4EFE6', emissive: new THREE.Color('#FFD9A8'), emissiveIntensity: 0, roughness: 0.4 });
+  return lampMat;
+}
+
 function norm([a, b, c, d]) { return [Math.min(a, c), Math.min(b, d), Math.max(a, c), Math.max(b, d)]; }
 
+// Materials are built once per distinct "materials" block and reused on every rebuild.
+let matCache = { key: null, mats: null };
 function makeMaterials(defs) {
+  const key = JSON.stringify(defs);
+  if (matCache.key === key) return matCache.mats;
   const out = {};
   for (const [k, d] of Object.entries(defs)) {
     const op = d.opacity ?? 1;
@@ -159,9 +202,29 @@ function makeMaterials(defs) {
       transparent: op < 1, opacity: op, depthWrite: op >= 1,
     });
     if (op < 1) m.userData.castShadow = false;
+    m.envMapIntensity = d.env ?? 0.4;                     // sky reflections: subtle, the sun does the main lighting
+    const t = d.tex && patternTexture(d.tex);
+    if (t) {
+      const rep = 1 / (d.scale || 1);
+      m.map = t.map.clone(); m.map.repeat.set(rep, rep); m.map.needsUpdate = true;
+      m.color.multiplyScalar(1 / t.mean);                 // the pattern darkens on average; keep the specified color
+      if (d.bump) { m.bumpMap = t.bump.clone(); m.bumpMap.repeat.set(rep, rep); m.bumpMap.needsUpdate = true; m.bumpScale = d.bump; }
+    }
     out[k] = m;
   }
+  matCache = { key, mats: out };
   return out;
+}
+
+// UVs in meters from world position, so a texture's scale is the same on every box and patterns run on across boxes.
+function meterUV(geo, offset) {
+  const pos = geo.attributes.position, nor = geo.attributes.normal, uv = geo.attributes.uv;
+  for (let i = 0; i < pos.count; i++) {
+    const x = pos.getX(i) + offset.x, y = pos.getY(i) + offset.y, z = pos.getZ(i) + offset.z;
+    const ax = Math.abs(nor.getX(i)), ay = Math.abs(nor.getY(i));
+    if (ax > 0.5) uv.setXY(i, z, y); else if (ay > 0.5) uv.setXY(i, x, z); else uv.setXY(i, x, y);
+  }
+  uv.needsUpdate = true;
 }
 function opacityMat(mats, key, op) {
   const id = `${key}@${op}`;
@@ -194,7 +257,17 @@ function buildWall(w, z, h, t, mat, M, box) {
     seg(p0, p1, 0, sill);
     seg(p0, p1, head, h);
     const top = head;
-    if (o.type === 'window') {
+    if (o.type === 'door' && o.hinge) {
+      // hinged leaf drawn open 90°: hinge 'start'/'end' of the opening, swinging to side +1/−1 of the wall
+      const lt = 0.04, side = o.side || 1;
+      const a0 = o.hinge === 'start' ? p0 : p1 - lt, a1 = a0 + lt;
+      const n0 = side * (t / 2), n1 = side * (t / 2 + o.w - 0.03);
+      const r = horiz ? [s0 + a0, c + n0, s0 + a1, c + n1] : [c + n0, s0 + a0, c + n1, s0 + a1];
+      box(r, z + 0.01, top - 0.02, M(o.leaf || 'oak'));
+      const hn = side * (t / 2 + o.w - 0.1);
+      const hr = horiz ? [s0 + a0 - 0.02, c + hn - 0.02, s0 + a1 + 0.02, c + hn + 0.02] : [c + hn - 0.02, s0 + a0 - 0.02, c + hn + 0.02, s0 + a1 + 0.02];
+      if (top > 1.1) box(hr, z + 1.0, 0.03, M('black'));    // handle near the free edge
+    } else if (o.type === 'window') {
       box(rect(p0, p1, 0.03), z + sill, top - sill, M('glass'));
       box(rect(p0, p1, 0.06), z + sill, 0.04, M('black'));
       if (top - sill > 0.1) box(rect(p0, p1, 0.06), z + top - 0.04, 0.04, M('black'));
@@ -320,7 +393,9 @@ function gable(r, roofMat, slatMat, backMat, root, add, box) {
   const depth = (y1 - y0) + 2 * end;
   const thick = 0.12;
   for (const sgn of [-1, 1]) {
-    const m = new THREE.Mesh(new THREE.BoxGeometry(lenSlope, thick, depth), roofMat);
+    const geo = new THREE.BoxGeometry(lenSlope, thick, depth);
+    if (roofMat.map) meterUV(geo, new THREE.Vector3());
+    const m = new THREE.Mesh(geo, roofMat);
     const cx = xm + sgn * (W + side) / 2;
     const cy = ridge - (W + side) / 2 * tan + thick / 2 / Math.cos(ang);
     m.position.set(cx, cy, (y0 + y1) / 2);
