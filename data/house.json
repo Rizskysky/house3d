@@ -1,7 +1,7 @@
 {
   "meta": {
     "name": "House 3D",
-    "version": "v1.7 · 2026-10-19 · pintu taman: sliding aluminium, daun geser di sisi dalam",
+    "version": "v1.8 · 2026-10-19 · musholla: roster dinding kiblat + skylight 1 garis",
     "units": "meter",
     "coords": "x = barat→timur (0 = sisi jalan samping), y = belakang→depan (0 = batas belakang, 14 = jalan depan), z = tinggi. Semua rect = [x0, y0, x1, y1].",
     "lb": { "lt1": 56, "lt2": 49, "total": 105 }
@@ -104,8 +104,7 @@
       "open": [ { "at": 3.3, "w": 3.4, "type": "sliding", "head": 2.4, "leaves": ["fixed", "slide", "slide", "fixed"], "out": 1, "note": "PL1 sliding aluminium slim frame hitam doff + kaca polos: 2 kaca mati di rel luar, 2 daun geser di rel dalam (parkir di belakang kaca mati); ambang dengan lubang buang air, kunci tanam + grendel" } ] },
     { "level": "lt1", "kind": "ext", "a": [0, 8.5], "b": [7, 8.5],
       "open": [ { "at": 0.3, "w": 0.9, "type": "door", "head": 2.2, "note": "P1 pintu utama" } ] },
-    { "level": "lt1", "kind": "ext", "a": [7, 0], "b": [7, 1.5], "h": 3.2,
-      "open": [ { "at": 0.25, "w": 0.8, "type": "window", "sill": 2.0, "head": 2.5, "note": "J4 jendela atas musholla" } ] },
+    { "level": "lt1", "kind": "roster", "a": [7, 0], "b": [7, 1.5], "h": 3.2, "plinth": 0.45, "note": "dinding kiblat musholla sisi service yard: roster + kaca mati buram di sisi dalam" },
     { "level": "lt1", "kind": "ext", "a": [7, 3.5], "b": [9, 3.5], "h": 3.2,
       "open": [ { "at": 0.3, "w": 0.9, "type": "slide", "head": 2.1, "panel": "oak", "note": "P11 musholla" } ] },
     { "level": "lt1", "kind": "ext", "a": [9, 0], "b": [9, 3.5], "h": 3.2 },
@@ -218,7 +217,8 @@
     { "level": "site", "rect": [5.75, 0.12, 6.3, 0.62], "h": 0.85, "mat": "white", "note": "bak cuci" },
     { "level": "site", "rect": [3.2, 0.3, 4.4, 0.7], "h": 1.1, "mat": "steel", "opacity": 0.6, "note": "jemuran" },
 
-    { "level": "lt1", "rect": [7.08, 1.3, 7.2, 2.1], "h": 2.4, "mat": "mihrab", "note": "panel mihrab" },
+    { "level": "lt1", "rect": [7.08, 1.55, 7.2, 2.35], "h": 2.4, "mat": "mihrab", "note": "panel mihrab (dinding kiblat sisi dapur tetap masif)" },
+    { "level": "lt1", "rect": [7.07, 0.08, 7.09, 1.45], "z": 0.45, "h": 2.6, "mat": "glass", "note": "kaca mati buram di balik roster (tahan hujan, debu, serangga)" },
     { "level": "lt1", "rect": [7.15, 0.08, 8.6, 0.44], "h": 0.8, "mat": "oak", "note": "lemari mukena" },
 
     { "level": "site", "rect": [8.86, 3.72, 8.94, 3.8], "z": 0.75, "h": 0.2, "mat": "black", "note": "kran wudhu" },
@@ -269,7 +269,8 @@
   "roofs": [
     { "type": "gable", "id": "rumah", "rect": [0, 1.5, 7, 8.5], "ridge": "y", "eave": 6.45, "rise": 3.2,
       "over": { "side": 0.6, "end": 0.8 }, "mat": "charcoal", "gableFront": "slats" },
-    { "type": "flat", "id": "dak-musholla", "rect": [7, 0, 9, 3.5], "z": 3.2, "t": 0.2, "mat": "concrete" },
+    { "type": "flat", "id": "dak-musholla", "rect": [7, 0, 9, 3.5], "z": 3.2, "t": 0.2, "mat": "concrete",
+      "skylight": [7.15, 0.2, 7.45, 3.3], "note": "skylight 1 garis 30 cm menempel dinding kiblat: cahaya menyapu dinding mihrab" },
     { "type": "flat", "id": "kanopi-carport", "rect": [2.05, 8.6, 9, 13.9], "z": 2.8, "t": 0.1, "mat": "charcoal",
       "posts": [ [2.2, 13.75], [8.85, 13.75] ] },
     { "type": "glass", "id": "kanopi-kaca", "rect": [7.02, 3.5, 8.98, 6.9], "z": 2.85, "frame": 1.1 }
@@ -307,6 +308,7 @@
     "corner":  { "label": "Tikungan",  "pos": [-5.5, 1.65, 19.5], "target": [4.5, 3.4, 6.5] },
     "garden":  { "label": "Taman",     "pos": [8.4, 1.6, 8.3], "target": [7.6, 1.2, 2.0] },
     "carport": { "label": "Carport",   "pos": [8.55, 1.6, 10.6], "target": [7.4, 1.4, 8.5], "fov": 70 },
+    "musholla": { "label": "Musholla", "pos": [8.8, 1.5, 3.3], "target": [7.0, 1.7, 1.0], "fov": 72 },
     "living":  { "label": "R. keluarga", "pos": [2.9, 1.55, 8.15], "target": [6.6, 1.1, 3.0] }
   }
 }

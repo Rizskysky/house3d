@@ -54,7 +54,7 @@ A `rect` is always `[x0, y0, x1, y1]`. In three.js, `x → X`, `z → Y` (up), `
 | `stairs` | flights (`dir`, `steps`, `z0`, `z1`), landings, rails | change the stair |
 | `boxes` | furniture and small objects: `rect`, `z` (above the level), `h`, `mat` | move furniture |
 | `prayerMats` | center, size, rotation toward qibla (degrees) | |
-| `roofs` | `gable`, `flat` (with optional `posts`), `glass` canopy | change roof pitch or overhang |
+| `roofs` | `gable`, `flat` (with optional `posts` and one `skylight` strip), `glass` canopy | change roof pitch or overhang |
 | `cars`, `plants` | position and size | |
 | `context.houses` | simple neighbor blocks (toggle "Tetangga") | |
 | `cameras` | camera presets (`pos`, `target`, optional `fov`) shown as buttons | add a viewpoint |

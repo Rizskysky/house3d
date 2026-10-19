@@ -97,7 +97,17 @@ export function buildHouse(data, state) {
     if (!show.roof(r)) continue;
     if (r.type === 'gable') gable(r, M(r.mat), M('teak'), M('charcoal'), root, add, box);
     else if (r.type === 'flat') {
-      box(r.rect, r.z, r.t, M(r.mat));
+      const sky = r.skylight;                                   // one strip [x0,y0,x1,y1] cut out of the slab
+      if (!sky) box(r.rect, r.z, r.t, M(r.mat));
+      else {
+        const [x0, y0, x1, y1] = norm(r.rect), [s0, t0, s1, t1] = norm(sky);
+        for (const piece of [[x0, y0, s0, y1], [s1, y0, x1, y1], [s0, y0, s1, t0], [s0, t1, s1, y1]])
+          if (piece[2] - piece[0] > 0.001 && piece[3] - piece[1] > 0.001) box(piece, r.z, r.t, M(r.mat));
+        const c = 0.06;                                         // upstand around the opening
+        for (const e of [[s0 - c, t0 - c, s1 + c, t0], [s0 - c, t1, s1 + c, t1 + c], [s0 - c, t0, s0, t1], [s1, t0, s1 + c, t1]])
+          box(e, r.z + r.t, 0.12, M('charcoal'));
+        box([s0, t0, s1, t1], r.z + r.t + 0.1, 0.02, M('glass'));
+      }
       for (const p of r.posts || []) box([p[0] - 0.05, p[1] - 0.05, p[0] + 0.05, p[1] + 0.05], 0, r.z, M('charcoal'));
     } else if (r.type === 'glass') glassCanopy(r, M, box);
   }
