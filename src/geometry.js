@@ -202,6 +202,24 @@ function buildWall(w, z, h, t, mat, M, box) {
     } else if (o.type === 'gate') {
       for (let p = p0 + 0.04; p < p1 - 0.02; p += 0.13) box(rect(p, p + 0.07, 0.05), z, top, M('teak'));
       box(rect(p0, p1, 0.06), z + top - 0.05, 0.05, M('black'));
+    } else if (o.type === 'swing') {
+      // aluminium glass doors: 'fixed' panes stay in the wall plane; 'swing' leaves are drawn
+      // opened 180° outward, lying flat in front of the neighbouring fixed pane (hooked open).
+      const kinds = o.leaves || ['swing', 'swing'], n = kinds.length, pw = o.w / n, out = o.out || 1;
+      const frame = M('black'), glass = M('glass');
+      box(rect(p0, p1, 0.07), z + top - 0.05, 0.05, frame);
+      box(rect(p0, p1, 0.07), z, 0.03, frame);
+      for (let i = 0; i <= n; i++) { const q = Math.min(p0 + i * pw, p1 - 0.04); box(rect(q, q + 0.04, 0.07), z, top, frame); }
+      kinds.forEach((k, i) => {
+        const q0 = p0 + i * pw, q1 = q0 + pw;
+        if (k === 'fixed') { box(rect(q0, q1, 0.03), z, top, glass); return; }
+        const j = kinds[i - 1] === 'fixed' ? i - 1 : i + 1;      // hinge on the side of the fixed pane
+        const r0 = p0 + j * pw, r1 = r0 + pw, off = out * (t / 2 + 0.05);
+        box(rect(r0, r1, 0.03, off), z + 0.03, top - 0.06, glass);
+        box(rect(r0, r1, 0.05, off), z + top - 0.07, 0.04, frame);
+        box(rect(r0, r1, 0.05, off), z + 0.03, 0.04, frame);
+        for (const e of [r0, r1 - 0.04]) box(rect(e, e + 0.04, 0.05, off), z + 0.03, top - 0.06, frame);
+      });
     } else if (o.type === 'bifold') {
       const n = o.panels || 4, pw = o.w / n, out = o.out || 1;
       box(rect(p0, p1, 0.08), z + top - 0.06, 0.06, M('black'));          // top track

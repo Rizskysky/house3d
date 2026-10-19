@@ -1,7 +1,7 @@
 {
   "meta": {
     "name": "House 3D",
-    "version": "v1.5 · 2026-10-19 · meja makan ke tengah, pantry di sisi musholla",
+    "version": "v1.6 · 2026-10-19 · bifold diganti pintu kaca aluminium ayun keluar",
     "units": "meter",
     "coords": "x = barat→timur (0 = sisi jalan samping), y = belakang→depan (0 = batas belakang, 14 = jalan depan), z = tinggi. Semua rect = [x0, y0, x1, y1].",
     "lb": { "lt1": 56, "lt2": 49, "total": 105 }
@@ -101,7 +101,7 @@
                 { "at": 3.3, "w": 1.5, "type": "window", "sill": 1.15, "head": 1.95, "note": "J1 dapur, di atas sink (dinding di atas kompor untuk cooker hood)" },
                 { "at": 6.0, "w": 0.85, "type": "door", "head": 2.1, "note": "P5 dapur → service yard" } ] },
     { "level": "lt1", "kind": "ext", "a": [7, 1.5], "b": [7, 8.5],
-      "open": [ { "at": 3.3, "w": 3.4, "type": "bifold", "head": 2.4, "panels": 4, "out": 1, "note": "PL1 bifold, terbuka penuh" } ] },
+      "open": [ { "at": 3.3, "w": 3.4, "type": "swing", "head": 2.4, "leaves": ["fixed", "swing", "swing", "fixed"], "out": 1, "note": "PL1 kusen aluminium + kaca: 2 daun ayun keluar di tengah (buka 180°, dikait ke kaca mati) + 2 kaca mati" } ] },
     { "level": "lt1", "kind": "ext", "a": [0, 8.5], "b": [7, 8.5],
       "open": [ { "at": 0.3, "w": 0.9, "type": "door", "head": 2.2, "note": "P1 pintu utama" } ] },
     { "level": "lt1", "kind": "ext", "a": [7, 0], "b": [7, 1.5], "h": 3.2,
@@ -223,13 +223,13 @@
 
     { "level": "site", "rect": [8.86, 3.72, 8.94, 3.8], "z": 0.75, "h": 0.2, "mat": "black", "note": "kran wudhu" },
     { "level": "site", "rect": [8.3, 3.6, 8.65, 3.95], "h": 0.4, "mat": "teak", "note": "bangku wudhu, depan kran" },
-    { "level": "site", "rect": [7.15, 5.0, 8.5, 6.6], "h": 0.06, "mat": "teak", "slatsTop": true, "note": "deck" },
+    { "level": "site", "rect": [7.15, 4.6, 8.4, 7.4], "h": 0.06, "mat": "teak", "slatsTop": true, "note": "deck: dari pintu kaca sampai area wudhu" },
     { "level": "site", "rect": [1.0, 8.85, 1.5, 9.15], "h": 0.04, "mat": "stone" },
     { "level": "site", "rect": [0.7, 9.4, 1.2, 9.7], "h": 0.04, "mat": "stone" },
     { "level": "site", "rect": [1.05, 9.95, 1.55, 10.25], "h": 0.04, "mat": "stone" },
     { "level": "site", "rect": [0.7, 10.5, 1.2, 10.8], "h": 0.04, "mat": "stone" },
-    { "level": "site", "rect": [7.5, 7.05, 7.9, 7.3], "h": 0.04, "mat": "stone" },
-    { "level": "site", "rect": [7.85, 7.6, 8.25, 7.85], "h": 0.04, "mat": "stone" },
+    { "level": "site", "rect": [7.45, 7.6, 7.85, 7.85], "h": 0.04, "mat": "stone" },
+    { "level": "site", "rect": [7.85, 8.0, 8.25, 8.25], "h": 0.04, "mat": "stone" },
 
     { "level": "lt2", "rect": [0.12, 1.62, 1.12, 3.62], "h": 0.45, "mat": "white", "note": "kasur kamar 2" },
     { "level": "lt2", "rect": [0.12, 1.62, 1.12, 1.74], "h": 0.9, "mat": "oak" },
