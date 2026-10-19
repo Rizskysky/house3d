@@ -104,8 +104,11 @@ export function buildHouse(data, state) {
   // ---------- lights (on in "Malam") ----------
   for (const l of data.lights || []) {
     if (!show.level(l.level)) continue;
-    // ceiling fittings would float in a cut view, or under a roof that is hidden
-    const cutAway = l.kind !== 'up' && (show.cutLevel === l.level || (l.level === 'site' && state.view === 'lt1'));
+    // a ceiling fitting is drawn only while the ceiling it hangs from is drawn (and not in a cut view)
+    const ceilingShown = l.level === 'lt1' ? show.slabs
+      : l.level === 'lt2' ? state.view === 'all' && state.roof
+      : state.view !== 'lt1';                                  // site: carport canopy
+    const cutAway = l.kind !== 'up' && (!ceilingShown || show.cutLevel === l.level);
     const [x, y] = l.at, z = lz(l.level) + l.z;
     const glow = lampMaterial();
     if (cutAway) { /* light only */ } else if (l.kind === 'pendant') {
