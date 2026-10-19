@@ -28,6 +28,7 @@ src/main.js         loads the data, wires the controls, deep links
 src/geometry.js     house.json → three.js meshes (walls, openings, stairs, roofs, furniture, plants)
 src/furniture.js    parametric furniture, fixtures, cars and plants, sized from each item's rect
 src/textures.js     procedural material patterns (wood, plaster, stone, terrazzo, grass…), drawn on canvas
+src/walk.js         first-person walk: collision and floor heights from house.json
 src/viewer.js       renderer, sky, lights, shadows, ambient occlusion, day/night, camera, PNG snapshot
 ```
 
@@ -51,6 +52,7 @@ A `rect` is always `[x0, y0, x1, y1]`. In three.js, `x → X`, `z → Y` (up), `
 | `materials` | `color`, `rough`, `metal`, `opacity`, plus optional `tex` (procedural pattern), `scale` (m per tile), `bump`, `env` (sky reflection strength) | retune a finish |
 | `floors` | floor surfaces per room (`name` becomes the room label) | resize or rename a room |
 | `slabs` | floor-2 slab pieces (the gaps are the stair void) | move the stair void |
+| `ceilings` | flat ceilings under the roof (`level`, `rect`, `z`, `t`), drawn while the roof is shown | |
 | `walls` | centerline `a → b`, `kind` (`ext`, `int`, `boundary`, `low`), optional `h`, and `open` | move a wall |
 | `walls[].open` | `at` (m from the wall's lower-coordinate end), `w`, `type`, `sill`, `head` | move or resize a door/window |
 | `stairs` | flights (`dir`, `steps`, `z0`, `z1`), landings, rails | change the stair |
@@ -61,6 +63,7 @@ A `rect` is always `[x0, y0, x1, y1]`. In three.js, `x → X`, `z → Y` (up), `
 | `cars`, `plants` | position and size | |
 | `context.houses` | simple neighbor blocks (toggle "Tetangga") | |
 | `cameras` | camera presets (`pos`, `target`, optional `fov`) shown as buttons | add a viewpoint |
+| `walk` | walk-mode `start` and `spots` (`label`, `level`, `at` [x, y], `yaw` in degrees, 0 = facing the back, −90 = facing east) | add a place to jump to |
 
 Furniture `type` values: `bed`, `wardrobe`, `openWardrobe`, `kitchen` (with worktop, optional `backsplash`), `wallCabinet`, `lowCabinet`, `tvConsole`, `tv`, `sofa`, `coffeeTable`, `diningTable`, `diningChair`, `desk`, `monitor`, `officeChair`, `shelf`, `bench`, `toilet`, `vanity`, `fridge`, `cooktop`, `sink`, `hood`, `microwave`, `riceCooker`, `nightstand`, `sideTable`, `loungeChair`, `washer`, `laundrySink`, `dryingRack`, `mihrab`, `faucet`, `steppingStone`, `railing`.
 
@@ -74,6 +77,8 @@ Opening `type` values: `door` (gap; with `hinge` `start`/`end`, `side` ±1 and o
 - **Kualitas**: Tinggi adds ambient occlusion and sharper shadows; Standar is lighter and is the default on phones.
 - **Kamera** presets come from `cameras` in the data.
 - **Simpan gambar** saves the current view as PNG.
+- **Jalan-jalan**: first-person walk. Joystick (phone) or W A S D / arrows (desktop), drag to look, Shift to run; the menu jumps to a room. Walls, doors, furniture and stairs come from the data (fixed glass panes stay solid).
+- Tap or click a room to see its name, size and area.
 - Deep links: `#<view>-<camera>[-malam]`, for example `#lt1-top`, `#all-corner-malam`.
 
 ## Roadmap

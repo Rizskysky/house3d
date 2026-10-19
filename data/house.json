@@ -1,5 +1,5 @@
 {
-  "meta": {"name": "House 3D", "version": "v2.3 · 2026-10-19 · lampu plafon disembunyikan saat plafonnya disembunyikan", "units": "meter", "coords": "x = barat→timur (0 = sisi jalan samping), y = belakang→depan (0 = batas belakang, 14 = jalan depan), z = tinggi. Semua rect = [x0, y0, x1, y1].", "lb": {"lt1": 56, "lt2": 49, "total": 105}},
+  "meta": {"name": "House 3D", "version": "v2.4 · 2026-10-19 · mode jalan-jalan, ketuk ruangan", "units": "meter", "coords": "x = barat→timur (0 = sisi jalan samping), y = belakang→depan (0 = batas belakang, 14 = jalan depan), z = tinggi. Semua rect = [x0, y0, x1, y1].", "lb": {"lt1": 56, "lt2": 49, "total": 105}},
 
   "lot": {"w": 9, "d": 14},
 
@@ -101,6 +101,10 @@
     {"level": "lt2", "rect": [1, 5.0, 2, 8.5], "z": 3.3, "t": 0.15},
     {"level": "lt2", "rect": [0, 7, 1, 8.5], "z": 3.3, "t": 0.15},
     {"level": "lt2", "rect": [3.5, 8.5, 7, 9.5], "z": 3.3, "t": 0.15}
+  ],
+
+  "ceilings": [
+    {"level": "lt2", "rect": [0, 1.5, 7, 8.5], "z": 3.0, "t": 0.03, "mat": "plaster", "note": "plafon lantai 2 (di bawah rangka atap)"}
   ],
 
   "walls": [
@@ -236,10 +240,10 @@
     {"level": "site", "at": [8.7, 7.95], "z": 0.05, "kind": "up", "power": 2.2, "color": "#FFE3B8", "note": "lampu sorot pohon taman"},
     {"level": "site", "at": [5.5, 11.2], "z": 2.78, "kind": "down", "power": 4.5, "note": "carport"},
     {"level": "site", "at": [1.0, 12.4], "z": 0.05, "kind": "up", "power": 2.2, "color": "#FFE3B8", "note": "lampu sorot kamboja"},
-    {"level": "lt2", "at": [5.25, 6.9], "z": 2.95, "kind": "down", "power": 5.4, "note": "kamar utama"},
-    {"level": "lt2", "at": [1.75, 2.75], "z": 2.95, "kind": "down", "power": 4.5, "note": "kamar 2"},
-    {"level": "lt2", "at": [5.25, 2.75], "z": 2.95, "kind": "down", "power": 4.5, "note": "kamar 3"},
-    {"level": "lt2", "at": [3.5, 4.75], "z": 2.95, "kind": "down", "power": 3.6, "note": "hall"},
+    {"level": "lt2", "at": [5.25, 6.9], "z": 2.98, "kind": "down", "power": 5.4, "note": "kamar utama"},
+    {"level": "lt2", "at": [1.75, 2.75], "z": 2.98, "kind": "down", "power": 4.5, "note": "kamar 2"},
+    {"level": "lt2", "at": [5.25, 2.75], "z": 2.98, "kind": "down", "power": 4.5, "note": "kamar 3"},
+    {"level": "lt2", "at": [3.5, 4.75], "z": 2.98, "kind": "down", "power": 3.6, "note": "hall"},
     {"level": "lt2", "at": [5.25, 9.0], "z": 2.6, "kind": "down", "power": 2.7, "note": "balkon"}
   ],
 
@@ -272,6 +276,23 @@
   ],
 
   "context": {"note": "Bangunan tetangga sederhana untuk konteks; bisa disembunyikan di viewer.", "houses": [{"rect": [9.2, 1.5, 15.0, 8.5], "eave": 6.2, "rise": 2.6}, {"rect": [15.2, 1.5, 21.0, 8.5], "eave": 6.2, "rise": 2.6}, {"rect": [21.2, 1.5, 27.0, 8.5], "eave": 6.2, "rise": 2.6}, {"rect": [0.2, -8.5, 7.0, -1.5], "eave": 6.2, "rise": 2.8}]},
+
+  "walk": {
+    "start": {"label": "Depan rumah", "level": "site", "at": [0.85, 10.0], "yaw": 0},
+    "spots": [
+      {"label": "Depan rumah", "level": "site", "at": [0.85, 10.0], "yaw": 0},
+      {"label": "Genkan", "level": "lt1", "at": [1.45, 7.6], "yaw": -90},
+      {"label": "Ruang keluarga", "level": "lt1", "at": [4.4, 8.1], "yaw": 0},
+      {"label": "Dapur", "level": "lt1", "at": [3.8, 2.75], "yaw": 180},
+      {"label": "Studio", "level": "lt1", "at": [1.4, 3.4], "yaw": 45},
+      {"label": "Taman & deck", "level": "site", "at": [7.7, 7.8], "yaw": 0},
+      {"label": "Musholla", "level": "lt1", "at": [8.3, 3.0], "yaw": 90},
+      {"label": "Kamar utama", "level": "lt2", "at": [4.0, 8.0], "yaw": -45},
+      {"label": "Kamar 2", "level": "lt2", "at": [2.55, 3.6], "yaw": 90},
+      {"label": "Kamar 3", "level": "lt2", "at": [4.45, 3.6], "yaw": -90},
+      {"label": "Balkon", "level": "lt2", "at": [6.0, 9.0], "yaw": 180}
+    ]
+  },
 
   "cameras": {
     "iso": {"label": "Isometrik", "pos": [-8.5, 15.5, 21.5], "target": [4.6, 1.2, 6.8]},

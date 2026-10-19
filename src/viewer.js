@@ -154,7 +154,34 @@ export function createViewer(container) {
   new ResizeObserver(resize).observe(container);
 
   const draw = () => (quality === 'high' ? composer.render() : renderer.render(scene, camera));
-  renderer.setAnimationLoop(() => { controls.update(); draw(); });
+  const hooks = [], clock = new THREE.Clock();
+  let orbit = true;
+  renderer.setAnimationLoop(() => {
+    const dt = clock.getDelta();
+    for (const f of hooks) f(dt);
+    if (orbit) controls.update();
+    draw();
+  });
+  function onFrame(fn) { hooks.push(fn); }
+  function setOrbit(on) { orbit = on; controls.enabled = on; }
+
+  // translucent marker over a room's floor (tap-a-room)
+  let mark = null;
+  function highlight(rect, z) {
+    clearHighlight();
+    if (!rect) return;
+    const [x0, y0, x1, y1] = rect;
+    mark = new THREE.Group();
+    const fill = new THREE.Mesh(new THREE.PlaneGeometry(x1 - x0, y1 - y0),
+      new THREE.MeshBasicMaterial({ color: '#2F5D4A', transparent: true, opacity: 0.28, depthWrite: false }));
+    fill.rotation.x = -Math.PI / 2; fill.position.set((x0 + x1) / 2, z + 0.04, (y0 + y1) / 2);
+    const edge = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(x1 - x0, 0.01, y1 - y0)),
+      new THREE.LineBasicMaterial({ color: '#2F5D4A' }));
+    edge.position.copy(fill.position);
+    mark.add(fill, edge); mark.userData.noAO = true; fill.userData.noAO = true;
+    scene.add(mark);
+  }
+  function clearHighlight() { if (mark) { scene.remove(mark); mark.traverse((o) => o.geometry && o.geometry.dispose()); mark = null; } }
 
   function snapshot() {
     draw();
@@ -163,7 +190,8 @@ export function createViewer(container) {
 
   setNight(false);
   setQuality('high');
-  return { scene, camera, controls, renderer, setModel, setCamera, snapshot, setQuality, setNight };
+  return { scene, camera, controls, renderer, setModel, setCamera, snapshot, setQuality, setNight,
+    onFrame, setOrbit, highlight, clearHighlight, getModel: () => model };
 }
 
 // GTAO, but glass, labels and the sky don't count as occluders.

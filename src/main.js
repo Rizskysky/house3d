@@ -3,6 +3,8 @@
 const bust = new URL(import.meta.url).search;
 const { createViewer } = await import(`./viewer.js${bust}`);
 const { buildHouse } = await import(`./geometry.js${bust}`);
+const { createWalk } = await import(`./walk.js${bust}`);
+const THREE = await import('three');
 
 const $ = (s) => document.querySelector(s);
 const phone = window.matchMedia('(max-width: 640px)').matches;
@@ -67,12 +69,67 @@ $('#save').addEventListener('click', async () => {
   setTimeout(() => URL.revokeObjectURL(a.href), 4000);
 });
 
+// ---- walk mode ----
+const walk = createWalk({ viewer, data, overlay: $('#walk'), joystick: $('#joy') });
+const spotSel = $('#walk-spot');
+data.walk.spots.forEach((s, i) => { const o = document.createElement('option'); o.value = i; o.textContent = s.label; spotSel.appendChild(o); });
+let beforeWalk = null;
+$('#walk-btn').addEventListener('click', () => {
+  beforeWalk = { view: state.view, roof: state.roof };
+  state.view = 'all'; state.roof = true; rebuild(); sync();
+  closeInfo(); document.body.classList.add('walking');
+  spotSel.value = '0'; walk.enter(data.walk.spots[0]);
+});
+spotSel.addEventListener('change', () => walk.teleport(data.walk.spots[+spotSel.value]));
+$('#walk-exit').addEventListener('click', () => {
+  walk.exit(); document.body.classList.remove('walking');
+  Object.assign(state, beforeWalk); rebuild();
+  viewer.setCamera(data.cameras[state.camera]); sync();
+});
+
+// ---- tap a room ----
+const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+let tap = null;
+const canvas = viewer.renderer.domElement;
+canvas.addEventListener('pointerdown', (e) => { tap = { x: e.clientX, y: e.clientY, t: performance.now() }; });
+canvas.addEventListener('pointerup', (e) => {
+  if (!tap || walk.active) return;
+  const moved = Math.hypot(e.clientX - tap.x, e.clientY - tap.y), quick = performance.now() - tap.t < 450;
+  tap = null;
+  if (moved > 6 || !quick) return;
+  const r = canvas.getBoundingClientRect();
+  ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+  ray.setFromCamera(ndc, viewer.camera);
+  const hit = ray.intersectObject(viewer.getModel(), true).find((h) => h.object.visible && !h.object.isSprite);
+  if (!hit) return closeInfo();
+  const room = roomAt(hit.point.x, hit.point.z, hit.point.y);
+  room ? openInfo(room) : closeInfo();
+});
+function roomAt(x, y, z) {
+  const levels = z >= data.levels.lt2.z - 0.1 ? ['lt2'] : ['lt1', 'site'];
+  const named = data.floors.filter((f) => f.name && levels.includes(f.level));
+  const inside = named.filter((f) => { const [a, b, c, d] = f.rect; return x >= Math.min(a, c) && x <= Math.max(a, c) && y >= Math.min(b, d) && y <= Math.max(b, d); });
+  inside.sort((p, q) => (p.level === 'site') - (q.level === 'site') || area(p.rect) - area(q.rect));
+  return inside[0] || null;
+}
+const area = ([a, b, c, d]) => Math.abs(c - a) * Math.abs(d - b);
+const fmt = (n) => n.toLocaleString('id-ID', { maximumFractionDigits: 2 });
+function openInfo(f) {
+  const [a, b, c, d] = f.rect, w = Math.abs(c - a), l = Math.abs(d - b);
+  $('#info-name').textContent = f.name;
+  $('#info-size').textContent = `${fmt(w)} × ${fmt(l)} m · ${fmt(w * l)} m² · ${data.levels[f.level].name}`;
+  $('#info').hidden = false;
+  viewer.highlight([Math.min(a, c), Math.min(b, d), Math.max(a, c), Math.max(b, d)], data.levels[f.level].z + (f.z || 0));
+}
+function closeInfo() { $('#info').hidden = true; viewer.clearHighlight(); }
+$('#info-close').addEventListener('click', closeInfo);
+
 $('#panel-toggle').addEventListener('click', () => {
   const p = $('#panel'); const open = p.dataset.open !== 'true';
   p.dataset.open = String(open); $('#panel-toggle').setAttribute('aria-expanded', String(open));
 });
 
-function rebuild() { viewer.setModel(buildHouse(data, state)); }
+function rebuild() { viewer.setModel(buildHouse(data, state)); if (!$('#info').hidden) closeInfo(); }
 function sync() {
   document.querySelectorAll('[data-view]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.view === state.view)));
   document.querySelectorAll('[data-toggle]').forEach((b) => {
@@ -92,5 +149,5 @@ viewer.setNight(state.night);
 rebuild();
 viewer.setCamera(data.cameras[state.camera]);
 sync();
-window.__house = { data, state, viewer, rebuild };
+window.__house = { data, state, viewer, rebuild, walk, openInfo, roomAt };
 document.body.dataset.ready = 'true';

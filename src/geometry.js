@@ -46,6 +46,8 @@ export function buildHouse(data, state) {
     box(f.rect, lz(f.level) + (f.z || 0), 0.02, M(f.mat), { noShadow: true });
   }
   if (show.slabs) for (const s of data.slabs || []) box(s.rect, s.z, s.t, M('plaster'));
+  // flat ceilings under the roof: only when the roof itself is shown
+  if (state.view === 'all' && state.roof) for (const c of data.ceilings || []) box(c.rect, lz(c.level) + c.z, c.t, M(c.mat || 'plaster'));
 
   // ---------- walls ----------
   for (const w of data.walls || []) {
