@@ -1,5 +1,5 @@
 {
-  "meta": {"name": "House 3D", "version": "v2.4 · 2026-10-19 · mode jalan-jalan, ketuk ruangan", "units": "meter", "coords": "x = barat→timur (0 = sisi jalan samping), y = belakang→depan (0 = batas belakang, 14 = jalan depan), z = tinggi. Semua rect = [x0, y0, x1, y1].", "lb": {"lt1": 56, "lt2": 49, "total": 105}},
+  "meta": {"name": "House 3D", "version": "v2.5 · 2026-10-19 · render kualitas tinggi, dokumen kontraktor", "units": "meter", "coords": "x = barat→timur (0 = sisi jalan samping), y = belakang→depan (0 = batas belakang, 14 = jalan depan), z = tinggi. Semua rect = [x0, y0, x1, y1].", "lb": {"lt1": 56, "lt2": 49, "total": 105}},
 
   "lot": {"w": 9, "d": 14},
 

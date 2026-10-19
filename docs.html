@@ -28,7 +28,7 @@ header.ph span { color: var(--muted); font-size: 11px; }
 footer.pf { margin-top: auto; padding-top: 8px; border-top: 1px solid var(--line); color: var(--muted); font-size: 10.5px; display: flex; justify-content: space-between; }
 h1 { font-family: var(--display); font-weight: 600; font-size: 30px; line-height: 1.15; margin: 0 0 4px; }
 .lede { color: var(--muted); margin: 0 0 14px; font-size: 14px; }
-.hero { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 6px; background: var(--chip); margin-bottom: 14px; }
+.hero { width: 100%; aspect-ratio: 16 / 8.5; object-fit: cover; border-radius: 6px; background: var(--chip); margin-bottom: 14px; }
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px; }
 .stats div { background: var(--chip); border-radius: 8px; padding: 8px 10px; }
 .stats b { display: block; font-size: 18px; font-variant-numeric: tabular-nums; }
@@ -40,7 +40,9 @@ td.n, th.n { text-align: right; white-space: nowrap; }
 td.code { font-weight: 600; color: var(--accent); white-space: nowrap; }
 .sched td, .sched th { font-size: 11px; padding: 3px 5px; }
 .sched td:not(:last-child) { white-space: nowrap; }
-.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.rooms td, .rooms th { font-size: 11px; padding: 3px 5px; }
+.rooms tr.lv td { font-weight: 600; color: var(--accent); padding-top: 8px; border-bottom: 0; }
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: start; }
 .plan-wrap { display: flex; justify-content: center; }
 .plan .halo { paint-order: stroke; stroke: #FBFAF7; stroke-width: 0.05; stroke-linejoin: round; }
 .legend { display: flex; flex-wrap: wrap; gap: 12px; color: var(--muted); font-size: 11px; margin-top: 6px; justify-content: center; }
@@ -78,8 +80,9 @@ const page = (title, body, sub = '') => `<section class="page"><header class="ph
 // rooms
 const rooms = data.floors.filter((f) => f.name).map((f) => { const [x0, y0, x1, y1] = norm(f.rect); return { ...f, w: x1 - x0, h: y1 - y0 }; });
 const levelName = (l) => (l === 'site' ? 'Tapak' : data.levels[l].name);
-const roomRows = ['lt1', 'lt2', 'site'].map((l) => rooms.filter((r) => r.level === l).map((r) =>
-  `<tr><td>${esc(r.name)}</td><td>${levelName(r.level)}</td><td class="n">${num(r.w)} × ${num(r.h)} m</td><td class="n">${num(r.w * r.h, 1)} m²</td></tr>`).join('')).join('');
+const roomTable = (levels) => `<table class="rooms"><thead><tr><th>Ruang</th><th class="n">Ukuran</th><th class="n">Luas</th></tr></thead><tbody>` +
+  levels.map((l) => `<tr class="lv"><td colspan="3">${levelName(l)}</td></tr>` + rooms.filter((r) => r.level === l).map((r) =>
+    `<tr><td>${esc(r.name)}</td><td class="n">${num(r.w)} × ${num(r.h)} m</td><td class="n">${num(r.w * r.h, 1)} m²</td></tr>`).join('')).join('') + '</tbody></table>';
 
 const lb = data.meta.lb;
 const cover = `<h1>Rumah Japandi Tropis</h1>
@@ -87,7 +90,7 @@ const cover = `<h1>Rumah Japandi Tropis</h1>
   <img class="hero" src="docs/img/all-corner.jpg" alt="Tampak dari tikungan jalan">
   <div class="stats"><div><b>9 × 14 m</b><span>tanah, posisi hook</span></div><div><b>±${lb.total} m²</b><span>luas bangunan</span></div>
     <div><b>±${lb.lt1} m²</b><span>lantai 1</span></div><div><b>±${lb.lt2} m²</b><span>lantai 2</span></div></div>
-  <table><thead><tr><th>Ruang</th><th>Lantai</th><th class="n">Ukuran</th><th class="n">Luas</th></tr></thead><tbody>${roomRows}</tbody></table>`;
+  <div class="cols">${roomTable(['lt1'])}${roomTable(['lt2', 'site'])}</div>`;
 
 const legend = `<div class="legend"><span><i style="background:#232220"></i>dinding luar</span><span><i style="background:#4A4741"></i>dinding dalam</span>
   <span><i style="background:#8F8A80"></i>pagar/batas</span><span><i style="background:repeating-linear-gradient(90deg,#6B665E 0 3px,#fff 3px 6px)"></i>roster</span>
