@@ -83,7 +83,7 @@ export function buildHouse(data, state) {
   }
 
   // ---------- furniture & small objects ----------
-  for (const b of data.boxes || []) {
+  for (let b of data.boxes || []) {
     if (!show.level(b.level)) continue;
     const z = lz(b.level) + (b.z || 0);
     if (b.type) {                                          // modeled furniture (src/furniture.js)
@@ -96,6 +96,8 @@ export function buildHouse(data, state) {
       if (g) root.add(g);
       continue;
     }
+    if (show.cutLevel === b.level && (b.z || 0) < CUT_HEIGHT && (b.z || 0) + b.h > CUT_HEIGHT) b = { ...b, h: CUT_HEIGHT - (b.z || 0) };
+    else if (show.cutLevel === b.level && (b.z || 0) >= CUT_HEIGHT) continue;
     const mat = M(b.mat, b.opacity);
     if (b.legs) { tableLegs(b.rect, z, b.h, mat, box); continue; }
     if (b.slats) { slatWall(b.rect, z, b.h, mat, box); continue; }

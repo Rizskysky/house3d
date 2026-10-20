@@ -387,6 +387,34 @@ const BUILDERS = {
     k.cyl('linen', 0, -0.03, h + 0.2, h + 0.36, 0.08, 0.12, 20);
   },
 
+  // dressing table: slim top with two drawers, tapered legs, arched mirror on the wall behind
+  dressingTable(k, W, D, h, it) {
+    const m = it.mat || 'oak';
+    legs4(k, m, W, D, 0, h - 0.03, 0.04, 0.018, 0.013);
+    k.box(m, [-W / 2, W / 2], [h - 0.03, h], [-D / 2, D / 2], 0.006);
+    k.box(m, [-W / 2 + 0.03, W / 2 - 0.03], [h - 0.15, h - 0.03], [-D / 2 + 0.02, D / 2 - 0.03]);
+    fronts(k, m, W - 0.06, D - 0.05, h - 0.15, h - 0.03, 2, { handle: 'h' });
+    const mw = Math.min(W * 0.7, 0.6), mh = it.mirrorH || 0.9, my = h + 0.12;
+    const arch = new THREE.Shape();
+    arch.moveTo(-mw / 2, my); arch.lineTo(mw / 2, my); arch.lineTo(mw / 2, my + mh - mw / 2);
+    arch.absarc(0, my + mh - mw / 2, mw / 2, 0, Math.PI, false); arch.lineTo(-mw / 2, my);
+    k.extrude(it.frame || 'oak', arch, 0.02, -D / 2);
+    const glass = new THREE.Shape(), gw = mw - 0.05;
+    glass.moveTo(-gw / 2, my + 0.025); glass.lineTo(gw / 2, my + 0.025); glass.lineTo(gw / 2, my + mh - mw / 2);
+    glass.absarc(0, my + mh - mw / 2, gw / 2, 0, Math.PI, false); glass.lineTo(-gw / 2, my + 0.025);
+    k.extrude('mirror', glass, 0.005, -D / 2 + 0.021);
+    k.cyl('ceramic', W / 2 - 0.12, -0.05, h, h + 0.1, 0.04, 0.035);                          // a few bottles and a tray
+    k.cyl('clay', W / 2 - 0.2, -0.02, h, h + 0.14, 0.022, 0.022);
+    k.box('white', [-W / 2 + 0.08, -W / 2 + 0.3], [h, h + 0.015], [-0.12, 0.06], 0.004);
+  },
+
+  // upholstered stool / pouf
+  stool(k, W, D, h, it) {
+    const r = Math.min(W, D) / 2;
+    k.cyl(it.legs || 'oak', 0, 0, 0, 0.04, r * 0.85, r * 0.85, 24);
+    k.cyl(it.mat || 'linen', 0, 0, 0.04, h, r, r * 0.9, 28);
+  },
+
   sideTable(k, W, D, h, it) {
     const m = it.mat || 'teak', r = Math.min(W, D) / 2;
     k.cyl(m, 0, 0, h - 0.03, h, r, r, 28);
