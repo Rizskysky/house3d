@@ -289,6 +289,14 @@ const BUILDERS = {
       const y = i * (h - 0.02) / n;
       k.box(m, [-W / 2, W / 2], [y, y + 0.02], [-D / 2, D / 2]);
       if (i === n) break;
+      if (it.items === 'shoes') {                                     // pairs of shoes instead of books
+        for (let x = -W / 2 + 0.05, j = i; x < W / 2 - 0.22; x += 0.24, j++) {
+          const c = ['charcoal', 'white', 'clay', 'linen', 'cloth3'][j % 5];
+          k.box(c, [x, x + 0.09], [y + 0.02, y + 0.1], [-D / 2 + 0.04, D / 2 - 0.03], 0.03);
+          k.box(c, [x + 0.1, x + 0.19], [y + 0.02, y + 0.1], [-D / 2 + 0.04, D / 2 - 0.03], 0.03);
+        }
+        continue;
+      }
       let x = -W / 2 + 0.03, j = i * 3;
       const fill = (i % 2 ? 0.55 : 0.8) * (W - 0.06);
       while (x < -W / 2 + 0.03 + fill) {
@@ -413,6 +421,31 @@ const BUILDERS = {
     const r = Math.min(W, D) / 2;
     k.cyl(it.legs || 'oak', 0, 0, 0, 0.04, r * 0.85, r * 0.85, 24);
     k.cyl(it.mat || 'linen', 0, 0, 0.04, h, r, r * 0.9, 28);
+  },
+
+  // pull-out drawer box on castors (under-stair storage), front at +z
+  drawerUnit(k, W, D, h, it) {
+    const m = it.mat || 'oak';
+    for (const sx of [-1, 1]) for (const sz of [-1, 1]) k.ball('black', sx * (W / 2 - 0.05), 0.025, sz * (D / 2 - 0.06), 0.025);
+    k.box(m, [-W / 2 + 0.005, W / 2 - 0.005], [0.05, h], [-D / 2, D / 2 - 0.02]);
+    k.box(m, [-W / 2, W / 2], [0.03, h], [D / 2 - 0.02, D / 2], 0.004);
+    k.box('black', [-Math.min(0.12, W / 3), Math.min(0.12, W / 3)], [h - 0.06, h - 0.045], [D / 2, D / 2 + 0.022], 0.003);
+  },
+
+  // cupboard shelving with storage bins and a suitcase (under the stair landing)
+  storageShelf(k, W, D, h, it) {
+    const m = it.mat || 'oak', n = Math.max(2, Math.round(h / 0.42));
+    const bins = ['linen', 'clay', 'cloth1', 'sage', 'linen', 'cloth2'];
+    for (let i = 1; i <= n; i++) k.box(m, [-W / 2, W / 2], [i * h / n - 0.02, i * h / n], [-D / 2, D / 2]);
+    k.box('charcoal', [-W / 2 + 0.06, -W / 2 + 0.5], [0.02, h / n - 0.06], [-D / 2 + 0.1, D / 2 - 0.08], 0.03);   // suitcase
+    k.box('black', [-W / 2 + 0.2, -W / 2 + 0.36], [h / n - 0.06, h / n - 0.03], [D / 2 - 0.1, D / 2 - 0.08]);
+    for (let i = 1; i < n; i++) {
+      const y = i * h / n, bh = h / n - 0.1;
+      for (let j = 0; j < 2; j++) {
+        const xa = -W / 2 + 0.04 + j * (W - 0.08) / 2;
+        k.box(bins[(i * 2 + j) % bins.length], [xa + 0.01, xa + (W - 0.08) / 2 - 0.02], [y, y + bh], [-D / 2 + 0.06, D / 2 - 0.04], 0.02);
+      }
+    }
   },
 
   sideTable(k, W, D, h, it) {
