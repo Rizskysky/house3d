@@ -448,6 +448,23 @@ const BUILDERS = {
     }
   },
 
+  // hard-shell suitcase standing upright, wheels and handle
+  suitcase(k, W, D, h, it) {
+    const m = it.mat || 'charcoal';
+    k.box(m, [-W / 2, W / 2], [0.05, h], [-D / 2, D / 2], 0.04);
+    for (let i = 1; i < 4; i++) k.box(m, [-W / 2 + i * W / 4 - 0.006, -W / 2 + i * W / 4 + 0.006], [0.08, h - 0.03], [D / 2 - 0.005, D / 2 + 0.004]);
+    for (const sx of [-1, 1]) for (const sz of [-1, 1]) k.ball('black', sx * (W / 2 - 0.04), 0.03, sz * (D / 2 - 0.04), 0.03);
+    k.box('black', [-0.12, -0.1], [h, h + 0.12], [-D / 2 + 0.02, -D / 2 + 0.04]);
+    k.box('black', [0.1, 0.12], [h, h + 0.12], [-D / 2 + 0.02, -D / 2 + 0.04]);
+    k.box('black', [-0.12, 0.12], [h + 0.1, h + 0.12], [-D / 2 + 0.02, -D / 2 + 0.04]);
+  },
+
+  // stacked storage bins / boxes
+  bins(k, W, D, h, it) {
+    const cols = ['linen', 'clay', 'cloth1', 'sage'], n = Math.max(1, Math.round(h / 0.32)), bh = h / n;
+    for (let i = 0; i < n; i++) k.box(cols[i % cols.length], [-W / 2 + 0.01 * i, W / 2 - 0.01 * i], [i * bh + 0.005, (i + 1) * bh - 0.005], [-D / 2, D / 2], 0.02);
+  },
+
   sideTable(k, W, D, h, it) {
     const m = it.mat || 'teak', r = Math.min(W, D) / 2;
     k.cyl(m, 0, 0, h - 0.03, h, r, r, 28);

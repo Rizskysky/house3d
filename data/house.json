@@ -1,5 +1,5 @@
 {
-  "meta": {"name": "House 3D", "version": "v2.7 · 2026-10-21 · bawah tangga: lemari dari studio + laci tarik, tanpa merunduk", "units": "meter", "coords": "x = barat→timur (0 = sisi jalan samping), y = belakang→depan (0 = batas belakang, 14 = jalan depan), z = tinggi. Semua rect = [x0, y0, x1, y1].", "lb": {"lt1": 56, "lt2": 49, "total": 105}},
+  "meta": {"name": "House 3D", "version": "v2.8 · 2026-10-21 · gudang bawah tangga untuk barang besar, pintu dari studio", "units": "meter", "coords": "x = barat→timur (0 = sisi jalan samping), y = belakang→depan (0 = batas belakang, 14 = jalan depan), z = tinggi. Semua rect = [x0, y0, x1, y1].", "lb": {"lt1": 56, "lt2": 49, "total": 105}},
 
   "lot": {"w": 9, "d": 14},
 
@@ -79,7 +79,7 @@
     {"level": "lt1", "rect": [0, 4, 2, 7], "mat": "tile", "name": "Tangga"},
     {"level": "lt1", "rect": [1, 4, 2, 5.5], "mat": "terrazzo", "name": "KM tamu"},
     {"level": "lt1", "rect": [1, 5.5, 2, 7], "mat": "oakFloor", "name": "Lemari genkan"},
-    {"level": "lt1", "rect": [0, 4, 1, 5], "mat": "oakFloor", "name": "Lemari bawah bordes"},
+    {"level": "lt1", "rect": [0, 4, 1, 7], "mat": "oakFloor", "name": "Gudang bawah tangga"},
     {"level": "lt1", "rect": [0, 7, 2, 8.5], "mat": "stone", "name": "Genkan"},
     {"level": "lt1", "rect": [2, 1.5, 7, 4.5], "mat": "tile", "name": "Dapur + makan"},
     {"level": "lt1", "rect": [2, 4.5, 7, 8.5], "mat": "tile", "name": "Ruang keluarga"},
@@ -124,9 +124,10 @@
     {"level": "site", "kind": "low", "a": [0, 14], "b": [2, 14], "h": 0.45},
     {"level": "site", "kind": "low", "a": [0, 8.5], "b": [0, 14], "h": 0.45},
     {"level": "lt1", "kind": "int", "a": [2, 1.5], "b": [2, 8.5], "open": [{"at": 1.55, "w": 0.8, "type": "door", "head": 2.1, "note": "P3 studio", "hinge": "end", "side": -1}, {"at": 3.1, "w": 0.7, "type": "door", "head": 2.1, "note": "P4 KM tamu, daun pintu buka keluar (ke arah ruang keluarga)", "hinge": "end", "side": 1, "leaf": "white"}, {"at": 5.6, "w": 1.0, "type": "opening", "head": 2.2, "note": "P2 genkan (bukaan tanpa daun pintu)"}]},
-    {"level": "lt1", "kind": "int", "a": [0, 4], "b": [2, 4], "open": [{"at": 0.1, "w": 0.75, "type": "door", "head": 1.6, "note": "P13 lemari bawah bordes (dibuka dari studio)", "hinge": "start", "side": -1, "leaf": "oak"}]},
+    {"level": "lt1", "kind": "int", "a": [0, 4], "b": [2, 4], "open": [{"at": 0.08, "w": 0.8, "type": "door", "head": 1.65, "note": "P13 pintu gudang bawah tangga (dari studio), 80 × 165 cm", "hinge": "start", "side": -1, "leaf": "oak"}]},
     {"level": "lt1", "kind": "int", "a": [1, 5.5], "b": [2, 5.5]},
-    {"level": "lt1", "kind": "int", "a": [1, 7], "b": [2, 7], "open": [{"at": 0.08, "w": 0.8, "type": "door", "head": 2.1, "note": "P12 lemari genkan (rak sepatu + laci tarik bawah tangga)", "hinge": "start", "side": -1}]},
+    {"level": "lt1", "kind": "int", "a": [1, 5.5], "b": [1, 7], "note": "dinding gudang bawah tangga / lemari genkan"},
+    {"level": "lt1", "kind": "int", "a": [1, 7], "b": [2, 7], "open": [{"at": 0.08, "w": 0.8, "type": "door", "head": 2.1, "note": "P12 lemari genkan (rak sepatu)", "hinge": "start", "side": -1}]},
     {"level": "lt1", "kind": "int", "a": [1, 4], "b": [1, 5.5], "h": 1.8, "note": "dinding KM tamu / gudang bawah bordes"},
     {"level": "lt2", "kind": "ext", "a": [0, 1.5], "b": [0, 8.5], "open": [{"at": 1.0, "w": 0.5, "type": "window", "sill": 0.9, "head": 2.3, "note": "J6 kamar 2, kisi"}, {"at": 5.85, "w": 0.8, "type": "window", "sill": 1.6, "head": 2.1, "note": "J11 KM dalam"}]},
     {"level": "lt2", "kind": "ext", "a": [0, 1.5], "b": [7, 1.5], "open": [{"at": 0.6, "w": 2.0, "type": "window", "sill": 0.9, "head": 2.2, "note": "J5 kamar 2"}, {"at": 4.2, "w": 2.1, "type": "window", "sill": 0.9, "head": 2.2, "note": "J7 kamar 3"}]},
@@ -181,13 +182,11 @@
     {"level": "lt1", "type": "bench", "rect": [1.3, 8.1, 1.95, 8.42], "h": 0.45, "mat": "oak", "face": "-y", "note": "bangku genkan (duduk pakai sepatu)"},
     {"level": "lt1", "type": "toilet", "rect": [1.5, 4.05, 1.95, 4.75], "h": 0.78, "face": "+y", "note": "kloset KM tamu (menghadap selatan, tidak menghadap kiblat)"},
     {"level": "lt1", "type": "vanity", "rect": [1.02, 5.05, 1.45, 5.45], "h": 0.85, "mat": "teak", "face": "+x", "note": "wastafel KM tamu"},
-    {"level": "lt1", "rect": [0.95, 5.5, 1.05, 6.0], "z": 0.82, "h": 2.48, "mat": "plaster", "note": "dinding di atas garis tangga (di bawahnya muka laci tarik)"},
-    {"level": "lt1", "rect": [0.95, 6.0, 1.05, 6.48], "z": 0.4, "h": 2.9, "mat": "plaster", "note": "dinding di atas garis tangga (di bawahnya muka laci tarik)"},
-    {"level": "lt1", "rect": [0.95, 6.48, 1.05, 7.0], "z": 0.0, "h": 3.3, "mat": "plaster", "note": "dinding di atas garis tangga (di bawahnya muka laci tarik)"},
     {"level": "lt1", "type": "shelf", "rect": [1.6, 5.58, 1.95, 6.92], "h": 2.4, "mat": "oak", "face": "-x", "items": "shoes", "note": "rak sepatu setinggi plafon (dinding timur lemari genkan)"},
-    {"level": "lt1", "type": "storageShelf", "rect": [0.1, 4.08, 0.92, 4.98], "h": 1.6, "mat": "oak", "face": "-y", "note": "lemari bawah bordes: koper, kipas, stok studio (dibuka dari studio, P13)"},
-    {"level": "lt1", "type": "drawerUnit", "rect": [0.12, 5.52, 0.97, 5.98], "h": 0.8, "mat": "oak", "face": "+x", "note": "laci tarik beroda 1 bawah tangga (galon, vacuum), ditarik ke lemari genkan"},
-    {"level": "lt1", "type": "drawerUnit", "rect": [0.12, 6.02, 0.97, 6.46], "h": 0.38, "mat": "oak", "face": "+x", "note": "laci tarik beroda 2 bawah tangga (sepatu musiman, alat kebersihan)"},
+    {"level": "lt1", "type": "storageShelf", "rect": [0.1, 4.1, 0.42, 4.95], "h": 1.6, "mat": "oak", "face": "+x", "note": "rak dangkal di dinding barat gudang (barang kecil)"},
+    {"level": "lt1", "type": "suitcase", "rect": [0.52, 5.0, 0.92, 5.28], "h": 0.75, "mat": "charcoal", "face": "-x", "note": "koper besar"},
+    {"level": "lt1", "type": "suitcase", "rect": [0.12, 5.05, 0.5, 5.3], "h": 0.62, "mat": "clay", "face": "+x", "note": "koper sedang"},
+    {"level": "lt1", "type": "bins", "rect": [0.12, 5.4, 0.6, 5.85], "h": 0.64, "face": "+x", "note": "kotak simpan bertumpuk"},
     {"level": "site", "type": "washer", "rect": [5.0, 0.12, 5.6, 0.72], "h": 0.85, "face": "+y", "note": "mesin cuci"},
     {"level": "site", "type": "laundrySink", "rect": [5.75, 0.12, 6.3, 0.62], "h": 0.85, "mat": "terrazzo", "face": "+y", "note": "bak cuci"},
     {"level": "site", "type": "dryingRack", "rect": [3.2, 0.3, 4.4, 0.9], "h": 1.1, "face": "+y", "note": "jemuran"},
@@ -242,7 +241,7 @@
     {"topic": "Dapur", "items": ["Kitchen set bentuk L tanpa island; jendela J1 di atas sink, dinding di atas kompor untuk cooker hood + cerobong.", "Meja makan di tengah (85 × 120 cm, 4 kursi) sekaligus meja bantu masak; lemari pantry tinggi + kabinet bawah/atas di dinding musholla."]},
     {"topic": "Kamar mandi & pintu", "items": ["KM tamu: daun pintu P4 buka keluar (ruangnya 1 × 1,5 m); kloset menghadap selatan, tidak menghadap kiblat.", "Semua pintu engsel dicek bebas halangan 80 cm di depannya; arah buka sesuai denah."]},
     {"topic": "Kamar", "items": ["Kamar 2 dan 3: kasur 160 × 200, lemari 150 cm; sandaran kasur 85 cm supaya tidak menutup ambang jendela samping (90 cm)."]},
-    {"topic": "Tangga", "items": ["Tangga melayang seperempat putaran: 9 anak tangga + bordes + 5 anak tangga; railing di sisi void lantai 2.", "Bawah bordes: lemari ±0,8 × 0,9 m, tinggi ±1,6 m, pintu P13 dari studio. Bawah anak tangga: 2 laci tarik beroda yang ditarik ke lemari genkan. Dinding di bawah garis tangga bukan dinding struktur: tangga ditumpu dinding barat atau balok besi (dihitung kontraktor)."]}
+    {"topic": "Tangga", "items": ["Tangga melayang seperempat putaran: 9 anak tangga + bordes + 5 anak tangga; railing di sisi void lantai 2.", "Gudang bawah tangga 0,88 × 2,95 m (tinggi 1,7 m di bawah bordes, turun mengikuti tangga), pintu P13 80 × 165 cm dari studio: muat koper besar, stroller lipat, kasur lipat, kipas berdiri, bahkan sepeda anak. Beri lampu + saklar di dalam. Tangga melayang ditumpu dinding barat/balok besi (dihitung kontraktor)."]}
   ],
 
   "lights": [
@@ -252,6 +251,7 @@
     {"level": "lt1", "at": [3.6, 2.3], "z": 3.28, "kind": "down", "power": 5.4, "note": "dapur"},
     {"level": "lt1", "at": [3.875, 3.85], "z": 1.55, "kind": "pendant", "power": 4.0, "ceiling": 3.28, "note": "lampu gantung meja makan"},
     {"level": "lt1", "at": [1.0, 2.75], "z": 3.28, "kind": "down", "power": 4.5, "note": "studio"},
+    {"level": "lt1", "at": [0.5, 4.5], "z": 1.7, "kind": "down", "power": 1.5, "note": "lampu gudang bawah tangga"},
     {"level": "lt1", "at": [7.4, 1.95], "z": 2.95, "kind": "down", "power": 3.6, "color": "#FFCF91", "note": "musholla, menyorot mihrab"},
     {"level": "lt1", "at": [8.0, 5.8], "z": 2.78, "kind": "down", "power": 3.6, "note": "deck, di bawah kanopi kaca"},
     {"level": "site", "at": [8.7, 7.95], "z": 0.05, "kind": "up", "power": 2.2, "color": "#FFE3B8", "note": "lampu sorot pohon taman"},
