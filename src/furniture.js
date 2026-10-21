@@ -465,6 +465,53 @@ const BUILDERS = {
     for (let i = 0; i < n; i++) k.box(cols[i % cols.length], [-W / 2 + 0.01 * i, W / 2 - 0.01 * i], [i * bh + 0.005, (i + 1) * bh - 0.005], [-D / 2, D / 2], 0.02);
   },
 
+  // built-in garden bench: rendered base recessed at the front, WPC/teak seat slab, LED strip under the overhang
+  builtInBench(k, W, D, h, it) {
+    k.box(it.base || 'plasterExt', [-W / 2, W / 2], [0, h - 0.06], [-D / 2, D / 2 - 0.09]);
+    k.box(it.mat || 'teak', [-W / 2, W / 2], [h - 0.06, h], [-D / 2, D / 2], 0.006);
+    for (let i = 1; i < 4; i++) k.box('black', [-W / 2 + 0.01, W / 2 - 0.01], [h - 0.001, h + 0.001], [-D / 2 + i * D / 4 - 0.002, -D / 2 + i * D / 4 + 0.002]);
+    const led = k.box('led', [-W / 2 + 0.02, W / 2 - 0.02], [h - 0.075, h - 0.062], [D / 2 - 0.11, D / 2 - 0.095]);
+    led.userData.lamp = true; led.castShadow = false;
+  },
+
+  // raised planter box with soil and a mix of tropical plants
+  planter(k, W, D, h, it) {
+    const wall = 0.06, base = it.mat || 'plasterExt';
+    k.box(base, [-W / 2, W / 2], [0, h], [-D / 2, -D / 2 + wall]);
+    k.box(base, [-W / 2, W / 2], [0, h], [D / 2 - wall, D / 2]);
+    k.box(base, [-W / 2, -W / 2 + wall], [0, h], [-D / 2, D / 2]);
+    k.box(base, [W / 2 - wall, W / 2], [0, h], [-D / 2, D / 2]);
+    k.box('soil', [-W / 2 + wall, W / 2 - wall], [0, h - 0.05], [-D / 2 + wall, D / 2 - wall]);
+    const kinds = it.plants || ['bird', 'snake', 'monstera', 'snake', 'bird'];
+    const n = Math.max(1, Math.round((W - 0.1) / 0.28)), y0 = h - 0.05;
+    let seed = Math.round((it.rect[0] * 13 + it.rect[1] * 7) * 100);
+    const rnd = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
+    for (let i = 0; i < n; i++) {
+      const x = -W / 2 + 0.08 + (i + 0.5) * (W - 0.16) / n, kind = kinds[i % kinds.length];
+      if (kind === 'bird') {                                         // strelitzia / bird of paradise: tall paddle leaves
+        for (let j = 0; j < 5; j++) {
+          const a = j * 1.3 + rnd(), tilt = 0.25 + rnd() * 0.35, hgt = 0.7 + rnd() * 0.5;
+          const stem = k.cyl('leafDark', x, 0, y0, y0 + hgt * 0.6, 0.008, 0.012, 6);
+          stem.rotation.set(Math.sin(a) * tilt, 0, Math.cos(a) * tilt);
+          const leaf = k.ball(j % 2 ? 'leaf' : 'leafDark', x + Math.cos(a) * tilt * hgt * 0.45, y0 + hgt * 0.75, Math.sin(a) * tilt * hgt * 0.3, 0.1, 1.1, 2.6, 0.12, 1);
+          leaf.rotation.set(Math.sin(a) * tilt, a, Math.cos(a) * tilt);
+        }
+      } else if (kind === 'snake') {                                 // sansevieria: upright sword leaves
+        for (let j = 0; j < 7; j++) {
+          const a = j * 0.9, r = 0.02 + rnd() * 0.04, hgt = 0.35 + rnd() * 0.3;
+          const s = k.cyl(j % 3 ? 'leafDark' : 'leafLight', x + Math.cos(a) * r, Math.sin(a) * r * 0.7, y0, y0 + hgt, 0.002, 0.025, 4);
+          s.rotation.set(Math.sin(a) * 0.12, a, Math.cos(a) * 0.12); s.scale.z = 0.35;
+        }
+      } else {                                                       // monstera: broad round leaves on arching stems
+        for (let j = 0; j < 5; j++) {
+          const a = j * 1.25 + rnd(), r = 0.12 + rnd() * 0.08, hgt = 0.35 + rnd() * 0.25;
+          const leaf = k.ball(j % 2 ? 'leaf' : 'leafLight', x + Math.cos(a) * r, y0 + hgt, Math.sin(a) * r * 0.6, 0.13, 1.2, 0.12, 1.0, 1);
+          leaf.rotation.set(0.35 * Math.sin(a), a, 0.35 * Math.cos(a));
+        }
+      }
+    }
+  },
+
   sideTable(k, W, D, h, it) {
     const m = it.mat || 'teak', r = Math.min(W, D) / 2;
     k.cyl(m, 0, 0, h - 0.03, h, r, r, 28);

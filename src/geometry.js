@@ -115,7 +115,7 @@ export function buildHouse(data, state) {
     const cutAway = l.kind !== 'up' && (!ceilingShown || show.cutLevel === l.level);
     const [x, y] = l.at, z = lz(l.level) + l.z;
     const glow = lampMaterial();
-    if (cutAway) { /* light only */ } else if (l.kind === 'pendant') {
+    if (cutAway || l.kind === 'strip') { /* light only: hidden LED strip or cut view */ } else if (l.kind === 'pendant') {
       const shade = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.2, 0.18, 24, 1, true), M('black'));
       shade.position.set(x, z + 0.09, y); add(shade, { shadow: false });
       const bulb = new THREE.Mesh(new THREE.SphereGeometry(0.06, 12, 8), glow);
@@ -130,7 +130,7 @@ export function buildHouse(data, state) {
       m.position.set(x, z, y); m.userData.lamp = true; add(m, { shadow: false });
     }
     const light = new THREE.PointLight(l.color || '#FFD9A8', l.power || 12, l.range || 7, 2);
-    light.position.set(x, l.kind === 'up' ? z + 0.3 : z - 0.12, y);
+    light.position.set(x, l.kind === 'up' ? z + 0.3 : l.kind === 'strip' ? z : z - 0.12, y);
     light.userData.nightOnly = true; light.visible = false;
     root.add(light);
   }
@@ -251,6 +251,7 @@ function makeMaterials(defs) {
     });
     if (op < 1) m.userData.castShadow = false;
     m.envMapIntensity = d.env ?? 0.4;                     // sky reflections: subtle, the sun does the main lighting
+    if (d.emissive) { m.emissive = new THREE.Color(d.emissive); m.emissiveIntensity = 0; }   // glows only at night (LED strips)
     const t = d.tex && patternTexture(d.tex);
     if (t) {
       const rep = 1 / (d.scale || 1);
