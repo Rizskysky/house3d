@@ -47,7 +47,23 @@ export function buildHouse(data, state) {
   }
   if (show.slabs) for (const s of data.slabs || []) box(s.rect, s.z, s.t, M('plaster'));
   // flat ceilings under the roof: only when the roof itself is shown
-  if (state.view === 'all' && state.roof) for (const c of data.ceilings || []) box(c.rect, lz(c.level) + c.z, c.t, M(c.mat || 'plaster'));
+  if (state.view === 'all' && state.roof) for (const c of data.ceilings || []) {
+    const z = lz(c.level) + c.z, mat = M(c.mat || 'plaster');
+    if (!c.cove) { box(c.rect, z, c.t, mat); continue; }
+    // drop ceiling: lowered perimeter band, raised centre panel, hidden LED strip in the cove between them
+    const [x0, y0, x1, y1] = norm(c.rect), b = c.cove.band, drop = c.cove.drop, up = c.cove.raise;
+    const zb = lz(c.level) + drop, ix0 = x0 + b, iy0 = y0 + b, ix1 = x1 - b, iy1 = y1 - b;
+    for (const r of [[x0, y0, x1, iy0], [x0, iy1, x1, y1], [x0, iy0, ix0, iy1], [ix1, iy0, x1, iy1]]) box(r, zb, z - zb + c.t, mat);
+    box([ix0, iy0, ix1, iy1], z + up, c.t, mat);                                   // raised centre
+    const s = 0.02;                                                                // cove sides up to the raised panel
+    for (const r of [[ix0, iy0, ix1, iy0 + s], [ix0, iy1 - s, ix1, iy1], [ix0, iy0, ix0 + s, iy1], [ix1 - s, iy0, ix1, iy1]]) box(r, z, up, mat);
+    const l = 0.06, ledM = M('led');                                               // lip + LED strip along the inner edge of the band
+    for (const r of [[ix0, iy0 - 0.01, ix1, iy0], [ix0, iy1, ix1, iy1 + 0.01], [ix0 - 0.01, iy0, ix0, iy1], [ix1, iy0, ix1 + 0.01, iy1]]) box(r, z + c.t, l, mat);
+    for (const r of [[ix0 + 0.03, iy0 - 0.05, ix1 - 0.03, iy0 - 0.03], [ix0 + 0.03, iy1 + 0.03, ix1 - 0.03, iy1 + 0.05],
+                     [ix0 - 0.05, iy0 + 0.03, ix0 - 0.03, iy1 - 0.03], [ix1 + 0.03, iy0 + 0.03, ix1 + 0.05, iy1 - 0.03]]) {
+      const m = box(r, z + c.t, 0.012, ledM, { noShadow: true }); m.userData.lamp = true;
+    }
+  }
 
   // ---------- walls ----------
   for (const w of data.walls || []) {

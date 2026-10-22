@@ -54,7 +54,7 @@ A `rect` is always `[x0, y0, x1, y1]`. In three.js, `x → X`, `z → Y` (up), `
 | `materials` | `color`, `rough`, `metal`, `opacity`, plus optional `tex` (procedural pattern), `scale` (m per tile), `bump`, `env` (sky reflection strength) | retune a finish |
 | `floors` | floor surfaces per room (`name` becomes the room label) | resize or rename a room |
 | `slabs` | floor-2 slab pieces (the gaps are the stair void) | move the stair void |
-| `ceilings` | flat ceilings under the roof (`level`, `rect`, `z`, `t`), drawn while the roof is shown | |
+| `ceilings` | ceilings under the roof (`level`, `rect`, `z`, `t`), drawn while the roof is shown; with `cove` {`band`, `drop`, `raise`} a drop ceiling with a hidden LED strip | |
 | `walls` | centerline `a → b`, `kind` (`ext`, `int`, `boundary`, `low`), optional `h`, and `open` | move a wall |
 | `walls[].open` | `at` (m from the wall's lower-coordinate end), `w`, `type`, `sill`, `head` | move or resize a door/window |
 | `stairs` | flights (`dir`, `steps`, `z0`, `z1`), landings, rails | change the stair |
