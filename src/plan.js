@@ -38,11 +38,16 @@ export function planSVG(data, level, { scale = 100 } = {}) {
     if (!lv.includes(b.level)) continue;
     const [x0, y0, x1, y1] = norm(b.rect);
     if (b.slatsTop) { r(x0, y0, x1 - x0, y1 - y0, 'fill="url(#deck)" stroke="#B89A72" stroke-width="0.012"'); continue; }
-    if ((b.z || 0) > 1.2 && b.type !== 'wallCabinet' && b.type !== 'hood') continue;
+    if ((b.z || 0) > 1.2 && !['wallCabinet', 'hood', 'acIndoor', 'acOutdoor'].includes(b.type)) continue;
     if (b.mat === 'glass') { r(x0, y0, x1 - x0, y1 - y0, 'fill="#CFE1EC" stroke="#7FA3B8" stroke-width="0.01"'); continue; }
     if (b.mat === 'jute') { r(x0, y0, x1 - x0, y1 - y0, 'fill="none" stroke="#C4B79F" stroke-width="0.01" stroke-dasharray="0.05 0.04"'); continue; }
     if (b.type === 'steppingStone') { out.push(`<ellipse cx="${f((x0 + x1) / 2)}" cy="${f((y0 + y1) / 2)}" rx="${f((x1 - x0) / 2)}" ry="${f((y1 - y0) / 2)}" fill="#D3D1CA"/>`); continue; }
-    const dash = b.type === 'wallCabinet' || b.type === 'hood' ? 'stroke-dasharray="0.06 0.04"' : '';
+    const dash = ['wallCabinet', 'hood', 'acIndoor', 'acOutdoor'].includes(b.type) ? 'stroke-dasharray="0.06 0.04"' : '';
+    if (b.type === 'acIndoor' || b.type === 'acOutdoor') {
+      r(x0, y0, x1 - x0, y1 - y0, `fill="#DCEAF2" stroke="#4F7F9C" stroke-width="0.012" ${dash}`);
+      text((x0 + x1) / 2, (y0 + y1) / 2 + 0.045, b.type === 'acIndoor' ? 'AC' : 'OU', 'font-size="0.11" font-weight="600" text-anchor="middle" fill="#2F5D7A"');
+      continue;
+    }
     r(x0, y0, x1 - x0, y1 - y0, `fill="#FFFFFF" fill-opacity="0.75" stroke="#A9A398" stroke-width="0.012" ${dash}`);
     if (b.type === 'bed') bedMarks(b, line);
   }

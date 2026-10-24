@@ -512,6 +512,25 @@ const BUILDERS = {
     }
   },
 
+  // wall-mounted split AC indoor unit (front at +z, louver at the bottom front)
+  acIndoor(k, W, D, h) {
+    k.box('white', [-W / 2, W / 2], [0, h], [-D / 2, D / 2], 0.03);
+    k.box('ceramic', [-W / 2 + 0.01, W / 2 - 0.01], [h * 0.35, h - 0.02], [D / 2 - 0.005, D / 2 + 0.004], 0.01);
+    k.box('charcoal', [-W / 2 + 0.04, W / 2 - 0.04], [0.02, 0.06], [D / 2 - 0.05, D / 2 - 0.01]);
+    k.box('steelDark', [W / 2 - 0.1, W / 2 - 0.06], [h * 0.4, h * 0.4 + 0.012], [D / 2 + 0.004, D / 2 + 0.006]);
+  },
+
+  // split AC outdoor unit on a wall bracket, fan grille on the front
+  acOutdoor(k, W, D, h) {
+    k.box('white', [-W / 2, W / 2], [0, h], [-D / 2 + 0.03, D / 2], 0.015);
+    const r = Math.min(h, W * 0.6) * 0.38, cx = -W * 0.12;
+    k.torus('charcoal', cx, h / 2, D / 2 + 0.005, r, 0.012, 0);
+    k.torus('charcoal', cx, h / 2, D / 2 + 0.005, r * 0.55, 0.008, 0);
+    const disc = k.cyl('screen', 0, 0, 0, 0.01, r * 0.95, r * 0.95, 24); disc.rotation.x = Math.PI / 2; disc.position.set(cx, h / 2, D / 2 - 0.004);
+    for (const x of [-W / 2 + 0.05, W / 2 - 0.05]) k.box('black', [x - 0.015, x + 0.015], [-0.04, 0], [-D / 2, D / 2 + 0.05]);   // bracket arms
+    k.box('steelDark', [W / 2 - 0.12, W / 2 - 0.02], [h * 0.2, h * 0.8], [D / 2 - 0.005, D / 2 + 0.003]);
+  },
+
   sideTable(k, W, D, h, it) {
     const m = it.mat || 'teak', r = Math.min(W, D) / 2;
     k.cyl(m, 0, 0, h - 0.03, h, r, r, 28);
