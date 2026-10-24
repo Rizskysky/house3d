@@ -8,12 +8,15 @@ const THREE = await import('three');
 
 const $ = (s) => document.querySelector(s);
 const phone = window.matchMedia('(max-width: 640px)').matches;
-const state = { view: 'all', roof: true, cut: true, labels: false, context: true, camera: 'iso', night: false, quality: phone ? 'std' : 'high' };
+const state = { view: 'all', roof: true, cut: true, labels: false, context: true, camera: 'iso', time: 'pagi', night: false, quality: phone ? 'std' : 'high' };
+// ?varian=barat loads the mirrored comparison plan (garden on the side-street), built by tools/mirror.py
+const variant = new URLSearchParams(location.search).get('varian') === 'barat' ? 'barat' : 'timur';
+const dataFile = variant === 'barat' ? 'data/house-barat.json' : 'data/house.json';
 
 // deep link: #lt1, #lt2, #all and/or a camera id, e.g. #lt1-top
 for (const part of location.hash.replace('#', '').split('-')) {
   if (['all', 'lt1', 'lt2'].includes(part)) state.view = part;
-  if (part === 'malam') state.night = true;
+  if (part === 'malam' || part === 'sore') state.time = part;
 }
 
 const viewer = createViewer($('#stage'));
@@ -23,11 +26,11 @@ if (phone) {
 let data;
 
 try {
-  const res = await fetch('data/house.json', { cache: 'no-cache' });
+  const res = await fetch(dataFile, { cache: 'no-cache' });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   data = await res.json();
 } catch (e) {
-  $('#status').textContent = `data/house.json gagal dimuat (${e.message}). Buka lewat server lokal atau GitHub Pages, bukan langsung dari file.`;
+  $('#status').textContent = `${dataFile} gagal dimuat (${e.message}). Buka lewat server lokal atau GitHub Pages, bukan langsung dari file.`;
   $('#status').hidden = false;
   throw e;
 }
@@ -54,8 +57,18 @@ document.querySelectorAll('[data-toggle]').forEach((b) => b.addEventListener('cl
 }));
 
 document.querySelectorAll('[data-time]').forEach((b) => b.addEventListener('click', () => {
-  state.night = b.dataset.time === 'night'; viewer.setNight(state.night); sync();
+  setTime(b.dataset.time); sync();
 }));
+function setTime(t) {
+  state.time = t; state.night = t === 'malam';
+  if (!state.night) viewer.setSun(t);
+  viewer.setNight(state.night);
+}
+document.querySelectorAll('[data-variant]').forEach((b) => b.addEventListener('click', () => {
+  if (b.dataset.variant === variant) return;
+  location.href = location.pathname + (b.dataset.variant === 'barat' ? '?varian=barat' : '') + location.hash;
+}));
+if (variant === 'barat') $('#doclink').href = 'docs.html?varian=barat';
 document.querySelectorAll('[data-quality]').forEach((b) => b.addEventListener('click', () => {
   state.quality = b.dataset.quality; viewer.setQuality(state.quality); sync();
 }));
@@ -131,7 +144,7 @@ $('#hq-btn').addEventListener('click', async () => {
   $('#hq-text').textContent = 'Merender gambar kualitas tinggi…';
   try {
     const blob = await viewer.renderHQ({ long, frames, onProgress: (i, n) => { $('#hq-bar').value = i; $('#hq-text').textContent = `Merender gambar kualitas tinggi… ${i}/${n}`; } });
-    download(blob, `house3d-hq-${state.view}-${state.camera}${state.night ? '-malam' : ''}.png`);
+    download(blob, `house3d-hq${variant === 'barat' ? '-barat' : ''}-${state.view}-${state.camera}${state.time !== 'pagi' ? '-' + state.time : ''}.png`);
   } catch (e) {
     console.error(e); alert('Render gagal: ' + e.message);
   } finally { $('#hq').hidden = true; }
@@ -157,16 +170,17 @@ function sync() {
     b.disabled = (k === 'roof' && state.view !== 'all') || (k === 'cut' && state.view === 'all');
   });
   document.querySelectorAll('[data-cam]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.cam === state.camera)));
-  document.querySelectorAll('[data-time]').forEach((b) => b.setAttribute('aria-pressed', String((b.dataset.time === 'night') === state.night)));
+  document.querySelectorAll('[data-time]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.time === state.time)));
+  document.querySelectorAll('[data-variant]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.variant === variant)));
   document.querySelectorAll('[data-quality]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.quality === state.quality)));
-  const tag = `${state.view}-${state.camera}${state.night ? '-malam' : ''}`;
+  const tag = `${state.view}-${state.camera}${state.time !== 'pagi' ? '-' + state.time : ''}`;
   if (location.hash !== `#${tag}`) history.replaceState(null, '', `#${tag}`);
 }
 
 viewer.setQuality(state.quality);
-viewer.setNight(state.night);
+setTime(state.time);
 rebuild();
 viewer.setCamera(data.cameras[state.camera]);
 sync();
-window.__house = { data, state, viewer, rebuild, walk, openInfo, roomAt };
+window.__house = { data, state, viewer, rebuild, walk, openInfo, roomAt, setTime, variant };
 document.body.dataset.ready = 'true';

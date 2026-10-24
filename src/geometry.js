@@ -451,13 +451,15 @@ function deckLines(rect, ztop, mat, box) {
 function gable(r, roofMat, slatMat, backMat, root, add, box) {
   const [x0, y0, x1, y1] = norm(r.rect);
   const W = (x1 - x0) / 2, xm = (x0 + x1) / 2;
-  const side = r.over?.side ?? 0.5, end = r.over?.end ?? 0.6;
+  const sideAll = r.over?.side ?? 0.5, end = r.over?.end ?? 0.6;
   const tan = r.rise / W, ang = Math.atan(tan);
   const ridge = r.eave + r.rise;
-  const lenSlope = (W + side) / Math.cos(ang);
   const depth = (y1 - y0) + 2 * end;
   const thick = 0.12;
   for (const sgn of [-1, 1]) {
+    // per-side eave overhang: over.west / over.east override over.side (e.g. no overhang on a boundary wall)
+    const side = (sgn < 0 ? r.over?.west : r.over?.east) ?? sideAll;
+    const lenSlope = (W + side) / Math.cos(ang);
     const geo = new THREE.BoxGeometry(lenSlope, thick, depth);
     if (roofMat.map) meterUV(geo, new THREE.Vector3());
     const m = new THREE.Mesh(geo, roofMat);

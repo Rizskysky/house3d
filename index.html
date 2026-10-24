@@ -113,6 +113,13 @@ body.walking #panel, body.walking .title, body.walking #info { display: none; }
 <section id="panel" data-open="true" aria-label="Kontrol tampilan">
   <button id="panel-toggle" type="button" aria-expanded="true">Kontrol tampilan <span aria-hidden="true">▾</span></button>
   <div class="group">
+    <span>Varian denah</span>
+    <div class="seg two" role="group" aria-label="Varian denah">
+      <button type="button" data-variant="timur" title="Desain utama: taman di sisi timur">Taman timur</button>
+      <button type="button" data-variant="barat" title="Perbandingan: denah dicerminkan, taman di sisi jalan samping">Taman barat</button>
+    </div>
+  </div>
+  <div class="group">
     <span>Lantai</span>
     <div class="seg" role="group" aria-label="Pilih lantai">
       <button type="button" data-view="all">Semua</button>
@@ -132,9 +139,10 @@ body.walking #panel, body.walking .title, body.walking #info { display: none; }
   <div class="pair">
     <div class="group">
       <span>Suasana</span>
-      <div class="seg two" role="group" aria-label="Siang atau malam">
-        <button type="button" data-time="day">Siang</button>
-        <button type="button" data-time="night">Malam</button>
+      <div class="seg" role="group" aria-label="Waktu: pagi, sore, atau malam">
+        <button type="button" data-time="pagi" title="Matahari pagi dari timur-tenggara">Pagi</button>
+        <button type="button" data-time="sore" title="Matahari sore dari barat, ±15.30">Sore</button>
+        <button type="button" data-time="malam">Malam</button>
       </div>
     </div>
     <div class="group">
@@ -155,7 +163,7 @@ body.walking #panel, body.walking .title, body.walking #info { display: none; }
     <button id="hq-btn" type="button" title="Gambar 2560 px, tepi halus, bayangan lembut">Render kualitas tinggi</button>
   </div>
   <p class="hint">Seret untuk memutar, dua jari untuk geser, cubit untuk zoom. Ketuk ruangan untuk lihat ukurannya.</p>
-  <a class="doclink" href="docs.html">Dokumen kontraktor (denah, pintu & jendela, catatan) →</a>
+  <a class="doclink" id="doclink" href="docs.html">Dokumen kontraktor (denah, pintu & jendela, catatan) →</a>
 </section>
 
 <section id="hq" hidden aria-live="polite"><div><p id="hq-text">Merender gambar kualitas tinggi…</p><progress id="hq-bar" max="1" value="0"></progress></div></section>

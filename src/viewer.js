@@ -10,6 +10,8 @@ import { FullScreenQuad } from 'three/addons/postprocessing/Pass.js';
 
 // Day: sun high in the east-south-east (the site sits near the equator); night: moonlight + the house's own lights.
 const SUN_DIR = new THREE.Vector3(17.5, 30, 19).normalize();
+// afternoon (±15.30): low sun from the west, slightly north; three.js x = east, z = south
+const SUNS = { pagi: { dir: SUN_DIR, color: '#FFF0D8' }, sore: { dir: new THREE.Vector3(-0.8, 0.6, -0.07).normalize(), color: '#FFDDB0' } };
 const DAY = { fog: '#DCE4EA', hemi: ['#F5EFE4', '#AE9876', 0.5], sun: ['#FFF0D8', 2.9], exposure: 0.82, env: true };
 const NIGHT = { fog: '#0D1420', hemi: ['#3A4A66', '#141414', 0.22], sun: ['#9FB4D8', 0.3], exposure: 1.0, env: false };
 
@@ -89,7 +91,14 @@ export function createViewer(container) {
   composer.addPass(ao);
   composer.addPass(new OutputPass());
 
-  let quality = 'high', night = false;
+  let quality = 'high', night = false, sunPreset = SUNS.pagi;
+
+  function setSun(key) {
+    sunPreset = SUNS[key] || SUNS.pagi;
+    sky.material.uniforms.sunPosition.value.copy(sunPreset.dir);
+    sun.position.copy(sun.target.position).addScaledVector(sunPreset.dir, 40);
+    if (!night) sun.color.set(sunPreset.color);
+  }
 
   function setQuality(q) {
     quality = q;
@@ -107,7 +116,7 @@ export function createViewer(container) {
     const P = on ? NIGHT : DAY;
     scene.fog.color.set(P.fog);
     hemi.color.set(P.hemi[0]); hemi.groundColor.set(P.hemi[1]); hemi.intensity = P.hemi[2];
-    sun.color.set(P.sun[0]); sun.intensity = P.sun[1];
+    sun.color.set(on ? P.sun[0] : sunPreset.color); sun.intensity = P.sun[1];
     sun.castShadow = !on;
     renderer.toneMappingExposure = P.exposure;
     scene.environment = P.env ? envMap : null;
@@ -254,7 +263,7 @@ export function createViewer(container) {
 
   setNight(false);
   setQuality('high');
-  return { scene, camera, controls, renderer, setModel, setCamera, snapshot, setQuality, setNight,
+  return { scene, camera, controls, renderer, setModel, setCamera, snapshot, setQuality, setNight, setSun,
     onFrame, setOrbit, highlight, clearHighlight, renderHQ, getModel: () => model };
 }
 

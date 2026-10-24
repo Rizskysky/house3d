@@ -144,8 +144,9 @@ export function planSVG(data, level, { scale = 100 } = {}) {
   }
 
   // dimension chains (outside the lot)
-  const xs = level === 'lt1' ? [0, 2, 7, 9] : [0, 3.5, 7];
-  const ys = level === 'lt1' ? [0, 1.5, 4, 4.5, 7, 8.5, 14] : [1.5, 4, 5.5, 8.5, 9.5];
+  const dm = data.meta.dims?.[level] || {};   // a variant can override the chains (e.g. the mirrored plan)
+  const xs = dm.x || (level === 'lt1' ? [0, 2, 7, 9] : [0, 3.5, 7]);
+  const ys = dm.y || (level === 'lt1' ? [0, 1.5, 4, 4.5, 7, 8.5, 14] : [1.5, 4, 5.5, 8.5, 9.5]);
   dimChain(out, xs, 'x', -0.75); dimChain(out, [0, 9], 'x', -1.25);
   dimChain(out, ys, 'y', -0.75); dimChain(out, [0, 14], 'y', -1.25);
 
