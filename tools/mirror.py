@@ -57,6 +57,8 @@ def mirror_wall(w):
             o['at'] = round(length - o['at'] - o['w'], 4)
             if 'hinge' in o:
                 o['hinge'] = 'end' if o['hinge'] == 'start' else 'start'
+            if 'stack' in o:
+                o['stack'] = 'end' if o['stack'] == 'start' else 'start'
             if 'leaves' in o:
                 o['leaves'] = list(reversed(o['leaves']))
         else:      # wall normal (+x) flips

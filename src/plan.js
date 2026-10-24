@@ -118,6 +118,12 @@ export function planSVG(data, level, { scale = 100 } = {}) {
           const a1 = P(p0 + i * pw, off), a2 = P(p0 + (i + 1) * pw, off);
           line(a1[0], a1[1], a2[0], a2[1], 'stroke="#232220" stroke-width="0.022"');
         }
+      } else if (o.type === 'bifold') {
+        // folding door drawn half open: one V per pair of panels, starting at the stacking jamb
+        const n = o.panels || 4, pw = o.w / n, sg = o.out || 1, dir = o.stack === 'start' ? 1 : -1;
+        const j = o.stack === 'start' ? p0 : p1, pts = [];
+        for (let i = 0; i <= n; i++) pts.push(P(j + dir * i * pw * 0.5, sg * (t / 2 + (i % 2 ? pw * 0.87 : 0))));
+        out.push(`<polyline points="${pts.map((q) => `${f(q[0])},${f(q[1])}`).join(' ')}" fill="none" stroke="#232220" stroke-width="0.02"/>`);
       } else if (o.type === 'gate') {
         const a1 = P(p0), a2 = P(p1);
         line(a1[0], a1[1], a2[0], a2[1], 'stroke="#98673B" stroke-width="0.05" stroke-dasharray="0.05 0.04"');
@@ -169,7 +175,7 @@ export function openingSchedule(data) {
   for (const w of data.walls) for (const o of w.open || []) {
     const code = codeOf(o);
     if (!code) continue;
-    const kind = { window: 'Jendela', door: 'Pintu engsel', slide: 'Pintu geser', sliding: 'Pintu geser kaca', gate: 'Pintu pagar', opening: 'Bukaan' }[o.type] || o.type;
+    const kind = { window: 'Jendela', door: 'Pintu engsel', slide: 'Pintu geser', sliding: 'Pintu geser kaca', bifold: 'Pintu lipat', gate: 'Pintu pagar', opening: 'Bukaan' }[o.type] || o.type;
     const head = o.head ?? 2.1, sill = o.type === 'window' ? (o.sill ?? 0.9) : 0;
     rows.push({ code, kind, level: data.levels[w.level === 'site' ? 'lt1' : w.level].name, w: o.w, h: head - sill, sill, note: (o.note || '').replace(/^[A-Z]+\d+\s*/, '') });
   }

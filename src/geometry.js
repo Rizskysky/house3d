@@ -389,17 +389,18 @@ function buildWall(w, z, h, t, mat, M, box) {
         for (const e of [r0, r1 - 0.04]) box(rect(e, e + 0.04, 0.05, off), z + 0.03, top - 0.06, frame);
       });
     } else if (o.type === 'bifold') {
-      const n = o.panels || 4, pw = o.w / n, out = o.out || 1;
+      // folded stack at one jamb ('end' by default, or o.stack = 'start'), swung to side `out`;
+      // glass panels with black frames, or solid panels when o.leaf names a material
+      const n = o.panels || 4, pw = o.w / n, out = o.out || 1, atStart = o.stack === 'start';
+      const pm = o.leaf ? M(o.leaf) : M('glass');
       box(rect(p0, p1, 0.08), z + top - 0.06, 0.06, M('black'));          // top track
-      for (let i = 0; i < n; i++) {                                     // folded stack at the end, swung outward
-        const pp = p1 - 0.05 - i * 0.075;
+      for (let i = 0; i < n; i++) {
+        const pp = atStart ? p0 + 0.085 + i * 0.075 : p1 - 0.05 - i * 0.075;
         const r = horiz
           ? [s0 + pp - 0.035, c, s0 + pp, c + out * pw]
           : [c, s0 + pp - 0.035, c + out * pw, s0 + pp];
-        box(r, z + 0.02, top - 0.08, M('glass'));
-        const fr = horiz ? [r[0], r[1], r[2], r[3]] : [r[0], r[1], r[2], r[3]];
-        box(fr, z + top - 0.1, 0.04, M('black'));
-        box(fr, z + 0.02, 0.04, M('black'));
+        box(r, z + 0.02, top - 0.08, pm);
+        if (!o.leaf) { box(r, z + top - 0.1, 0.04, M('black')); box(r, z + 0.02, 0.04, M('black')); }
       }
     }
     cur = p1;
