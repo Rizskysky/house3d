@@ -7,6 +7,7 @@ import * as THREE from 'three';
 const bust = new URL(import.meta.url).search;
 const { patternTexture } = await import(`./textures.js${bust}`);
 const { buildItem, buildCar, buildPlant } = await import(`./furniture.js${bust}`);
+const { winderPolys } = await import(`./stair.js${bust}`);
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 
 const CUT_HEIGHT = 1.3;          // wall height when "Potong dinding" is on
@@ -87,6 +88,36 @@ export function buildHouse(data, state) {
     }
   }
 
+  // ---------- wall tiles inside wet rooms (floors with wallTile: {mat, h}) ----------
+  for (const f of data.floors || []) {
+    if (!f.wallTile || !show.level(f.level)) continue;
+    const [x0, y0, x1, y1] = norm(f.rect), th = 0.008;
+    const tileH = show.cutLevel === f.level ? Math.min(f.wallTile.h, CUT_HEIGHT) : f.wallTile.h, tm = M(f.wallTile.mat);
+    const edges = [['x', x0, y0, y1, 1], ['x', x1, y0, y1, -1], ['y', y0, x0, x1, 1], ['y', y1, x0, x1, -1]];
+    for (const [ax, c, e0, e1, inward] of edges) {
+      for (const w of data.walls || []) {
+        if (w.level !== f.level) continue;
+        const vert = Math.abs(w.a[0] - w.b[0]) < 1e-6;           // wall along y (constant x)
+        if ((ax === 'x') !== vert || Math.abs((vert ? w.a[0] : w.a[1]) - c) > 1e-6) continue;
+        const s0 = vert ? Math.min(w.a[1], w.b[1]) : Math.min(w.a[0], w.b[0]), len = vert ? Math.abs(w.b[1] - w.a[1]) : Math.abs(w.b[0] - w.a[0]);
+        const lo = Math.max(e0, s0), hi = Math.min(e1, s0 + len);
+        if (hi - lo < 0.02) continue;
+        const wallH = w.h || (L[w.level] && L[w.level].h) || 2.4, hMax = Math.min(tileH, wallH), t = (THICK[w.kind] || 0.15) / 2;
+        // spans along the edge with their tile height (0 = gap at a door, sill height under a window)
+        const cuts = (w.open || []).map((o) => ({ a: s0 + o.at, b: s0 + o.at + o.w, h: o.type === 'window' ? Math.min(o.sill ?? 0.9, hMax) : 0 }))
+          .filter((o) => o.b > lo && o.a < hi).sort((p, q) => p.a - q.a);
+        const pieces = []; let cur = lo;
+        for (const o of cuts) { if (o.a > cur) pieces.push([cur, o.a, hMax]); pieces.push([Math.max(o.a, cur), Math.min(o.b, hi), o.h]); cur = Math.max(cur, o.b); }
+        if (cur < hi) pieces.push([cur, hi, hMax]);
+        for (const [pa, pb, ph] of pieces) {
+          if (ph < 0.02 || pb - pa < 0.01) continue;
+          const off = c + inward * t, r = ax === 'x' ? [off, pa, off + inward * th, pb] : [pa, off, pb, off + inward * th];
+          box(r, lz(f.level), ph, tm, { noShadow: true });
+        }
+      }
+    }
+  }
+
   // ---------- walls ----------
   for (const w of data.walls || []) {
     if (!show.level(w.level)) continue;
@@ -117,6 +148,15 @@ export function buildHouse(data, state) {
       }
     }
     for (const l of st.landings || []) box(l.rect, z + l.z - 0.08, 0.08, m);
+    for (const w of st.winders || []) for (const t of winderPolys(w)) {
+      // wedge tread: plan polygon extruded 5 cm; shape y = −plan y so that rotating −90° about X lands it on plan y
+      const shape = new THREE.Shape(t.pts.map(([x, y]) => new THREE.Vector2(x, -y)));
+      const geo = new THREE.ExtrudeGeometry(shape, { depth: 0.05, bevelEnabled: false });
+      if (m.map) meterUV(geo, new THREE.Vector3());
+      const mesh = new THREE.Mesh(geo, m);
+      mesh.rotation.x = -Math.PI / 2; mesh.position.y = z + t.top - 0.05;
+      add(mesh);
+    }
     for (const r of st.rails || []) box(r.rect, z + r.z0, r.h, M('black'));
   }
 

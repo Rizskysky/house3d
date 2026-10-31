@@ -48,6 +48,15 @@ const PATTERNS = {
       line(ctx, 0, i * h, SIZE, i * h, 'rgba(70,50,30,0.45)', 2);
     }
   },
+  // porcelain wood-look planks (one tile = 2 planks long, `rows` planks wide), 1/3 staggered joints, thin grout
+  plank120(ctx, r) { plankTiles(ctx, r, 12, 'rgba(150,130,105,0.75)'); },   // scale 2.4 → 120 × 20 cm
+  plank60(ctx, r) { plankTiles(ctx, r, 8, 'rgba(150,130,105,0.75)'); },     // scale 1.2 → 60 × 15 cm
+  // wall tile 60 × 30 (tile scale 1.2: 2 across, 4 up), soft marble cloud, thin light grout
+  wallTile(ctx, r) {
+    base(ctx, 246);
+    blotches(ctx, r, 160, 40, 140, 10, 0.03);
+    grid(ctx, 2, 4, 'rgba(160,150,135,0.6)', 2);
+  },
   // furniture / joinery: continuous grain, no seams
   wood(ctx, r) {
     base(ctx, 240);
@@ -179,6 +188,18 @@ const PATTERNS = {
 };
 
 // ---------------------------------------------------------------------------
+function plankTiles(ctx, r, rows, grout) {
+  base(ctx, 236);
+  const h = SIZE / rows, len = SIZE / 2;
+  for (let i = 0; i < rows; i++) {
+    const off = ((i * 1) % 3) * len / 3;
+    for (let x = -len + off; x < SIZE; x += len) {
+      grainBlock(ctx, r, x, i * h, len, h, 224 + r() * 22);
+      line(ctx, x, i * h, x, (i + 1) * h, grout, 1.5);
+    }
+    line(ctx, 0, i * h, SIZE, i * h, grout, 1.5);
+  }
+}
 function grainBlock(ctx, r, x, y, w, h, tone, angle = 0) {
   ctx.save();
   ctx.beginPath(); ctx.rect(Math.min(x, x + w), y, Math.abs(w), h); ctx.clip();

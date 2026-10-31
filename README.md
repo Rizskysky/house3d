@@ -30,6 +30,7 @@ src/furniture.js    parametric furniture, fixtures, cars and plants, sized from 
 src/textures.js     procedural material patterns (wood, plaster, stone, terrazzo, grass…), drawn on canvas
 src/plan.js         2D floor plans (SVG, 1:100 on A4) and the door/window schedule
 docs.html           contractor documents: summary, floor plans, ceiling plans, door/window schedule, technical notes, renders (print to PDF)
+src/stair.js        winder (anak tangga putar) geometry shared by the model, plans and walk mode
 src/walk.js         first-person walk: collision and floor heights from house.json
 src/viewer.js       renderer, sky, lights, shadows, ambient occlusion, day/night, camera, PNG snapshot
 ```
@@ -52,12 +53,12 @@ A `rect` is always `[x0, y0, x1, y1]`. In three.js, `x → X`, `z → Y` (up), `
 |---|---|---|
 | `levels` | floor heights | change ceiling height |
 | `materials` | `color`, `rough`, `metal`, `opacity`, plus optional `tex` (procedural pattern), `scale` (m per tile), `bump`, `env` (sky reflection strength) | retune a finish |
-| `floors` | floor surfaces per room (`name` becomes the room label) | resize or rename a room |
+| `floors` | floor surfaces per room (`name` becomes the room label); optional `wallTile` {`mat`, `h`} tiles the room's walls up to `h` (skips doors, stops at window sills) | resize or rename a room, change a floor finish |
 | `slabs` | floor-2 slab pieces (the gaps are the stair void) | move the stair void |
 | `ceilings` | ceilings under the roof (`level`, `rect`, `z`, `t`), drawn while the roof is shown; with `cove` {`band`, `drop`, `raise`} a drop ceiling with a hidden LED strip; with `slot` {`sides` ('+x', '-x', '+y', '-y' or 'all'), `w`, `depth`} a flat ceiling with an LED slot that washes the wall | drop ceiling, LED at the ceiling edge |
 | `walls` | centerline `a → b`, `kind` (`ext`, `int`, `boundary`, `low`), optional `h`, and `open` | move a wall |
 | `walls[].open` | `at` (m from the wall's lower-coordinate end), `w`, `type`, `sill`, `head` | move or resize a door/window |
-| `stairs` | flights (`dir`, `steps`, `z0`, `z1`), landings, rails | change the stair |
+| `stairs` | flights (`dir`, `steps`, `z0`, `z1`), landings, `winders` (corner `rect`, inner-corner `pivot`, angles `a0`→`a1`, `steps`, `z0`, `z1`), rails | change the stair |
 | `boxes` | furniture and small objects: `rect`, `z` (above the level), `h`, `mat`; with `type` (and `face`: `+y`/`-y`/`+x`/`-x`, the side its front points to) it is modeled by `src/furniture.js`, otherwise drawn as a plain box | move furniture |
 | `prayerMats` | center, size, rotation toward qibla (degrees) | |
 | `roofs` | `gable` (`over.side` / `over.end`, or per side `over.west` / `over.east`), `flat` (with optional `posts` and one `skylight` strip), `glass` canopy | change roof pitch or overhang |

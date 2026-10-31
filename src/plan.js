@@ -1,9 +1,11 @@
 // 2D floor plans as SVG, drawn from data/house.json (same source as the 3D model).
 // Units are meters; the SVG is sized in millimetres so it prints at 1:100 on A4.
+const { winderPolys } = await import(`./stair.js${new URL(import.meta.url).search}`);
 const THICK = { ext: 0.15, int: 0.1, boundary: 0.15, low: 0.12, roster: 0.12 };
 const FILL = {
   tile: '#F2EFE9', oakFloor: '#EEDFC4', terrazzo: '#E7E7E3', stone: '#DEDDD7', grass: '#E1EBD4',
   gravel: '#F1EFEA', concrete: '#E9E7E2',
+  crenata: '#EFE0C6', tectona: '#EADDC9', lumber: '#E5D5C4', calavera: '#D9D1C7',
 };
 const LEVELS = { lt1: ['site', 'lt1'], lt2: ['lt2'] };
 
@@ -69,6 +71,8 @@ export function planSVG(data, level, { scale = 100 } = {}) {
       }
     }
     for (const l of st.landings || []) { const [x0, y0, x1, y1] = norm(l.rect); r(x0, y0, x1 - x0, y1 - y0, 'fill="#FFFFFF" stroke="#6B665E" stroke-width="0.012"'); }
+    for (const w of st.winders || []) for (const t of winderPolys(w))
+      out.push(`<polygon points="${t.pts.map((q) => q.map(f).join(',')).join(' ')}" fill="#FFFFFF" stroke="#6B665E" stroke-width="0.012" ${below ? 'stroke-dasharray="0.06 0.04"' : ''}/>`);
     if (!below) {
       // walking line: up flight 1 (−y), across the landing, up flight 2 (+x or −x)
       const a = norm(st.flights[0].rect), b = norm(st.flights[1].rect), east = st.flights[1].dir !== '-x';
@@ -189,7 +193,10 @@ export function ceilingSVG(data, level, { scale = 100 } = {}) {
     if (inside(cx, cy) || level !== 'lt1') continue;
     r(x0, y0, x1 - x0, y1 - y0, 'fill="#FAF8F4" stroke="none"');
     const dak = (data.roofs || []).find((rf) => rf.type === 'flat' && rf.z < slabZ && (() => { const [a, b, c, d] = norm(rf.rect); return cx > a && cx < c && cy > b && cy < d; })());
-    text(cx, cy + 0.32, dak ? `dak beton ${hlab(dak.z)}` : `plat beton ${hlab(slabZ)}`, 'font-size="0.12" text-anchor="middle" fill="#6B665E" class="halo"');
+    const inRect = (rc) => { const [a, b, c, d] = norm(rc); return cx > a && cx < c && cy > b && cy < d; };
+    const underStair = (data.stairs || []).some((st) => [...st.flights, ...(st.winders || []), ...(st.landings || [])].some((p) => inRect(p.rect)));
+    const lab = dak ? `dak beton ${hlab(dak.z)}` : underStair ? 'bawah tangga' : `plat beton ${hlab(slabZ)}`;
+    text(cx, cy + 0.32, lab, 'font-size="0.12" text-anchor="middle" fill="#6B665E" class="halo"');
   }
   for (const c of ceilings) {
     const [x0, y0, x1, y1] = norm(c.rect), cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;

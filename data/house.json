@@ -1,17 +1,17 @@
 {
-  "meta": {"name": "House 3D", "version": "v4.0 · 2026-10-31 · desain final taman barat", "units": "meter", "coords": "x = barat→timur (0 = sisi jalan samping), y = belakang→depan (0 = batas belakang, 14 = jalan depan), z = tinggi. Semua rect = [x0, y0, x1, y1].", "lb": {"lt1": 56, "lt2": 49, "total": 105}, "dims": {"lt2": {"x": [2, 5.5, 9]}}},
+  "meta": {"name": "House 3D", "version": "v4.1 · 2026-10-31 · plafon 2,8 m bersih, lantai granit, cat Champagne White", "units": "meter", "coords": "x = barat→timur (0 = sisi jalan samping), y = belakang→depan (0 = batas belakang, 14 = jalan depan), z = tinggi. Semua rect = [x0, y0, x1, y1].", "lb": {"lt1": 56, "lt2": 49, "total": 105}, "dims": {"lt2": {"x": [2, 5.5, 9]}}},
 
   "lot": {"w": 9, "d": 14},
 
   "levels": {
     "site": {"z": 0, "name": "Tapak"},
-    "lt1": {"z": 0, "h": 3.3, "name": "Lantai 1"},
-    "lt2": {"z": 3.45, "h": 3.0, "name": "Lantai 2"}
+    "lt1": {"z": 0, "h": 3.0, "name": "Lantai 1"},
+    "lt2": {"z": 3.15, "h": 3.0, "name": "Lantai 2"}
   },
 
   "materials": {
-    "plaster": {"color": "#EEE9DF", "rough": 0.92, "tex": "plaster", "scale": 2.5},
-    "plasterExt": {"color": "#F3EFE7", "rough": 0.9, "tex": "plaster", "scale": 2.5},
+    "plaster": {"color": "#F0E7D6", "rough": 0.92, "tex": "plaster", "scale": 2.5, "note": "Jotun 12302 Champagne White (perkiraan warna)"},
+    "plasterExt": {"color": "#F2EADB", "rough": 0.9, "tex": "plaster", "scale": 2.5},
     "boundary": {"color": "#CCC7BD", "rough": 0.95, "tex": "concrete", "scale": 2.5},
     "andesite": {"color": "#6F706B", "rough": 0.95, "tex": "andesite", "scale": 1.2, "bump": 1.5},
     "tile": {"color": "#E2DACB", "rough": 0.6, "tex": "tile", "scale": 1.2, "bump": 0.6},
@@ -59,7 +59,12 @@
     "bambooCulm": {"color": "#9DB061", "rough": 0.7},
     "plant": {"color": "#6E9E48", "rough": 1},
     "soil": {"color": "#3B2E22", "rough": 1},
-    "led": {"color": "#F4EAD8", "rough": 0.5, "emissive": "#FFC27A"}
+    "led": {"color": "#F4EAD8", "rough": 0.5, "emissive": "#FFC27A"},
+    "crenata": {"color": "#D6BC97", "rough": 0.62, "tex": "plank120", "scale": 2.4, "bump": 0.5, "note": "RomanGranit dCrenata Beige 120x20"},
+    "tectona": {"color": "#DCC6A6", "rough": 0.75, "tex": "plank60", "scale": 1.2, "bump": 0.7, "note": "RomanGranit dTectona Pine 60x15 R11"},
+    "lumber": {"color": "#C3A283", "rough": 0.8, "tex": "plank60", "scale": 1.2, "bump": 0.8, "note": "RomanGranit dLumber Beige 60x15 R11"},
+    "calavera": {"color": "#8C7A66", "rough": 0.78, "tex": "plank60", "scale": 1.2, "bump": 0.8, "note": "RomanGranit dCalavera Noce 60x15 R11"},
+    "adonis": {"color": "#ECE7DB", "rough": 0.25, "tex": "wallTile", "scale": 1.2, "env": 0.6, "note": "RomanGranit dAdonis Beige 60x30 polished (dinding KM)"}
   },
 
   "ground": [
@@ -71,47 +76,51 @@
   ],
 
   "floors": [
-    {"level": "site", "rect": [2.0, 0, 9.0, 1.5], "mat": "concrete", "name": "Service yard"},
+    {"level": "site", "rect": [2.0, 0, 9.0, 1.5], "mat": "tile", "name": "Service yard"},
     {"level": "site", "rect": [2, 8.5, 9, 14], "mat": "concrete", "name": "Carport"},
     {"level": "site", "rect": [0, 8.5, 2, 14], "mat": "grass", "name": "Taman pojok"},
     {"level": "site", "rect": [0.25, 8.75, 1.85, 13.8], "mat": "gravel", "z": 0.02},
-    {"level": "site", "rect": [0.0, 3.5, 2.0, 4.5], "mat": "stone", "name": "Wudhu"},
+    {"level": "site", "rect": [0.0, 3.5, 2.0, 4.5], "mat": "lumber", "name": "Wudhu"},
     {"level": "site", "rect": [0.0, 4.5, 2.0, 8.5], "mat": "grass", "name": "Taman"},
-    {"level": "lt1", "rect": [7.0, 1.5, 9.0, 4], "mat": "oakFloor", "name": "Studio"},
-    {"level": "lt1", "rect": [7.0, 4, 9.0, 7], "mat": "tile", "name": "Tangga"},
-    {"level": "lt1", "rect": [7.0, 4, 8.0, 5.5], "mat": "terrazzo", "name": "KM tamu"},
-    {"level": "lt1", "rect": [7.0, 5.5, 8.0, 7], "mat": "oakFloor", "name": "Lemari genkan"},
-    {"level": "lt1", "rect": [8.0, 4, 9.0, 7], "mat": "oakFloor", "name": "Gudang bawah tangga"},
-    {"level": "lt1", "rect": [7.0, 7, 9.0, 8.5], "mat": "stone", "name": "Genkan"},
-    {"level": "lt1", "rect": [2.0, 1.5, 7.0, 4.5], "mat": "tile", "name": "Dapur + makan"},
-    {"level": "lt1", "rect": [2.0, 4.5, 7.0, 8.5], "mat": "tile", "name": "Ruang keluarga"},
-    {"level": "lt1", "rect": [0.0, 0, 2.0, 3.5], "mat": "oakFloor", "name": "Musholla"},
-    {"level": "lt2", "rect": [5.5, 1.5, 9.0, 4], "mat": "oakFloor", "name": "Kamar 2"},
-    {"level": "lt2", "rect": [2.0, 1.5, 5.5, 4], "mat": "oakFloor", "name": "Kamar 3"},
-    {"level": "lt2", "rect": [4.0, 4, 7.0, 5.5], "mat": "oakFloor", "name": "Hall"},
-    {"level": "lt2", "rect": [2.0, 4, 4.0, 5.5], "mat": "terrazzo", "name": "KM"},
-    {"level": "lt2", "rect": [7.0, 5.5, 8.0, 7], "mat": "oakFloor"},
-    {"level": "lt2", "rect": [5.5, 5.5, 7.0, 8.5], "mat": "oakFloor", "name": "Walk-in"},
-    {"level": "lt2", "rect": [2.0, 5.5, 5.5, 8.5], "mat": "oakFloor", "name": "Kamar utama"},
-    {"level": "lt2", "rect": [7.0, 7, 9.0, 8.5], "mat": "terrazzo", "name": "KM dalam"},
-    {"level": "lt2", "rect": [2.0, 8.5, 5.5, 9.5], "mat": "stone", "name": "Balkon"}
+    {"level": "lt1", "rect": [7.0, 1.5, 9.0, 4], "mat": "crenata", "name": "Studio"},
+    {"level": "lt1", "rect": [7.0, 4, 9.0, 7], "mat": "crenata", "name": "Tangga", "z": -0.01},
+    {"level": "lt1", "rect": [7.0, 4, 8.0, 5.5], "mat": "tectona", "name": "KM tamu", "wallTile": {"mat": "adonis", "h": 2.1}},
+    {"level": "lt1", "rect": [7.0, 5.5, 8.0, 7], "mat": "crenata", "name": "Lemari genkan"},
+    {"level": "lt1", "rect": [8.0, 4, 9.0, 7], "mat": "crenata", "name": "Gudang bawah tangga"},
+    {"level": "lt1", "rect": [7.0, 7, 9.0, 8.5], "mat": "calavera", "name": "Genkan"},
+    {"level": "lt1", "rect": [2.0, 1.5, 7.0, 4.5], "mat": "crenata", "name": "Dapur + makan"},
+    {"level": "lt1", "rect": [2.0, 4.5, 7.0, 8.5], "mat": "crenata", "name": "Ruang keluarga"},
+    {"level": "lt1", "rect": [0.0, 0, 2.0, 3.5], "mat": "crenata", "name": "Musholla"},
+    {"level": "lt2", "rect": [5.5, 1.5, 9.0, 4], "mat": "crenata", "name": "Kamar 2"},
+    {"level": "lt2", "rect": [2.0, 1.5, 5.5, 4], "mat": "crenata", "name": "Kamar 3"},
+    {"level": "lt2", "rect": [4.0, 4, 7.0, 5.5], "mat": "crenata", "name": "Hall"},
+    {"level": "lt2", "rect": [2.0, 4, 4.0, 5.5], "mat": "tectona", "name": "KM", "wallTile": {"mat": "adonis", "h": 2.1}},
+    {"level": "lt2", "rect": [7.0, 5.5, 8.0, 7], "mat": "crenata"},
+    {"level": "lt2", "rect": [5.5, 5.5, 7.0, 8.5], "mat": "crenata", "name": "Walk-in"},
+    {"level": "lt2", "rect": [2.0, 5.5, 5.5, 8.5], "mat": "crenata", "name": "Kamar utama"},
+    {"level": "lt2", "rect": [7.0, 7, 9.0, 8.5], "mat": "tectona", "name": "KM dalam", "wallTile": {"mat": "adonis", "h": 2.1}},
+    {"level": "lt2", "rect": [2.0, 8.5, 5.5, 9.5], "mat": "lumber", "name": "Balkon"}
   ],
 
   "slabs": [
-    {"level": "lt2", "rect": [2.0, 1.5, 7.0, 8.5], "z": 3.3, "t": 0.15},
-    {"level": "lt2", "rect": [7.0, 1.5, 9.0, 4.05], "z": 3.3, "t": 0.15},
-    {"level": "lt2", "rect": [7.0, 5.0, 8.0, 8.5], "z": 3.3, "t": 0.15},
-    {"level": "lt2", "rect": [8.0, 7, 9.0, 8.5], "z": 3.3, "t": 0.15},
-    {"level": "lt2", "rect": [2.0, 8.5, 5.5, 9.5], "z": 3.3, "t": 0.15}
+    {"level": "lt2", "rect": [2.0, 1.5, 7.0, 8.5], "z": 3.0, "t": 0.15},
+    {"level": "lt2", "rect": [7.0, 1.5, 9.0, 4.05], "z": 3.0, "t": 0.15},
+    {"level": "lt2", "rect": [7.0, 5.0, 8.0, 8.5], "z": 3.0, "t": 0.15},
+    {"level": "lt2", "rect": [8.0, 7, 9.0, 8.5], "z": 3.0, "t": 0.15},
+    {"level": "lt2", "rect": [2.0, 8.5, 5.5, 9.5], "z": 3.0, "t": 0.15}
   ],
 
   "ceilings": [
-    {"level": "lt1", "rect": [2.0, 4.5, 7.0, 8.5], "z": 3.15, "t": 0.03, "mat": "plaster", "cove": {"band": 0.5, "drop": 2.9, "raise": 0.1}, "note": "ruang keluarga: drop ceiling, pinggiran 50 cm di 2,90 m, tengah 3,25 m (di bawah plat), LED tersembunyi"},
-    {"level": "lt2", "rect": [5.5, 1.5, 9.0, 4], "z": 3.0, "t": 0.03, "mat": "plaster", "slot": {"sides": ["+x"], "w": 0.15, "depth": 0.1}, "note": "kamar 2: plafon datar 3,0 m, LED di ujung plafon (celah 15 cm di dinding kepala kasur, menyinari dinding ke bawah)"},
-    {"level": "lt2", "rect": [2.0, 1.5, 5.5, 4], "z": 3.0, "t": 0.03, "mat": "plaster", "slot": {"sides": ["-x"], "w": 0.15, "depth": 0.1}, "note": "kamar 3: plafon datar 3,0 m, LED di ujung plafon di dinding kepala kasur"},
-    {"level": "lt2", "rect": [2.0, 5.5, 5.5, 8.5], "z": 3.0, "t": 0.03, "mat": "plaster", "cove": {"band": 0.5, "drop": 2.75, "raise": 0.15}, "note": "kamar utama: plafon drop + LED tersembunyi"},
-    {"level": "lt2", "rect": [2.0, 4, 9.0, 5.5], "z": 3.0, "t": 0.03, "mat": "plaster", "note": "plafon datar hall, KM, void tangga"},
-    {"level": "lt2", "rect": [5.5, 5.5, 9.0, 8.5], "z": 3.0, "t": 0.03, "mat": "plaster", "note": "plafon datar walk-in, KM dalam (KM: PVC/GRC tahan air)"}
+    {"level": "lt1", "rect": [2.0, 4.5, 7.0, 8.5], "z": 2.8, "t": 0.03, "mat": "plaster", "cove": {"band": 0.5, "drop": 2.8, "raise": 0.15}, "note": "ruang keluarga: drop ceiling, pinggiran 50 cm di 2,80 m, tengah 2,95 m, LED tersembunyi"},
+    {"level": "lt1", "rect": [2.0, 1.5, 7.0, 4.5], "z": 2.8, "t": 0.03, "mat": "plaster", "note": "dapur + makan: plafon gipsum datar 2,80 m"},
+    {"level": "lt1", "rect": [7.0, 1.5, 9.0, 4.0], "z": 2.8, "t": 0.03, "mat": "plaster", "note": "studio"},
+    {"level": "lt1", "rect": [7.0, 5.5, 8.0, 7.0], "z": 2.8, "t": 0.03, "mat": "plaster", "note": "lemari genkan"},
+    {"level": "lt1", "rect": [7.0, 7.0, 9.0, 8.5], "z": 2.8, "t": 0.03, "mat": "plaster", "note": "genkan"},
+    {"level": "lt2", "rect": [5.5, 1.5, 9.0, 4], "z": 2.8, "t": 0.03, "mat": "plaster", "slot": {"sides": ["+x"], "w": 0.15, "depth": 0.1}, "note": "kamar 2: plafon datar 2,8 m, LED di ujung plafon (celah 15 cm di dinding kepala kasur, menyinari dinding ke bawah)"},
+    {"level": "lt2", "rect": [2.0, 1.5, 5.5, 4], "z": 2.8, "t": 0.03, "mat": "plaster", "slot": {"sides": ["-x"], "w": 0.15, "depth": 0.1}, "note": "kamar 3: plafon datar 2,8 m, LED di ujung plafon di dinding kepala kasur"},
+    {"level": "lt2", "rect": [2.0, 5.5, 5.5, 8.5], "z": 2.8, "t": 0.03, "mat": "plaster", "cove": {"band": 0.5, "drop": 2.8, "raise": 0.2}, "note": "kamar utama: drop ceiling, pinggiran 50 cm di 2,80 m, tengah naik ke 3,00 m, LED tersembunyi"},
+    {"level": "lt2", "rect": [5.5, 5.5, 9.0, 8.5], "z": 2.8, "t": 0.03, "mat": "plaster", "note": "plafon datar walk-in, KM dalam (KM: PVC/GRC tahan air)"},
+    {"level": "lt2", "rect": [2.0, 4, 9.0, 5.5], "z": 2.8, "t": 0.03, "mat": "plaster", "note": "plafon datar hall, KM, void tangga"}
   ],
 
   "walls": [
@@ -119,10 +128,10 @@
     {"level": "lt1", "kind": "ext", "a": [9.0, 1.5], "b": [2.0, 1.5], "open": [{"at": 5.4, "w": 1.2, "type": "window", "sill": 1.0, "head": 2.2, "note": "J2 studio"}, {"at": 2.2, "w": 1.5, "type": "window", "sill": 1.15, "head": 1.95, "note": "J1 dapur, di atas sink (dinding di atas kompor untuk cooker hood)"}, {"at": 0.15, "w": 0.85, "type": "door", "head": 2.1, "note": "P5 dapur → service yard", "hinge": "start", "side": -1}]},
     {"level": "lt1", "kind": "ext", "a": [2.0, 1.5], "b": [2.0, 8.5], "open": [{"at": 3.3, "w": 3.4, "type": "sliding", "head": 2.4, "leaves": ["fixed", "slide", "slide", "fixed"], "out": -1, "note": "PL1 sliding aluminium slim frame hitam doff + kaca polos: 2 kaca mati di rel luar, 2 daun geser di rel dalam (parkir di belakang kaca mati); ambang dengan lubang buang air, kunci tanam + grendel"}]},
     {"level": "lt1", "kind": "ext", "a": [9.0, 8.5], "b": [2.0, 8.5], "open": [{"at": 5.8, "w": 0.9, "type": "door", "head": 2.2, "note": "P1 pintu utama", "hinge": "start", "side": -1, "leaf": "teak"}]},
-    {"level": "lt1", "kind": "roster", "a": [2.0, 0], "b": [2.0, 1.5], "h": 3.2, "plinth": 0.45, "note": "dinding timur musholla sisi service yard: roster + kaca mati buram di sisi dalam (dinding kiblat tetap masif, menghadap jalan)"},
-    {"level": "lt1", "kind": "ext", "a": [2.0, 3.5], "b": [0.0, 3.5], "h": 3.2, "open": [{"at": 0.8, "w": 0.9, "type": "slide", "head": 2.1, "panel": "oak", "note": "P11 musholla"}]},
-    {"level": "lt1", "kind": "ext", "a": [0.0, 0], "b": [0.0, 3.5], "h": 3.2},
-    {"level": "lt1", "kind": "ext", "a": [2.0, 0], "b": [0.0, 0], "h": 3.2},
+    {"level": "lt1", "kind": "roster", "a": [2.0, 0], "b": [2.0, 1.5], "h": 2.8, "plinth": 0.45, "note": "dinding timur musholla sisi service yard: roster + kaca mati buram di sisi dalam (dinding kiblat tetap masif, menghadap jalan)"},
+    {"level": "lt1", "kind": "ext", "a": [2.0, 3.5], "b": [0.0, 3.5], "h": 2.8, "open": [{"at": 0.8, "w": 0.9, "type": "slide", "head": 2.1, "panel": "oak", "note": "P11 musholla"}]},
+    {"level": "lt1", "kind": "ext", "a": [0.0, 0], "b": [0.0, 3.5], "h": 2.8},
+    {"level": "lt1", "kind": "ext", "a": [2.0, 0], "b": [0.0, 0], "h": 2.8},
     {"level": "site", "kind": "boundary", "a": [9.0, 0], "b": [2.0, 0], "h": 2.4},
     {"level": "site", "kind": "boundary", "a": [9.0, 0], "b": [9.0, 1.5], "h": 2.4, "note": "dinding batas timur: dinding mati tanpa jendela"},
     {"level": "site", "kind": "boundary", "a": [0, 3.5], "b": [0, 4.5], "h": 2.8, "note": "dinding wudhu sisi jalan samping, masif"},
@@ -131,8 +140,7 @@
     {"level": "site", "kind": "roster", "a": [2.0, 8.5], "b": [0.0, 8.5], "h": 2.8, "plinth": 0.6, "note": "roster taman: dinding masif 60 cm + roster sampai bawah kanopi carport"},
     {"level": "site", "kind": "low", "a": [0, 14], "b": [2, 14], "h": 0.45},
     {"level": "site", "kind": "low", "a": [0, 8.5], "b": [0, 14], "h": 0.45},
-    {"level": "lt1", "kind": "int", "a": [7.0, 1.5], "b": [7.0, 8.5], "open": [{"at": 1.55, "w": 0.8, "type": "door", "head": 2.1, "note": "P3 studio", "hinge": "end", "side": 1}, {"at": 3.1, "w": 0.7, "type": "door", "head": 2.1, "note": "P4 KM tamu, daun pintu buka keluar (ke arah ruang keluarga)", "hinge": "end", "side": -1, "leaf": "white"}, {"at": 5.6, "w": 1.0, "type": "opening", "head": 2.2, "note": "P2 genkan (bukaan tanpa daun pintu)"}]},
-    {"level": "lt1", "kind": "int", "a": [9.0, 4], "b": [7.0, 4], "open": [{"at": 1.12, "w": 0.8, "type": "door", "head": 1.65, "note": "P13 pintu gudang bawah tangga (dari studio), 80 × 165 cm", "hinge": "end", "side": -1, "leaf": "oak"}]},
+    {"level": "lt1", "kind": "int", "a": [9.0, 4], "b": [7.0, 4], "open": [{"at": 1.12, "w": 0.8, "type": "door", "head": 1.9, "note": "P13 pintu gudang bawah tangga (dari studio), 80 × 190 cm", "hinge": "end", "side": -1, "leaf": "oak"}]},
     {"level": "lt1", "kind": "int", "a": [8.0, 5.5], "b": [7.0, 5.5]},
     {"level": "lt1", "kind": "int", "a": [8.0, 5.5], "b": [8.0, 7], "note": "dinding gudang bawah tangga / lemari genkan"},
     {"level": "lt1", "kind": "int", "a": [8.0, 7], "b": [7.0, 7], "open": [{"at": 0.12, "w": 0.8, "type": "bifold", "panels": 2, "head": 2.1, "out": -1, "stack": "end", "leaf": "oak", "note": "P12 lemari genkan (rak sepatu): pintu lipat 2 daun @40 cm, membuka ke dalam, lipatan di sisi tangga supaya tidak kena rak sepatu"}]},
@@ -149,7 +157,8 @@
     {"level": "lt2", "kind": "int", "a": [7.0, 5.5], "b": [7.0, 8.5], "open": [{"at": 0.1, "w": 1.3, "type": "opening", "head": 2.2, "note": "muka lemari linen, dibuka dari walk-in"}, {"at": 1.95, "w": 0.7, "type": "door", "head": 2.1, "note": "P10 KM dalam", "hinge": "end", "side": 1, "leaf": "white"}]},
     {"level": "lt2", "kind": "int", "a": [9.0, 7], "b": [7.0, 7]},
     {"level": "lt2", "kind": "int", "a": [8.0, 5.5], "b": [8.0, 7]},
-    {"level": "lt2", "kind": "int", "a": [8.0, 5.5], "b": [7.0, 5.5]}
+    {"level": "lt2", "kind": "int", "a": [8.0, 5.5], "b": [7.0, 5.5]},
+    {"level": "lt1", "kind": "int", "a": [7.0, 1.5], "b": [7.0, 8.5], "open": [{"at": 1.55, "w": 0.8, "type": "door", "head": 2.1, "note": "P3 studio", "hinge": "end", "side": 1}, {"at": 3.1, "w": 0.7, "type": "door", "head": 2.1, "note": "P4 KM tamu, daun pintu buka keluar (ke arah ruang keluarga)", "hinge": "end", "side": -1, "leaf": "white"}, {"at": 5.6, "w": 1.0, "type": "opening", "head": 2.2, "note": "P2 genkan (bukaan tanpa daun pintu)"}]}
   ],
 
   "facadeBands": [
@@ -157,7 +166,7 @@
   ],
 
   "stairs": [
-    {"level": "lt1", "mat": "oak", "flights": [{"rect": [8.03, 5.0, 8.93, 7.0], "dir": "-y", "steps": 9, "z0": 0, "z1": 1.8}, {"rect": [7.0, 4.07, 8.0, 4.97], "dir": "-x", "steps": 5, "z0": 1.8, "z1": 3.45}], "landings": [{"rect": [8.0, 4.07, 8.93, 5.0], "z": 1.8}], "rails": []}
+    {"level": "lt1", "mat": "oak", "flights": [{"rect": [8.03, 5.0, 8.93, 7.5], "dir": "-y", "steps": 10, "z0": 0, "z1": 1.75}, {"rect": [7.0, 4.07, 8.0, 4.97], "dir": "-x", "steps": 4, "z0": 2.275, "z1": 2.975}], "landings": [], "winders": [{"rect": [8.0, 4.07, 8.93, 5.0], "pivot": [8.0, 5.0], "a0": 0, "a1": -90, "steps": 3, "z0": 1.75, "z1": 2.275}], "rails": [], "note": "18 optrede @17,5 cm (lantai ke lantai 3,15 m), antrede 25 cm: 10 anak tangga + 3 anak tangga putar + 4 anak tangga + naik ke lantai 2"}
   ],
 
   "boxes": [
@@ -169,7 +178,7 @@
     {"level": "lt1", "type": "kitchen", "rect": [6.28, 2.24, 6.9, 2.95], "h": 0.88, "mat": "oak", "face": "-x", "doors": 1, "note": "kitchen set kaki L (sepanjang dinding studio, berhenti sebelum pintu studio)"},
     {"level": "lt1", "type": "fridge", "rect": [3.25, 1.6, 3.95, 2.25], "h": 1.8, "mat": "white", "face": "+y", "note": "kulkas"},
     {"level": "lt1", "type": "cooktop", "rect": [5.9, 1.72, 6.55, 2.14], "z": 0.88, "h": 0.02, "face": "+y", "note": "kompor tanam 2 tungku"},
-    {"level": "lt1", "type": "hood", "rect": [5.87, 1.6, 6.58, 2.1], "z": 1.7, "h": 1.58, "mat": "steel", "face": "+y", "note": "cooker hood + cerobong sampai plafon"},
+    {"level": "lt1", "type": "hood", "rect": [5.87, 1.6, 6.58, 2.1], "z": 1.7, "h": 1.1, "mat": "steel", "face": "+y", "note": "cooker hood + cerobong sampai plafon"},
     {"level": "lt1", "type": "sink", "rect": [4.3, 1.75, 5.05, 2.12], "z": 0.88, "h": 0.02, "face": "+y", "note": "sink, di bawah jendela"},
     {"level": "lt1", "type": "diningTable", "rect": [4.7, 3.25, 5.55, 4.45], "h": 0.76, "mat": "teak", "face": "-x", "note": "meja makan di tengah, memanjang dapur → ruang keluarga"},
     {"level": "lt1", "type": "diningChair", "rect": [5.59, 3.45, 5.99, 3.85], "h": 0.84, "mat": "rattan", "face": "-x", "note": "kursi makan rotan"},
@@ -199,7 +208,7 @@
     {"level": "site", "type": "laundrySink", "rect": [2.7, 0.12, 3.25, 0.62], "h": 0.85, "mat": "terrazzo", "face": "+y", "note": "bak cuci"},
     {"level": "site", "type": "dryingRack", "rect": [4.6, 0.3, 5.8, 0.9], "h": 1.1, "face": "+y", "note": "jemuran"},
     {"level": "lt1", "type": "mihrab", "rect": [0.08, 1.55, 0.2, 2.35], "h": 2.4, "mat": "mihrab", "frame": "oak", "face": "+x", "note": "panel mihrab di dinding kiblat (barat, sisi jalan, masif)"},
-    {"level": "lt1", "rect": [1.91, 0.08, 1.93, 1.45], "z": 0.45, "h": 2.6, "mat": "glass", "note": "kaca mati buram di balik roster (tahan hujan, debu, serangga)"},
+    {"level": "lt1", "rect": [1.91, 0.08, 1.93, 1.45], "z": 0.45, "h": 2.3, "mat": "glass", "note": "kaca mati buram di balik roster (tahan hujan, debu, serangga)"},
     {"level": "lt1", "type": "lowCabinet", "rect": [0.4, 0.08, 1.85, 0.44], "h": 0.8, "mat": "oak", "face": "+y", "doors": 3, "note": "lemari mukena"},
     {"level": "site", "type": "faucet", "rect": [0.08, 3.66, 0.22, 3.86], "z": 0.6, "h": 0.25, "face": "+x", "note": "kran wudhu"},
     {"level": "site", "type": "bench", "rect": [0.35, 3.6, 0.7, 3.95], "h": 0.4, "mat": "teak", "face": "-x", "note": "bangku wudhu, depan kran"},
@@ -239,7 +248,7 @@
     {"level": "lt2", "rect": [2.0, 8.5, 2.06, 9.5], "h": 1.0, "mat": "glass", "note": "railing balkon samping"},
     {"level": "lt1", "type": "acIndoor", "rect": [7.05, 1.9, 7.27, 2.7], "z": 2.35, "h": 0.28, "face": "+x", "note": "AC studio ½ PK Daikin Beta (FTKE15), dinding barat di atas rak"},
     {"level": "site", "type": "acOutdoor", "rect": [7.35, 1.14, 8.05, 1.42], "z": 1.95, "h": 0.55, "face": "-y", "note": "unit luar AC studio, bracket dinding service yard"},
-    {"level": "lt1", "type": "acIndoor", "rect": [4.3, 8.2, 5.3, 8.42], "z": 2.5, "h": 0.3, "face": "-y", "note": "AC ruang keluarga+makan 2 PK Daikin Beta (FTKE50), dinding depan"},
+    {"level": "lt1", "type": "acIndoor", "rect": [4.3, 8.2, 5.3, 8.42], "z": 2.4, "h": 0.3, "face": "-y", "note": "AC ruang keluarga+makan 2 PK Daikin Beta (FTKE50), dinding depan"},
     {"level": "site", "type": "acOutdoor", "rect": [4.35, 8.58, 5.2, 8.88], "z": 2.0, "h": 0.6, "face": "+y", "note": "unit luar AC ruang keluarga, bracket dinding carport di bawah kanopi"},
     {"level": "lt2", "type": "acIndoor", "rect": [7.4, 3.73, 8.2, 3.95], "z": 2.3, "h": 0.28, "face": "-y", "note": "AC kamar 2 ½ PK Daikin Beta (FTKE15), dinding selatan"},
     {"level": "lt2", "type": "acOutdoor", "rect": [7.3, 1.14, 8.0, 1.42], "z": 0.3, "h": 0.55, "face": "-y", "note": "unit luar AC kamar 2, bracket dinding belakang (atas service yard)"},
@@ -257,50 +266,51 @@
 
   "notes": [
     {"topic": "Tata letak", "items": ["Taman, wudhu, dan musholla di sisi jalan samping (barat); studio, tangga, gudang, KM tamu, dan genkan menempel dinding batas timur. Carport dan taman pojok di depan.", "Dinding timur (batas tetangga) adalah dinding mati tanpa jendela, seluruhnya di dalam batas tanah; sisi luar diplester + cat waterproof sejak awal. Studio dapat cahaya dari J2 (utara), kamar 2 dari J5 (utara), KM dalam dari J12 (selatan).", "Kaca PL1 ruang keluarga dan jendela J8, J9, J10 lantai 2 menghadap barat ke taman: kena matahari sore jam 14–17 sepanjang tahun, jadi peneduh wajib (lihat Taman & privasi).", "Atap pelana tanpa tritisan di sisi timur: talang + lisplang di garis dinding timur, air hujan dibuang ke saluran sendiri.", "Tidak ada pintu servis dari jalan samping; service yard diakses lewat pintu dapur P5.", "Pintu utama P1 di ujung timur carport, dengan jalur jalan ±1,6 m di sisi timur carport. Kode jendela J3, J6, J11 tidak dipakai lagi."]},
-    {"topic": "Lantai & level", "items": ["Lantai dalam rumah ±10–15 cm lebih tinggi dari deck dan taman, supaya air hujan tidak masuk lewat pintu taman.", "Deck kayu menerus dari ujung roster sampai area wudhu, lalu ke pintu musholla (P11)."]},
+    {"topic": "Lantai & level", "items": ["Lantai dalam rumah ±10–15 cm lebih tinggi dari deck dan taman, supaya air hujan tidak masuk lewat pintu taman.", "Deck kayu menerus dari ujung roster sampai area wudhu, lalu ke pintu musholla (P11).", "Tinggi lantai ke lantai 3,15 m; plafon bersih 2,80 m di lantai 1 dan lantai 2."]},
     {"topic": "Pintu taman PL1", "items": ["Sliding aluminium slim frame hitam doff, kaca polos: 2 kaca mati di rel luar, 2 daun geser di rel dalam.", "Ambang bawah dengan lubang buang air (weep hole); kunci tanam + grendel atas-bawah."]},
     {"topic": "Musholla", "items": ["Dak beton biasa dengan skylight 1 garis ±30 cm menempel dinding kiblat (barat): kaca laminated + film penahan panas, bibir beton keliling.", "Dinding kiblat menghadap jalan samping, jadi masif (tenang, tidak terlihat dari jalan) dengan panel mihrab; roster + kaca mati buram pindah ke dinding timur sisi service yard.", "Arah kiblat: sajadah diputar ±25° dari dinding barat (cek ulang dengan kompas kiblat di lokasi)."]},
     {"topic": "Taman & privasi", "items": ["Dinding taman sisi jalan samping: masif 1,2 m (privasi saat duduk + keamanan) lalu roster sampai 2,8 m; dinding wudhu masif penuh.", "Roster di depan taman (batas ke taman pojok): dinding masif 60 cm + roster sampai bawah kanopi carport (±2,8 m).", "Peneduh sore wajib: bambu rumpun (tidak menjalar, mis. Bambusa multiplex) di bak tanaman pojok dan di sepanjang roster jalan, kanopi/overhang ±1 m di atas PL1, kaca low-e atau film panas.", "Kanopi kaca di atas deck: tempered laminated dengan rangka hitam dan kisi kayu di bawahnya.", "Pojok taman (roster jalan + roster depan): bangku L tanam, dudukan WPC 45 cm dengan LED di bawahnya, bak tanaman 35–40 cm di belakang. Taman barat dapat ±5 jam matahari, cukup untuk strelitzia. Bak wajib waterproofing + pipa buang."]},
     {"topic": "Dapur", "items": ["Kitchen set bentuk L tanpa island; jendela J1 di atas sink, dinding di atas kompor untuk cooker hood + cerobong.", "Meja makan di tengah (85 × 120 cm, 4 kursi) sekaligus meja bantu masak; lemari pantry tinggi + kabinet bawah/atas di dinding musholla."]},
     {"topic": "Kamar mandi & pintu", "items": ["KM tamu: daun pintu P4 buka keluar (ruangnya 1 × 1,5 m); kloset menghadap selatan, tidak menghadap kiblat.", "Lemari sepatu genkan P12: pintu lipat 2 daun @40 cm (engsel lipat + rel atas), membuka ke dalam dengan lipatan di sisi tangga, karena pintu engsel 80 cm menabrak rak sepatu saat dibuka.", "Semua pintu engsel dicek bebas halangan 80 cm di depannya; arah buka sesuai denah."]},
     {"topic": "Kamar", "items": ["Kamar 2 dan 3: kasur 160 × 200, lemari 150 cm; sandaran kasur 85 cm supaya tidak menutup ambang jendela samping (90 cm)."]},
-    {"topic": "Plafon & LED", "items": ["Ruang keluarga: drop ceiling gipsum. Pinggiran 50 cm turun ke 2,90 m, tengah 3,25 m (±5 cm di bawah plat beton), LED strip 2700–3000K tersembunyi di celahnya + dimmer. Sisi pinggiran yang menghadap meja makan sekaligus jadi batas zona ruang keluarga–makan.", "Kamar utama: drop ceiling gipsum. Pinggiran 50 cm turun ke 2,75 m, tengah naik ke ±3,15 m di ruang atap, LED strip tersembunyi + dimmer.", "Kamar 2 dan 3: plafon datar 3,0 m dengan LED di ujung plafon di dinding kepala kasur: celah (slot) 15 cm lebar × 10 cm dalam sepanjang dinding, LED strip 2700–3000K di sisi dalam celah menyinari dinding ke bawah. Saklar terpisah dari lampu utama + dimmer.", "LED strip pakai profil aluminium + diffuser (tidak terlihat titik-titik LED), driver 24V di tempat yang bisa diakses (lubang servis di plafon).", "Hall dan walk-in plafon datar 3,0 m; KM plafon PVC/GRC tahan air. Dapur dan makan: plat beton diaci + cat atau plafon datar. Insulasi (aluminium foil + glasswool) di atas plafon lantai 2.", "Kalau tinggi lantai 1 nanti diturunkan, pinggiran drop ceiling ruang keluarga minimal 2,6 m."]},
-    {"topic": "Tangga", "items": ["Tangga melayang seperempat putaran: 9 anak tangga + bordes + 5 anak tangga; railing di sisi void lantai 2.", "Gudang bawah tangga 0,88 × 2,95 m (tinggi 1,7 m di bawah bordes, turun mengikuti tangga), pintu P13 80 × 165 cm dari studio: muat koper besar, stroller lipat, kasur lipat, kipas berdiri, bahkan sepeda anak. Beri lampu + saklar di dalam. Tangga melayang ditumpu dinding timur/balok besi (dihitung kontraktor)."]},
+    {"topic": "Plafon & LED", "items": ["Semua ruang plafon bersih minimal 2,80 m (lantai 1 dan 2). Plat lantai 2 di 3,00 m, jadi ada ruang ±20 cm di atas plafon lantai 1 untuk kabel, pipa AC, dan lampu tanam.", "Ruang keluarga: drop ceiling gipsum. Pinggiran 50 cm di 2,80 m, tengah naik ke 2,95 m, LED strip 2700–3000K tersembunyi di celahnya + dimmer.", "Kamar utama: drop ceiling gipsum. Pinggiran 50 cm di 2,80 m, tengah naik ke 3,00 m di ruang atap, LED strip tersembunyi + dimmer.", "Kamar 2 dan 3: plafon datar 2,80 m dengan LED di ujung plafon di dinding kepala kasur: celah (slot) 15 cm lebar × 10 cm dalam sepanjang dinding, LED strip 2700–3000K di sisi dalam celah menyinari dinding ke bawah. Saklar terpisah dari lampu utama + dimmer.", "Dapur, makan, studio, genkan, lemari genkan, hall, walk-in: plafon gipsum datar 2,80 m. KM: plafon PVC/GRC tahan air 2,80 m (KM tamu: bawah tangga). Musholla: dak beton ekspos, bawah dak 2,80 m.", "LED strip pakai profil aluminium + diffuser (tidak terlihat titik-titik LED), driver 24V di tempat yang bisa diakses (lubang servis di plafon). Insulasi (aluminium foil + glasswool) di atas plafon lantai 2."]},
+    {"topic": "Lantai & cat", "items": ["Cat semua dinding interior dan plafon: Jotun 12302 Champagne White, finishing matte/eggshell yang bisa dilap; dinding KM di atas keramik pakai cat anti-jamur warna sama.", "Lantai semua ruang kering lt 1 dan lt 2 (ruang keluarga, dapur, makan, studio, musholla, lemari genkan, gudang, 3 kamar, walk-in, hall): RomanGranit dCrenata Beige 120 × 20 (GT1225517R), satu batch, susunan geser 1/3, nat 2 mm beige, klip leveling.", "Lantai 3 KM: RomanGranit dTectona Pine 60 × 15 R11 (GT615526R). Dinding KM: dAdonis Beige 60 × 30 (GT639757FR) setinggi 2,1 m.", "Wudhu dan balkon: RomanGranit dLumber Beige 60 × 15 R11 P5 (GT615531R). Genkan: dCalavera Noce 60 × 15 R11 (GT615502R). Service yard: keramik biasa.", "Plint dari potongan granit yang sama, tinggi 7–8 cm."]},
+    {"topic": "Tangga", "items": ["Lantai ke lantai 3,15 m (plafon bersih 2,80 m + plenum/plat). Tangga melayang seperempat putaran: 10 anak tangga + 3 anak tangga putar (winder) + 4 anak tangga + naik ke lantai 2 = 18 optrede @17,5 cm, antrede 25 cm (2 × 17,5 + 25 = 60 cm).", "Kaki tangga maju 50 cm ke genkan (sisi timur); jarak anak tangga pertama ke dinding depan/pintu utama P1 ±1,0 m.", "Anak tangga putar: lebar pijakan ±25 cm di garis jalan 50 cm dari sisi dalam; sisi dalam sempit, beri pegangan tangan di dinding.", "Gudang bawah tangga 0,88 × 2,95 m, tinggi ±1,9 m di bawah anak tangga putar (turun mengikuti tangga), pintu P13 80 × 190 cm dari studio. Beri lampu + saklar di dalam. Tangga ditumpu dinding timur/balok besi (dihitung kontraktor).", "KM tamu di bawah potongan atas tangga: tinggi bebas ±2,7–2,9 m di atas kloset."]},
     {"topic": "AC & listrik", "items": ["5 AC split inverter Daikin: studio ½ PK, kamar 2 ½ PK, kamar 3 ½ PK, ruang keluarga + makan 2 PK (Beta Inverter FTKE); kamar utama 1 PK (Alpha Inverter FTKH). Posisi unit dalam (AC) dan unit luar (OU) sesuai denah.", "Ruang keluarga menghadap barat: kalau PL1 tanpa peneduh, naikkan AC ruang keluarga ke 2½ PK; dengan roster + kanopi + kaca low-e, 2 PK cukup.", "Unit luar: studio, kamar 2, kamar 3 di dinding belakang (service yard); ruang keluarga dan kamar utama di dinding carport di bawah kanopi. Tidak ada unit luar di fasad yang menghadap jalan.", "Saat pembangunan: pipa tembaga tertanam dengan insulasi (armaflex) dalam selongsong PVC, kabel AC, dan pipa buang air AC ke floor drain/taman untuk setiap AC — jangan pasang belakangan (harus bongkar dinding/plafon).", "Setiap AC punya stopkontak/titik listrik sendiri dekat unit dalam (±2,3 m dari lantai) dan jalur MCB terpisah di panel.", "Daya PLN minimal 4.400 VA, disarankan 5.500 VA (5 AC + PC + dapur bisa ±4–5 kW saat bersamaan).", "Bracket unit luar galvanis/stainless; lantai 2 dipasang dari sisi luar dengan akses servis (tangga/scaffold) — sisakan ruang ±30 cm di depan kipas."]}
   ],
 
   "lights": [
-    {"level": "lt1", "at": [8.0, 7.75], "z": 3.28, "kind": "down", "power": 4.5, "note": "genkan"},
-    {"level": "lt1", "at": [5.4, 6.5], "z": 3.23, "kind": "down", "power": 6.3, "note": "ruang keluarga"},
-    {"level": "lt1", "at": [3.4, 6.5], "z": 3.23, "kind": "down", "power": 6.3, "note": "ruang keluarga"},
-    {"level": "lt1", "at": [5.4, 2.3], "z": 3.28, "kind": "down", "power": 5.4, "note": "dapur"},
-    {"level": "lt1", "at": [5.125, 3.85], "z": 1.55, "kind": "pendant", "power": 4.0, "ceiling": 3.28, "note": "lampu gantung meja makan"},
-    {"level": "lt1", "at": [8.0, 2.75], "z": 3.28, "kind": "down", "power": 4.5, "note": "studio"},
-    {"level": "lt1", "at": [8.5, 4.5], "z": 1.7, "kind": "down", "power": 1.5, "note": "lampu gudang bawah tangga"},
-    {"level": "lt1", "at": [0.4, 1.95], "z": 2.95, "kind": "down", "power": 3.6, "color": "#FFCF91", "note": "musholla, menyorot mihrab"},
+    {"level": "lt1", "at": [8.0, 7.75], "z": 2.78, "kind": "down", "power": 4.5, "note": "genkan"},
+    {"level": "lt1", "at": [5.4, 6.5], "z": 2.93, "kind": "down", "power": 6.3, "note": "ruang keluarga"},
+    {"level": "lt1", "at": [3.4, 6.5], "z": 2.93, "kind": "down", "power": 6.3, "note": "ruang keluarga"},
+    {"level": "lt1", "at": [5.4, 2.3], "z": 2.78, "kind": "down", "power": 5.4, "note": "dapur"},
+    {"level": "lt1", "at": [5.125, 3.85], "z": 1.55, "kind": "pendant", "power": 4.0, "ceiling": 2.78, "note": "lampu gantung meja makan"},
+    {"level": "lt1", "at": [8.0, 2.75], "z": 2.78, "kind": "down", "power": 4.5, "note": "studio"},
+    {"level": "lt1", "at": [8.5, 4.5], "z": 1.6, "kind": "down", "power": 1.5, "note": "lampu gudang bawah tangga"},
+    {"level": "lt1", "at": [0.4, 1.95], "z": 2.75, "kind": "down", "power": 3.6, "color": "#FFCF91", "note": "musholla, menyorot mihrab"},
     {"level": "lt1", "at": [1.0, 5.8], "z": 2.78, "kind": "down", "power": 3.6, "note": "deck, di bawah kanopi kaca"},
     {"level": "site", "at": [5.5, 11.2], "z": 2.78, "kind": "down", "power": 4.5, "note": "carport"},
     {"level": "site", "at": [1.0, 12.4], "z": 0.05, "kind": "up", "power": 2.2, "color": "#FFE3B8", "note": "lampu sorot kamboja"},
-    {"level": "lt2", "at": [3.75, 6.9], "z": 3.13, "kind": "down", "power": 5.4, "note": "kamar utama"},
-    {"level": "lt2", "at": [7.25, 2.75], "z": 2.98, "kind": "down", "power": 4.5, "note": "kamar 2"},
-    {"level": "lt2", "at": [3.75, 2.75], "z": 2.98, "kind": "down", "power": 4.5, "note": "kamar 3"},
-    {"level": "lt2", "at": [5.5, 4.75], "z": 2.98, "kind": "down", "power": 3.6, "note": "hall"},
+    {"level": "lt2", "at": [3.75, 6.9], "z": 2.98, "kind": "down", "power": 5.4, "note": "kamar utama"},
+    {"level": "lt2", "at": [7.25, 2.75], "z": 2.78, "kind": "down", "power": 4.5, "note": "kamar 2"},
+    {"level": "lt2", "at": [3.75, 2.75], "z": 2.78, "kind": "down", "power": 4.5, "note": "kamar 3"},
+    {"level": "lt2", "at": [5.5, 4.75], "z": 2.78, "kind": "down", "power": 3.6, "note": "hall"},
     {"level": "lt2", "at": [3.75, 9.0], "z": 2.6, "kind": "down", "power": 2.7, "note": "balkon"},
     {"level": "site", "at": [1.05, 7.2], "z": 0.32, "kind": "strip", "power": 1.2, "color": "#FFC27A", "note": "LED di bawah dudukan bangku taman"},
     {"level": "site", "at": [1.15, 7.75], "z": 0.32, "kind": "strip", "power": 1.0, "color": "#FFC27A", "note": "LED di bawah dudukan bangku taman"},
-    {"level": "lt2", "at": [4.65, 7.0], "z": 3.05, "kind": "strip", "power": 0.9, "color": "#FFC27A", "note": "LED plafon kamar utama"},
-    {"level": "lt2", "at": [2.85, 7.0], "z": 3.05, "kind": "strip", "power": 0.9, "color": "#FFC27A", "note": "LED plafon kamar utama"},
-    {"level": "lt2", "at": [8.85, 2.1], "z": 3.05, "kind": "strip", "power": 1.0, "color": "#FFC27A", "note": "LED ujung plafon kamar 2 (dinding kepala kasur)"},
-    {"level": "lt2", "at": [8.85, 3.0], "z": 3.05, "kind": "strip", "power": 1.0, "color": "#FFC27A", "note": "LED ujung plafon kamar 2 (dinding kepala kasur)"},
-    {"level": "lt2", "at": [2.15, 2.1], "z": 3.05, "kind": "strip", "power": 1.0, "color": "#FFC27A", "note": "LED ujung plafon kamar 3 (dinding kepala kasur)"},
-    {"level": "lt2", "at": [2.15, 3.0], "z": 3.05, "kind": "strip", "power": 1.0, "color": "#FFC27A", "note": "LED ujung plafon kamar 3 (dinding kepala kasur)"},
-    {"level": "lt1", "at": [3.3, 6.5], "z": 3.2, "kind": "strip", "power": 1.4, "color": "#FFC27A", "note": "LED plafon ruang keluarga"},
-    {"level": "lt1", "at": [5.7, 6.5], "z": 3.2, "kind": "strip", "power": 1.4, "color": "#FFC27A", "note": "LED plafon ruang keluarga"}
+    {"level": "lt2", "at": [4.65, 7.0], "z": 2.85, "kind": "strip", "power": 0.9, "color": "#FFC27A", "note": "LED plafon kamar utama"},
+    {"level": "lt2", "at": [2.85, 7.0], "z": 2.85, "kind": "strip", "power": 0.9, "color": "#FFC27A", "note": "LED plafon kamar utama"},
+    {"level": "lt2", "at": [8.85, 2.1], "z": 2.85, "kind": "strip", "power": 1.0, "color": "#FFC27A", "note": "LED ujung plafon kamar 2 (dinding kepala kasur)"},
+    {"level": "lt2", "at": [8.85, 3.0], "z": 2.85, "kind": "strip", "power": 1.0, "color": "#FFC27A", "note": "LED ujung plafon kamar 2 (dinding kepala kasur)"},
+    {"level": "lt2", "at": [2.15, 2.1], "z": 2.85, "kind": "strip", "power": 1.0, "color": "#FFC27A", "note": "LED ujung plafon kamar 3 (dinding kepala kasur)"},
+    {"level": "lt2", "at": [2.15, 3.0], "z": 2.85, "kind": "strip", "power": 1.0, "color": "#FFC27A", "note": "LED ujung plafon kamar 3 (dinding kepala kasur)"},
+    {"level": "lt1", "at": [3.3, 6.5], "z": 2.9, "kind": "strip", "power": 1.4, "color": "#FFC27A", "note": "LED plafon ruang keluarga"},
+    {"level": "lt1", "at": [5.7, 6.5], "z": 2.9, "kind": "strip", "power": 1.4, "color": "#FFC27A", "note": "LED plafon ruang keluarga"}
   ],
 
   "roofs": [
-    {"type": "gable", "id": "rumah", "rect": [2.0, 1.5, 9.0, 8.5], "ridge": "y", "eave": 6.45, "rise": 3.2, "over": {"side": 0.6, "end": 0.8, "east": 0.0}, "mat": "charcoal", "gableFront": "slats", "note": "tanpa tritisan di sisi timur (dinding batas): talang + lisplang di garis dinding, air ke saluran sendiri"},
-    {"type": "flat", "id": "dak-musholla", "rect": [0.0, 0, 2.0, 3.5], "z": 3.2, "t": 0.2, "mat": "concrete", "skylight": [0.15, 0.2, 0.45, 3.3], "note": "skylight 1 garis 30 cm menempel dinding kiblat: cahaya menyapu dinding mihrab"},
+    {"type": "gable", "id": "rumah", "rect": [2.0, 1.5, 9.0, 8.5], "ridge": "y", "eave": 6.15, "rise": 3.2, "over": {"side": 0.6, "end": 0.8, "east": 0.0}, "mat": "charcoal", "gableFront": "slats", "note": "tanpa tritisan di sisi timur (dinding batas): talang + lisplang di garis dinding, air ke saluran sendiri"},
+    {"type": "flat", "id": "dak-musholla", "rect": [0.0, 0, 2.0, 3.5], "z": 2.8, "t": 0.2, "mat": "concrete", "skylight": [0.15, 0.2, 0.45, 3.3], "note": "skylight 1 garis 30 cm menempel dinding kiblat: cahaya menyapu dinding mihrab"},
     {"type": "flat", "id": "kanopi-carport", "rect": [2.05, 8.6, 9, 13.9], "z": 2.8, "t": 0.1, "mat": "charcoal", "posts": [[2.2, 13.75], [8.85, 13.75]]},
     {"type": "glass", "id": "kanopi-kaca", "rect": [0.02, 3.5, 1.98, 6.9], "z": 2.85, "frame": 1.1}
   ],

@@ -1,6 +1,7 @@
 // First-person walk through the house: joystick (phone) or WASD/arrows (desktop) to move, drag to look.
 // Collision and floor heights come straight from house.json: walls (with their door openings),
 // furniture footprints, the two stair flights and landing, and the floor-2 slabs.
+const { winderHeight } = await import(`./stair.js${new URL(import.meta.url).search}`);
 const THICK = { ext: 0.15, int: 0.1, boundary: 0.15, low: 0.12, roster: 0.12 };
 const PASSABLE = new Set(['door', 'slide', 'opening', 'sliding', 'swing', 'gate', 'bifold']);
 const RADIUS = 0.2, EYE = 1.55, STEP = 0.5, WALK = 1.3, RUN = 2.6;
@@ -179,6 +180,7 @@ function buildSupports(data) {
       s.push({ r: [x0, y0, x1, y1], z: fn });
     }
     for (const l of st.landings || []) s.push({ r: norm(l.rect), z: () => base + l.z });
+    for (const w of st.winders || []) s.push({ r: norm(w.rect), z: (x, y) => base + (winderHeight(w, x, y) ?? 0) });
   }
   return s;
 }
