@@ -57,6 +57,27 @@ const PATTERNS = {
     blotches(ctx, r, 160, 40, 140, 10, 0.03);
     grid(ctx, 2, 4, 'rgba(160,150,135,0.6)', 2);
   },
+  // speckled terrazzo wall tile 60 × 30 (tile scale 1.2: 2 across, 4 up), fine grey chips, light grout
+  terrazzoTile(ctx, r) {
+    base(ctx, 248);
+    blotches(ctx, r, 80, 40, 120, 6, 0.02);
+    for (let i = 0; i < 9000; i++) {                       // chips ~2–5 mm (1 px ≈ 2,3 mm at scale 1.2)
+      const g = 165 + r() * 70;
+      dot(ctx, r() * SIZE, r() * SIZE, 0.45 + r() * r() * 1.1, `rgba(${g},${g},${g - 3},${0.25 + r() * 0.3})`);
+    }
+    grid(ctx, 2, 4, 'rgba(170,168,160,0.55)', 2);
+  },
+  // stone-look floor tile 60 × 60 (tile scale 1.2: 2 × 2), fine grain and soft relief, thin dark grout
+  stoneTile60(ctx, r) {
+    base(ctx, 236);
+    const n = 2, s = SIZE / n;
+    for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) {
+      ctx.fillStyle = grey(226 + r() * 22); ctx.fillRect(i * s, j * s, s, s);
+      blotchesIn(ctx, r, i * s, j * s, s, 22, 0.08);
+    }
+    speckle(ctx, r, 14000, 1, 0.16);
+    grid(ctx, n, n, 'rgba(70,70,68,0.6)', 3);
+  },
   // furniture / joinery: continuous grain, no seams
   wood(ctx, r) {
     base(ctx, 240);

@@ -107,7 +107,7 @@ const notePages = [[]];
 let used = 0;
 for (const n of data.notes || []) {
   const len = n.topic.length + n.items.reduce((a, i) => a + i.length + 60, 0);
-  if (used + len > 5300 && notePages[notePages.length - 1].length) { notePages.push([]); used = 0; }
+  if (used + len > 5600 && notePages[notePages.length - 1].length) { notePages.push([]); used = 0; }
   notePages[notePages.length - 1].push(noteHtml(n)); used += len;
 }
 

@@ -5,7 +5,7 @@ const THICK = { ext: 0.15, int: 0.1, boundary: 0.15, low: 0.12, roster: 0.12 };
 const FILL = {
   tile: '#F2EFE9', oakFloor: '#EEDFC4', terrazzo: '#E7E7E3', stone: '#DEDDD7', grass: '#E1EBD4',
   gravel: '#F1EFEA', concrete: '#E9E7E2',
-  crenata: '#EFE0C6', tectona: '#EADDC9', lumber: '#E5D5C4', calavera: '#D9D1C7',
+  crenata: '#EFE0C6', tectona: '#EADDC9', lumber: '#E5D5C4', calavera: '#D9D1C7', cascade: '#D4D3D0',
 };
 const LEVELS = { lt1: ['site', 'lt1'], lt2: ['lt2'] };
 
