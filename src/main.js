@@ -9,9 +9,7 @@ const THREE = await import('three');
 const $ = (s) => document.querySelector(s);
 const phone = window.matchMedia('(max-width: 640px)').matches;
 const state = { view: 'all', roof: true, cut: true, labels: false, context: true, camera: 'iso', time: 'pagi', night: false, quality: phone ? 'std' : 'high' };
-// ?varian=barat loads the mirrored comparison plan (garden on the side-street), built by tools/mirror.py
-const variant = new URLSearchParams(location.search).get('varian') === 'barat' ? 'barat' : 'timur';
-const dataFile = variant === 'barat' ? 'data/house-barat.json' : 'data/house.json';
+const dataFile = 'data/house.json';
 
 // deep link: #lt1, #lt2, #all and/or a camera id, e.g. #lt1-top
 for (const part of location.hash.replace('#', '').split('-')) {
@@ -64,11 +62,6 @@ function setTime(t) {
   if (!state.night) viewer.setSun(t);
   viewer.setNight(state.night);
 }
-document.querySelectorAll('[data-variant]').forEach((b) => b.addEventListener('click', () => {
-  if (b.dataset.variant === variant) return;
-  location.href = location.pathname + (b.dataset.variant === 'barat' ? '?varian=barat' : '') + location.hash;
-}));
-if (variant === 'barat') $('#doclink').href = 'docs.html?varian=barat';
 document.querySelectorAll('[data-quality]').forEach((b) => b.addEventListener('click', () => {
   state.quality = b.dataset.quality; viewer.setQuality(state.quality); sync();
 }));
@@ -144,7 +137,7 @@ $('#hq-btn').addEventListener('click', async () => {
   $('#hq-text').textContent = 'Merender gambar kualitas tinggi…';
   try {
     const blob = await viewer.renderHQ({ long, frames, onProgress: (i, n) => { $('#hq-bar').value = i; $('#hq-text').textContent = `Merender gambar kualitas tinggi… ${i}/${n}`; } });
-    download(blob, `house3d-hq${variant === 'barat' ? '-barat' : ''}-${state.view}-${state.camera}${state.time !== 'pagi' ? '-' + state.time : ''}.png`);
+    download(blob, `house3d-hq-${state.view}-${state.camera}${state.time !== 'pagi' ? '-' + state.time : ''}.png`);
   } catch (e) {
     console.error(e); alert('Render gagal: ' + e.message);
   } finally { $('#hq').hidden = true; }
@@ -171,7 +164,6 @@ function sync() {
   });
   document.querySelectorAll('[data-cam]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.cam === state.camera)));
   document.querySelectorAll('[data-time]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.time === state.time)));
-  document.querySelectorAll('[data-variant]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.variant === variant)));
   document.querySelectorAll('[data-quality]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.quality === state.quality)));
   const tag = `${state.view}-${state.camera}${state.time !== 'pagi' ? '-' + state.time : ''}`;
   if (location.hash !== `#${tag}`) history.replaceState(null, '', `#${tag}`);
@@ -182,5 +174,5 @@ setTime(state.time);
 rebuild();
 viewer.setCamera(data.cameras[state.camera]);
 sync();
-window.__house = { data, state, viewer, rebuild, walk, openInfo, roomAt, setTime, variant };
+window.__house = { data, state, viewer, rebuild, walk, openInfo, roomAt, setTime };
 document.body.dataset.ready = 'true';

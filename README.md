@@ -24,14 +24,12 @@ Settings → Pages → Build and deployment → **Deploy from a branch** → `ma
 ```
 index.html          page, controls, import map
 data/house.json     the house: single source of truth
-data/house-barat.json  comparison variant (garden on the side street), generated: do not edit
-tools/mirror.py     builds house-barat.json by mirroring house.json west↔east (re-run after every data change)
 src/main.js         loads the data, wires the controls, deep links
 src/geometry.js     house.json → three.js meshes (walls, openings, stairs, roofs, furniture, plants)
 src/furniture.js    parametric furniture, fixtures, cars and plants, sized from each item's rect
 src/textures.js     procedural material patterns (wood, plaster, stone, terrazzo, grass…), drawn on canvas
 src/plan.js         2D floor plans (SVG, 1:100 on A4) and the door/window schedule
-docs.html           contractor documents: summary, plans, door/window schedule, technical notes, renders (print to PDF)
+docs.html           contractor documents: summary, floor plans, ceiling plans, door/window schedule, technical notes, renders (print to PDF)
 src/walk.js         first-person walk: collision and floor heights from house.json
 src/viewer.js       renderer, sky, lights, shadows, ambient occlusion, day/night, camera, PNG snapshot
 ```
@@ -56,7 +54,7 @@ A `rect` is always `[x0, y0, x1, y1]`. In three.js, `x → X`, `z → Y` (up), `
 | `materials` | `color`, `rough`, `metal`, `opacity`, plus optional `tex` (procedural pattern), `scale` (m per tile), `bump`, `env` (sky reflection strength) | retune a finish |
 | `floors` | floor surfaces per room (`name` becomes the room label) | resize or rename a room |
 | `slabs` | floor-2 slab pieces (the gaps are the stair void) | move the stair void |
-| `ceilings` | ceilings under the roof (`level`, `rect`, `z`, `t`), drawn while the roof is shown; with `cove` {`band`, `drop`, `raise`} a drop ceiling with a hidden LED strip | |
+| `ceilings` | ceilings under the roof (`level`, `rect`, `z`, `t`), drawn while the roof is shown; with `cove` {`band`, `drop`, `raise`} a drop ceiling with a hidden LED strip; with `slot` {`sides` ('+x', '-x', '+y', '-y' or 'all'), `w`, `depth`} a flat ceiling with an LED slot that washes the wall | drop ceiling, LED at the ceiling edge |
 | `walls` | centerline `a → b`, `kind` (`ext`, `int`, `boundary`, `low`), optional `h`, and `open` | move a wall |
 | `walls[].open` | `at` (m from the wall's lower-coordinate end), `w`, `type`, `sill`, `head` | move or resize a door/window |
 | `stairs` | flights (`dir`, `steps`, `z0`, `z1`), landings, rails | change the stair |
@@ -76,7 +74,6 @@ Opening `type` values: `door` (gap; with `hinge` `start`/`end`, `side` ±1 and o
 
 ## Viewer controls
 
-- **Varian denah**: Taman timur (the design, `data/house.json`) or Taman barat (`?varian=barat`, the mirrored comparison from `tools/mirror.py`). The docs link follows the variant.
 - **Lantai**: Semua, Lantai 1, Lantai 2. Single-floor views hide everything above and, with **Potong dinding**, cut the walls to 1.3 m so the rooms are visible.
 - **Atap**, **Label ruang**, **Tetangga** toggles.
 - **Suasana**: Pagi (morning sun from the east-south-east), Sore (±15.30, low sun from the west) or Malam (moonlight and the lamps in `lights`).
@@ -86,7 +83,7 @@ Opening `type` values: `door` (gap; with `hinge` `start`/`end`, `side` ±1 and o
 - **Jalan-jalan**: first-person walk. Joystick (phone) or W A S D / arrows (desktop), drag to look, Shift to run; the menu jumps to a room. Walls, doors, furniture and stairs come from the data (fixed glass panes stay solid).
 - Tap or click a room to see its name, size and area.
 - **Render kualitas tinggi**: a 2560 px still (1920 px on phones) averaged over 32 frames (16 on phones) with sub-pixel jitter, a slightly moving sun for soft shadows and ambient occlusion; downloads as PNG.
-- Deep links: `[?varian=barat]#<view>-<camera>[-sore|-malam]`, for example `#lt1-top`, `#all-corner-malam`, `?varian=barat#all-living-sore`.
+- Deep links: `#<view>-<camera>[-sore|-malam]`, for example `#lt1-top`, `#all-corner-malam`, `#all-living-sore`.
 
 ## Roadmap
 

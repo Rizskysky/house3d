@@ -70,12 +70,13 @@ export function planSVG(data, level, { scale = 100 } = {}) {
     }
     for (const l of st.landings || []) { const [x0, y0, x1, y1] = norm(l.rect); r(x0, y0, x1 - x0, y1 - y0, 'fill="#FFFFFF" stroke="#6B665E" stroke-width="0.012"'); }
     if (!below) {
-      // walking line: up flight 1 (−y), across the landing, up flight 2 (+x)
-      const a = norm(st.flights[0].rect), b = norm(st.flights[1].rect);
-      const pts = [[(a[0] + a[2]) / 2, a[3] - 0.1], [(a[0] + a[2]) / 2, (b[1] + b[3]) / 2], [b[2] - 0.12, (b[1] + b[3]) / 2]];
+      // walking line: up flight 1 (−y), across the landing, up flight 2 (+x or −x)
+      const a = norm(st.flights[0].rect), b = norm(st.flights[1].rect), east = st.flights[1].dir !== '-x';
+      const pts = [[(a[0] + a[2]) / 2, a[3] - 0.1], [(a[0] + a[2]) / 2, (b[1] + b[3]) / 2], [east ? b[2] - 0.12 : b[0] + 0.12, (b[1] + b[3]) / 2]];
       out.push(`<polyline points="${pts.map((q) => q.map(f).join(',')).join(' ')}" fill="none" stroke="#2F5D4A" stroke-width="0.015"/>`);
       const e = pts[2];
-      out.push(`<path d="M${f(e[0] + 0.08)},${f(e[1])} l-0.14,-0.06 l0,0.12 z" fill="#2F5D4A"/>`);
+      out.push(east ? `<path d="M${f(e[0] + 0.08)},${f(e[1])} l-0.14,-0.06 l0,0.12 z" fill="#2F5D4A"/>`
+                    : `<path d="M${f(e[0] - 0.08)},${f(e[1])} l0.14,-0.06 l0,0.12 z" fill="#2F5D4A"/>`);
       text(pts[0][0], pts[0][1] - 0.12, 'naik', 'font-size="0.13" text-anchor="middle" fill="#2F5D4A"');
     } else {
       const v = norm(st.flights[0].rect);
@@ -150,7 +151,7 @@ export function planSVG(data, level, { scale = 100 } = {}) {
   }
 
   // dimension chains (outside the lot)
-  const dm = data.meta.dims?.[level] || {};   // a variant can override the chains (e.g. the mirrored plan)
+  const dm = data.meta.dims?.[level] || {};   // data can override the dimension chains per level
   const xs = dm.x || (level === 'lt1' ? [0, 2, 7, 9] : [0, 3.5, 7]);
   const ys = dm.y || (level === 'lt1' ? [0, 1.5, 4, 4.5, 7, 8.5, 14] : [1.5, 4, 5.5, 8.5, 9.5]);
   dimChain(out, xs, 'x', -0.75); dimChain(out, [0, 9], 'x', -1.25);
@@ -165,6 +166,77 @@ export function planSVG(data, level, { scale = 100 } = {}) {
   text(3.25, sy + 0.08, 'm', 'font-size="0.15"');
   text(9, sy + 0.3, `skala 1:${scale}`, 'font-size="0.15" text-anchor="end" fill="#6B665E"');
 
+  out.push('</svg>');
+  return out.join('\n');
+}
+
+// Reflected ceiling plan: ceiling types and heights, drop-ceiling bands, LED lines and downlights.
+export function ceilingSVG(data, level, { scale = 100 } = {}) {
+  const pad = 1.7, X0 = -pad, Y0 = -pad, W = 9 + pad * 2, H = 14 + pad * 2, mm = 1000 / scale, out = [];
+  const lvZ = { lt1: 0, lt2: 0 }[level] ?? 0, slabZ = data.levels.lt1.h;          // lt1 rooms without a ceiling show the slab underside
+  const r = (x, y, w, h, a) => out.push(`<rect x="${f(x)}" y="${f(y)}" width="${f(w)}" height="${f(h)}" ${a}/>`);
+  const text = (x, y, s, a = '') => out.push(`<text x="${f(x)}" y="${f(y)}" ${a}>${esc(s)}</text>`);
+  const hlab = (v) => `+${num(v)}`;
+  const LED = 'stroke="#E08A1E" stroke-width="0.035" stroke-dasharray="0.09 0.04" fill="none"';
+  out.push(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="${X0} ${Y0} ${W} ${H}" width="${f(W * mm)}mm" height="${f(H * mm)}mm" class="plan" font-family="Albert Sans, system-ui, sans-serif">`);
+  out.push('<defs><pattern id="band" width="0.1" height="0.1" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="0.1" height="0.1" fill="#ECE7DC"/><line x1="0" y1="0" x2="0" y2="0.1" stroke="#B9B1A3" stroke-width="0.012"/></pattern></defs>');
+  r(0, 0, 9, 14, 'fill="none" stroke="#8F8A80" stroke-width="0.02" stroke-dasharray="0.15 0.08"');
+  const ceilings = (data.ceilings || []).filter((c) => c.level === level);
+  const inside = (x, y) => ceilings.some((c) => { const [a, b, cc, d] = norm(c.rect); return x > a && x < cc && y > b && y < d; });
+  // rooms that have no ceiling of their own (lantai 1: plat beton / dak)
+  for (const fl of data.floors) if (fl.level === level && fl.name && !['Tangga', 'Gudang bawah tangga'].includes(fl.name)) {
+    const [x0, y0, x1, y1] = norm(fl.rect), cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
+    if (inside(cx, cy) || level !== 'lt1') continue;
+    r(x0, y0, x1 - x0, y1 - y0, 'fill="#FAF8F4" stroke="none"');
+    const dak = (data.roofs || []).find((rf) => rf.type === 'flat' && rf.z < slabZ && (() => { const [a, b, c, d] = norm(rf.rect); return cx > a && cx < c && cy > b && cy < d; })());
+    text(cx, cy + 0.32, dak ? `dak beton ${hlab(dak.z)}` : `plat beton ${hlab(slabZ)}`, 'font-size="0.12" text-anchor="middle" fill="#6B665E" class="halo"');
+  }
+  for (const c of ceilings) {
+    const [x0, y0, x1, y1] = norm(c.rect), cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
+    if (c.cove) {
+      const b = c.cove.band;
+      r(x0, y0, x1 - x0, y1 - y0, 'fill="url(#band)" stroke="#8F8A80" stroke-width="0.01"');
+      r(x0 + b, y0 + b, x1 - x0 - 2 * b, y1 - y0 - 2 * b, 'fill="#FFFFFF" stroke="#6B665E" stroke-width="0.012"');
+      r(x0 + b - 0.05, y0 + b - 0.05, x1 - x0 - 2 * b + 0.1, y1 - y0 - 2 * b + 0.1, LED);
+      text(cx, y0 + b * 0.62, `drop ${hlab(c.cove.drop)}`, 'font-size="0.12" text-anchor="middle" fill="#4A4741" class="halo"');
+      text(cx, cy + 0.32, `tengah ${hlab(c.z + c.cove.raise)} · LED tersembunyi`, 'font-size="0.12" text-anchor="middle" fill="#4A4741" class="halo"');
+    } else if (c.slot) {
+      const w = c.slot.w ?? 0.15, sides = c.slot.sides || [], has = (sd) => sides.includes(sd) || sides.includes('all');
+      r(x0, y0, x1 - x0, y1 - y0, 'fill="#FFFFFF" stroke="#8F8A80" stroke-width="0.01"');
+      const strip = { '-x': [x0, y0, w, y1 - y0], '+x': [x1 - w, y0, w, y1 - y0], '-y': [x0, y0, x1 - x0, w], '+y': [x0, y1 - w, x1 - x0, w] };
+      for (const [sd, q] of Object.entries(strip)) if (has(sd)) {
+        r(q[0], q[1], q[2], q[3], 'fill="#F6E3C4" stroke="#C9A36A" stroke-width="0.008"');
+        const vert = sd.endsWith('x'), lx = sd === '-x' ? x0 + w : sd === '+x' ? x1 - w : 0, ly = sd === '-y' ? y0 + w : sd === '+y' ? y1 - w : 0;
+        out.push(vert ? `<line x1="${f(lx)}" y1="${f(y0 + 0.05)}" x2="${f(lx)}" y2="${f(y1 - 0.05)}" ${LED}/>` : `<line x1="${f(x0 + 0.05)}" y1="${f(ly)}" x2="${f(x1 - 0.05)}" y2="${f(ly)}" ${LED}/>`);
+      }
+      text(cx, cy + 0.32, `datar ${hlab(c.z)} · LED di ujung plafon`, 'font-size="0.12" text-anchor="middle" fill="#4A4741" class="halo"');
+    } else {
+      r(x0, y0, x1 - x0, y1 - y0, 'fill="#FFFFFF" stroke="#8F8A80" stroke-width="0.01"');
+      text(cx, cy + 0.32, `datar ${hlab(c.z)}`, 'font-size="0.12" text-anchor="middle" fill="#4A4741" class="halo"');
+    }
+  }
+  // walls (plain, openings not drawn)
+  for (const w of data.walls) {
+    if (w.level !== level) continue;
+    const t = THICK[w.kind] || 0.15, [ax, ay] = w.a, [bx, by] = w.b, horiz = Math.abs(ay - by) < 1e-6;
+    const x0 = Math.min(ax, bx), y0 = Math.min(ay, by);
+    r(horiz ? x0 : ax - t / 2, horiz ? ay - t / 2 : y0, horiz ? Math.abs(bx - ax) : t, horiz ? t : Math.abs(by - ay), `fill="${w.kind === 'int' ? '#6B665E' : '#232220'}"`);
+  }
+  // lights
+  for (const l of data.lights || []) {
+    if (l.level !== level || l.kind === 'strip' || l.kind === 'up') continue;
+    const [x, y] = l.at;
+    if (l.kind === 'pendant') out.push(`<circle cx="${f(x)}" cy="${f(y)}" r="0.11" fill="#232220"/>`);
+    else out.push(`<circle cx="${f(x)}" cy="${f(y)}" r="0.09" fill="#FFFFFF" stroke="#232220" stroke-width="0.015"/><path d="M${f(x - 0.06)},${f(y - 0.06)} L${f(x + 0.06)},${f(y + 0.06)} M${f(x + 0.06)},${f(y - 0.06)} L${f(x - 0.06)},${f(y + 0.06)}" stroke="#232220" stroke-width="0.012"/>`);
+  }
+  // room names
+  for (const fl of data.floors) if (fl.level === level && fl.name) {
+    const [x0, y0, x1, y1] = norm(fl.rect), small = Math.min(x1 - x0, y1 - y0) < 1.6;
+    text((x0 + x1) / 2, (y0 + y1) / 2 + 0.05, fl.name, `font-size="${small ? 0.14 : 0.19}" font-weight="600" text-anchor="middle" fill="#232220" class="halo"`);
+  }
+  out.push(`<g transform="translate(${f(9 + 0.9)},${f(-1.0)})"><circle r="0.32" fill="none" stroke="#232220" stroke-width="0.015"/>` +
+    `<path d="M0,-0.28 L0.12,0.16 L0,0.08 L-0.12,0.16 z" fill="#232220"/><text y="-0.38" font-size="0.18" font-weight="600" text-anchor="middle">U</text></g>`);
+  text(0, 14 + 0.45, `Denah plafon (dilihat dari bawah) · tinggi dari lantai jadi ${level === 'lt1' ? 'lantai 1' : 'lantai 2'} · skala 1:${scale}`, 'font-size="0.15" fill="#6B665E"');
   out.push('</svg>');
   return out.join('\n');
 }

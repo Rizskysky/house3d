@@ -49,6 +49,28 @@ export function buildHouse(data, state) {
   // flat ceilings under the roof: only when the roof itself is shown
   if (state.view === 'all' && state.roof) for (const c of data.ceilings || []) {
     const z = lz(c.level) + c.z, mat = M(c.mat || 'plaster');
+    if (c.slot) {
+      // flat ceiling with an LED slot along chosen walls: the strip sits on the inner lip of the
+      // recess and washes light down the wall (e.g. the headboard wall)
+      const [x0, y0, x1, y1] = norm(c.rect), w = c.slot.w ?? 0.15, dp = c.slot.depth ?? 0.1, sides = c.slot.sides || [];
+      const has = (sd) => sides.includes(sd) || sides.includes('all');
+      const px0 = x0 + (has('-x') ? w : 0), py0 = y0 + (has('-y') ? w : 0), px1 = x1 - (has('+x') ? w : 0), py1 = y1 - (has('+y') ? w : 0);
+      box([px0, py0, px1, py1], z, c.t, mat);
+      const ledM = M('led'), lt = 0.02;
+      const strips = {
+        '-x': { top: [x0, y0, px0, y1], lip: [px0, py0, px0 + lt, py1], led: [px0 - 0.012, py0 + 0.05, px0, py1 - 0.05] },
+        '+x': { top: [px1, y0, x1, y1], lip: [px1 - lt, py0, px1, py1], led: [px1, py0 + 0.05, px1 + 0.012, py1 - 0.05] },
+        '-y': { top: [x0, y0, x1, py0], lip: [px0, py0, px1, py0 + lt], led: [px0 + 0.05, py0 - 0.012, px1 - 0.05, py0] },
+        '+y': { top: [x0, py1, x1, y1], lip: [px0, py1 - lt, px1, py1], led: [px0 + 0.05, py1, px1 - 0.05, py1 + 0.012] },
+      };
+      for (const [sd, s] of Object.entries(strips)) {
+        if (!has(sd)) continue;
+        box(s.top, z + dp, c.t, mat);                              // top of the recess
+        box(s.lip, z + c.t, dp, mat);                              // inner side of the recess
+        const m = box(s.led, z + dp - 0.03, 0.02, ledM, { noShadow: true }); m.userData.lamp = true;
+      }
+      continue;
+    }
     if (!c.cove) { box(c.rect, z, c.t, mat); continue; }
     // drop ceiling: lowered perimeter band, raised centre panel, hidden LED strip in the cove between them
     const [x0, y0, x1, y1] = norm(c.rect), b = c.cove.band, drop = c.cove.drop, up = c.cove.raise;
@@ -184,7 +206,7 @@ export function buildHouse(data, state) {
   for (const p of data.plants || []) root.add(buildPlant(p, M));
   if (state.context) for (const h of (data.context && data.context.houses) || []) {
     box(h.rect, 0, h.eave, M('neighbor'));
-    gable({ rect: h.rect, eave: h.eave, rise: h.rise, over: { side: 0.4, end: 0.5 } }, M('neighborRoof'), null, M('neighbor'), root, add, box);
+    gable({ rect: h.rect, eave: h.eave, rise: h.rise, over: { side: 0.4, end: 0.5, ...(h.over || {}) } }, M('neighborRoof'), null, M('neighbor'), root, add, box);
   }
 
   mergeStatic(root);

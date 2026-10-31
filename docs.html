@@ -63,13 +63,12 @@ td.code { font-weight: 600; color: var(--accent); white-space: nowrap; }
 </style>
 </head>
 <body>
-<div class="toolbar"><a href="./" id="back">← Model 3D</a><button type="button" onclick="window.print()">Cetak / Simpan PDF</button></div>
+<div class="toolbar"><a href="./">← Model 3D</a><button type="button" onclick="window.print()">Cetak / Simpan PDF</button></div>
 <main id="doc"><p style="text-align:center;padding:40px">Memuat dokumen…</p></main>
 <script type="module">
 const bust = `?v=${Date.now()}`;
-const { planSVG, openingSchedule } = await import(`./src/plan.js${bust}`);
-const barat = new URLSearchParams(location.search).get('varian') === 'barat';
-const data = await (await fetch(barat ? 'data/house-barat.json' : 'data/house.json', { cache: 'no-cache' })).json();
+const { planSVG, ceilingSVG, openingSchedule } = await import(`./src/plan.js${bust}`);
+const data = await (await fetch('data/house.json', { cache: 'no-cache' })).json();
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
 const num = (v, d = 2) => v.toLocaleString('id-ID', { minimumFractionDigits: d, maximumFractionDigits: d });
 const norm = ([a, b, c, d]) => [Math.min(a, c), Math.min(b, d), Math.max(a, c), Math.max(b, d)];
@@ -88,7 +87,7 @@ const roomTable = (levels) => `<table class="rooms"><thead><tr><th>Ruang</th><th
 const lb = data.meta.lb;
 const cover = `<h1>Rumah Japandi Tropis</h1>
   <p class="lede">Dokumen kontraktor: denah, daftar pintu & jendela, dan catatan teknis. Dibuat otomatis dari data model 3D, jadi selalu sama dengan model.</p>
-  ${barat ? '' : '<img class="hero" src="docs/img/all-corner.jpg" alt="Tampak dari tikungan jalan">'}
+  <img class="hero" src="docs/img/all-corner.jpg" alt="Tampak dari tikungan jalan">
   <div class="stats"><div><b>9 × 14 m</b><span>tanah, posisi hook</span></div><div><b>±${lb.total} m²</b><span>luas bangunan</span></div>
     <div><b>±${lb.lt1} m²</b><span>lantai 1</span></div><div><b>±${lb.lt2} m²</b><span>lantai 2</span></div></div>
   <div class="cols">${roomTable(['lt1'])}${roomTable(['lt2', 'site'])}</div>`;
@@ -97,9 +96,20 @@ const legend = `<div class="legend"><span><i style="background:#232220"></i>dind
   <span><i style="background:#8F8A80"></i>pagar/batas</span><span><i style="background:repeating-linear-gradient(90deg,#6B665E 0 3px,#fff 3px 6px)"></i>roster</span>
   <span><i style="background:#fff"></i>jendela (garis tengah)</span><span><i style="background:#2F5D4A;border-color:#2F5D4A"></i>kode pintu/jendela</span></div>`;
 
+const ceilLegend = `<div class="legend"><span><i style="background:repeating-linear-gradient(45deg,#ECE7DC 0 3px,#B9B1A3 3px 4px)"></i>drop ceiling (pinggiran turun)</span>
+  <span><i style="background:#fff"></i>plafon datar / bagian tengah</span><span><i style="background:#F6E3C4;border-color:#C9A36A"></i>celah LED di ujung plafon</span>
+  <span><i style="border:0;border-top:2px dashed #E08A1E;height:0"></i>LED strip 2700–3000K</span><span>⊗ downlight</span><span>● lampu gantung</span></div>`;
 const sched = openingSchedule(data).map((o) => `<tr><td class="code">${o.code}</td><td>${o.kind}</td><td>${o.level.replace('Lantai ', 'Lt ')}</td>
   <td class="n">${num(o.w)}</td><td class="n">${num(o.h)}</td><td class="n">${o.sill ? num(o.sill) : '–'}</td><td>${esc(o.note)}</td></tr>`).join('');
-const notes = (data.notes || []).map((n) => `<h3>${esc(n.topic)}</h3><ul>${n.items.map((i) => `<li>${esc(i)}</li>`).join('')}</ul>`).join('');
+// technical notes split over pages by text length so nothing is clipped on A4
+const noteHtml = (n) => `<h3>${esc(n.topic)}</h3><ul>${n.items.map((i) => `<li>${esc(i)}</li>`).join('')}</ul>`;
+const notePages = [[]];
+let used = 0;
+for (const n of data.notes || []) {
+  const len = n.topic.length + n.items.reduce((a, i) => a + i.length + 60, 0);
+  if (used + len > 5300 && notePages[notePages.length - 1].length) { notePages.push([]); used = 0; }
+  notePages[notePages.length - 1].push(noteHtml(n)); used += len;
+}
 
 const renders = [['all-corner-malam', 'Tampak tikungan, malam'], ['all-living', 'Ruang keluarga, dapur, meja makan'], ['all-garden', 'Taman dan deck dari dalam'],
   ['lt1-iso', 'Potongan lantai 1'], ['lt2-iso', 'Potongan lantai 2'], ['all-corner', 'Tampak tikungan, siang']]
@@ -109,10 +119,11 @@ document.getElementById('doc').innerHTML =
   page('Ringkasan', cover, 'ukuran dalam meter, as dinding') +
   page('Denah Lantai 1', `<div class="plan-wrap">${planSVG(data, 'lt1')}</div>${legend}`, 'termasuk tapak, carport, taman · 1:100 di A4') +
   page('Denah Lantai 2', `<div class="plan-wrap">${planSVG(data, 'lt2')}</div>${legend}`, '1:100 di A4') +
+  page('Denah Plafon Lantai 1', `<div class="plan-wrap">${ceilingSVG(data, 'lt1')}</div>${ceilLegend}`, 'tinggi dari lantai jadi · 1:100 di A4') +
+  page('Denah Plafon Lantai 2', `<div class="plan-wrap">${ceilingSVG(data, 'lt2')}</div>${ceilLegend}`, 'tinggi dari lantai jadi · 1:100 di A4') +
   page('Pintu & Jendela', `<table class="sched"><thead><tr><th>Kode</th><th>Jenis</th><th>Lantai</th><th class="n">Lebar</th><th class="n">Tinggi</th><th class="n">Ambang</th><th>Keterangan</th></tr></thead><tbody>${sched}</tbody></table>`, 'meter; tinggi = tinggi bukaan, ambang = tinggi dari lantai') +
-  page('Catatan Teknis', `<div class="notes">${notes}</div>`) +
-  (barat ? '' : page('Tampak 3D', `<div class="renders">${renders}</div>`, 'render dari model 3D'));
-if (barat) document.getElementById('back').href = './?varian=barat';
+  notePages.map((ns, i) => page(notePages.length > 1 ? `Catatan Teknis (${i + 1}/${notePages.length})` : 'Catatan Teknis', `<div class="notes">${ns.join('')}</div>`)).join('') +
+  page('Tampak 3D', `<div class="renders">${renders}</div>`, 'render dari model 3D');
 document.body.dataset.ready = 'true';
 </script>
 </body>
