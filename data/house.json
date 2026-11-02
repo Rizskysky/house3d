@@ -1,5 +1,5 @@
 {
-  "meta": {"name": "House 3D", "version": "v4.2 · 2026-10-31 · plafon 2,8 m bersih, lantai granit, KM dCascade + dAlmazora 1,8 m", "units": "meter", "coords": "x = barat→timur (0 = sisi jalan samping), y = belakang→depan (0 = batas belakang, 14 = jalan depan), z = tinggi. Semua rect = [x0, y0, x1, y1].", "lb": {"lt1": 56, "lt2": 49, "total": 105}, "dims": {"lt2": {"x": [2, 5.5, 9]}}},
+  "meta": {"name": "House 3D", "version": "v4.3 · 2026-11-02 · plafon 2,8 m bersih, lantai dSaumlaki Beige, KM dCascade + dAlmazora 1,8 m", "units": "meter", "coords": "x = barat→timur (0 = sisi jalan samping), y = belakang→depan (0 = batas belakang, 14 = jalan depan), z = tinggi. Semua rect = [x0, y0, x1, y1].", "lb": {"lt1": 56, "lt2": 49, "total": 105}, "dims": {"lt2": {"x": [2, 5.5, 9]}}},
 
   "lot": {"w": 9, "d": 14},
 
@@ -60,12 +60,12 @@
     "plant": {"color": "#6E9E48", "rough": 1},
     "soil": {"color": "#3B2E22", "rough": 1},
     "led": {"color": "#F4EAD8", "rough": 0.5, "emissive": "#FFC27A"},
-    "crenata": {"color": "#D6BC97", "rough": 0.62, "tex": "plank120", "scale": 2.4, "bump": 0.5, "note": "RomanGranit dCrenata Beige 120x20"},
     "tectona": {"color": "#DCC6A6", "rough": 0.75, "tex": "plank60", "scale": 1.2, "bump": 0.7, "note": "RomanGranit dTectona Pine 60x15 R11"},
     "lumber": {"color": "#C3A283", "rough": 0.8, "tex": "plank60", "scale": 1.2, "bump": 0.8, "note": "RomanGranit dLumber Beige 60x15 R11"},
     "calavera": {"color": "#8C7A66", "rough": 0.78, "tex": "plank60", "scale": 1.2, "bump": 0.8, "note": "RomanGranit dCalavera Noce 60x15 R11"},
     "cascade": {"color": "#8C8984", "rough": 0.7, "tex": "stoneTile60", "scale": 1.2, "bump": 0.6, "note": "RomanGranit dCascade Smoke 60x60 (GT602459R), lantai kering KM"},
-    "almazora": {"color": "#E9E8E3", "rough": 0.22, "tex": "terrazzoTile", "scale": 1.2, "env": 0.6, "note": "RomanGranit dAlmazora Perla 60x30 polished (GT639759FR), dinding KM"}
+    "almazora": {"color": "#E9E8E3", "rough": 0.22, "tex": "terrazzoTile", "scale": 1.2, "env": 0.6, "note": "RomanGranit dAlmazora Perla 60x30 polished (GT639759FR), dinding KM"},
+    "saumlaki": {"color": "#CFC2A2", "rough": 0.7, "tex": "plank90", "scale": 1.8, "bump": 0.45, "note": "RomanGranit dSaumlaki Beige 90x15 matt R10 P2 (GT912245R)"}
   },
 
   "ground": [
@@ -83,23 +83,23 @@
     {"level": "site", "rect": [0.25, 8.75, 1.85, 13.8], "mat": "gravel", "z": 0.02},
     {"level": "site", "rect": [0.0, 3.5, 2.0, 4.5], "mat": "lumber", "name": "Wudhu"},
     {"level": "site", "rect": [0.0, 4.5, 2.0, 8.5], "mat": "grass", "name": "Taman"},
-    {"level": "lt1", "rect": [7.0, 1.5, 9.0, 4], "mat": "crenata", "name": "Studio"},
-    {"level": "lt1", "rect": [7.0, 4, 9.0, 7], "mat": "crenata", "name": "Tangga", "z": -0.01},
+    {"level": "lt1", "rect": [7.0, 1.5, 9.0, 4], "mat": "saumlaki", "name": "Studio"},
+    {"level": "lt1", "rect": [7.0, 4, 9.0, 7], "mat": "saumlaki", "name": "Tangga", "z": -0.01},
     {"level": "lt1", "rect": [7.0, 4, 8.0, 5.5], "mat": "cascade", "name": "KM tamu", "wallTile": {"mat": "almazora", "h": 1.8}},
-    {"level": "lt1", "rect": [7.0, 5.5, 8.0, 7], "mat": "crenata", "name": "Lemari genkan"},
-    {"level": "lt1", "rect": [8.0, 4, 9.0, 7], "mat": "crenata", "name": "Gudang bawah tangga"},
+    {"level": "lt1", "rect": [7.0, 5.5, 8.0, 7], "mat": "saumlaki", "name": "Lemari genkan"},
+    {"level": "lt1", "rect": [8.0, 4, 9.0, 7], "mat": "saumlaki", "name": "Gudang bawah tangga"},
     {"level": "lt1", "rect": [7.0, 7, 9.0, 8.5], "mat": "calavera", "name": "Genkan"},
-    {"level": "lt1", "rect": [2.0, 1.5, 7.0, 4.5], "mat": "crenata", "name": "Dapur + makan"},
-    {"level": "lt1", "rect": [2.0, 4.5, 7.0, 8.5], "mat": "crenata", "name": "Ruang keluarga"},
-    {"level": "lt1", "rect": [0.0, 0, 2.0, 3.5], "mat": "crenata", "name": "Musholla"},
-    {"level": "lt2", "rect": [5.5, 1.5, 9.0, 4], "mat": "crenata", "name": "Kamar 2"},
-    {"level": "lt2", "rect": [2.0, 1.5, 5.5, 4], "mat": "crenata", "name": "Kamar 3"},
-    {"level": "lt2", "rect": [4.0, 4, 7.0, 5.5], "mat": "crenata", "name": "Hall"},
+    {"level": "lt1", "rect": [2.0, 1.5, 7.0, 4.5], "mat": "saumlaki", "name": "Dapur + makan"},
+    {"level": "lt1", "rect": [2.0, 4.5, 7.0, 8.5], "mat": "saumlaki", "name": "Ruang keluarga"},
+    {"level": "lt1", "rect": [0.0, 0, 2.0, 3.5], "mat": "saumlaki", "name": "Musholla"},
+    {"level": "lt2", "rect": [5.5, 1.5, 9.0, 4], "mat": "saumlaki", "name": "Kamar 2"},
+    {"level": "lt2", "rect": [2.0, 1.5, 5.5, 4], "mat": "saumlaki", "name": "Kamar 3"},
+    {"level": "lt2", "rect": [4.0, 4, 7.0, 5.5], "mat": "saumlaki", "name": "Hall"},
     {"level": "lt2", "rect": [2.0, 4, 4.0, 5.5], "mat": "cascade", "name": "KM", "wallTile": {"mat": "almazora", "h": 1.8}},
     {"level": "lt2", "rect": [2.0, 4, 2.775, 5.5], "mat": "tectona", "z": 0.002, "note": "area shower KM bersama (di lapangan 1–1,5 cm lebih rendah)"},
-    {"level": "lt2", "rect": [7.0, 5.5, 8.0, 7], "mat": "crenata"},
-    {"level": "lt2", "rect": [5.5, 5.5, 7.0, 8.5], "mat": "crenata", "name": "Walk-in"},
-    {"level": "lt2", "rect": [2.0, 5.5, 5.5, 8.5], "mat": "crenata", "name": "Kamar utama"},
+    {"level": "lt2", "rect": [7.0, 5.5, 8.0, 7], "mat": "saumlaki"},
+    {"level": "lt2", "rect": [5.5, 5.5, 7.0, 8.5], "mat": "saumlaki", "name": "Walk-in"},
+    {"level": "lt2", "rect": [2.0, 5.5, 5.5, 8.5], "mat": "saumlaki", "name": "Kamar utama"},
     {"level": "lt2", "rect": [7.0, 7, 9.0, 8.5], "mat": "cascade", "name": "KM dalam", "wallTile": {"mat": "almazora", "h": 1.8}},
     {"level": "lt2", "rect": [8.0, 7.775, 9.0, 8.5], "mat": "tectona", "z": 0.002, "note": "area shower KM dalam (di lapangan 1–1,5 cm lebih rendah)"},
     {"level": "lt2", "rect": [2.0, 8.5, 5.5, 9.5], "mat": "lumber", "name": "Balkon"}
@@ -277,7 +277,7 @@
     {"topic": "Kamar mandi & pintu", "items": ["KM tamu: daun pintu P4 buka keluar (ruangnya 1 × 1,5 m); kloset menghadap selatan, tidak menghadap kiblat.", "dCascade Smoke antislip P2: hanya untuk area kering; area shower wajib dTectona Pine (P4) dan dipisah kaca. Pesan dCascade lebih banyak (±30–40% potongan di KM kecil); mulai susunan dari garis kaca/pintu, floor drain area kering di pojok atau bawah wastafel.", "Lemari sepatu genkan P12: pintu lipat 2 daun @40 cm (engsel lipat + rel atas), membuka ke dalam dengan lipatan di sisi tangga, karena pintu engsel 80 cm menabrak rak sepatu saat dibuka.", "Semua pintu engsel dicek bebas halangan 80 cm di depannya; arah buka sesuai denah."]},
     {"topic": "Kamar", "items": ["Kamar 2 dan 3: kasur 160 × 200, lemari 150 cm; sandaran kasur 85 cm supaya tidak menutup ambang jendela samping (90 cm)."]},
     {"topic": "Plafon & LED", "items": ["Semua ruang plafon bersih minimal 2,80 m (lantai 1 dan 2). Plat lantai 2 di 3,00 m, jadi ada ruang ±20 cm di atas plafon lantai 1 untuk kabel, pipa AC, dan lampu tanam.", "Ruang keluarga: drop ceiling gipsum. Pinggiran 50 cm di 2,80 m, tengah naik ke 2,95 m, LED strip 2700–3000K tersembunyi di celahnya + dimmer.", "Kamar utama: drop ceiling gipsum. Pinggiran 50 cm di 2,80 m, tengah naik ke 3,00 m di ruang atap, LED strip tersembunyi + dimmer.", "Kamar 2 dan 3: plafon datar 2,80 m dengan LED di ujung plafon di dinding kepala kasur: celah (slot) 15 cm lebar × 10 cm dalam sepanjang dinding, LED strip 2700–3000K di sisi dalam celah menyinari dinding ke bawah. Saklar terpisah dari lampu utama + dimmer.", "Dapur, makan, studio, genkan, lemari genkan, hall, walk-in: plafon gipsum datar 2,80 m. KM: plafon PVC/GRC tahan air 2,80 m (KM tamu: bawah tangga). Musholla: dak beton ekspos, bawah dak 2,80 m.", "LED strip pakai profil aluminium + diffuser (tidak terlihat titik-titik LED), driver 24V di tempat yang bisa diakses (lubang servis di plafon). Insulasi (aluminium foil + glasswool) di atas plafon lantai 2."]},
-    {"topic": "Lantai & cat", "items": ["Cat semua dinding interior dan plafon: Jotun 12302 Champagne White, finishing matte/eggshell yang bisa dilap; dinding KM di atas keramik pakai cat anti-jamur warna sama.", "Lantai semua ruang kering lt 1 dan lt 2 (ruang keluarga, dapur, makan, studio, musholla, lemari genkan, gudang, 3 kamar, walk-in, hall): RomanGranit dCrenata Beige 120 × 20 (GT1225517R), satu batch, susunan geser 1/3, nat 2 mm beige, klip leveling.", "Kamar mandi (3 KM): lantai area kering (wastafel, kloset, seluruh KM tamu) RomanGranit dCascade Smoke 60 × 60 (GT602459R); lantai area shower di balik kaca (KM bersama ±0,78 × 1,5 m, KM dalam ±1,0 × 0,73 m) dTectona Pine 60 × 15 R11 P4 (GT615526R), dipasang memanjang ke arah floor drain/linear drain, 1–1,5 cm lebih rendah dari area kering dengan batas tepat di garis kaca. Dinding KM: dAlmazora Perla 60 × 30 polished (GT639759FR) setinggi 1,8 m (6 baris tidur), nat putih keabuan; lantai nat abu.", "Wudhu dan balkon: RomanGranit dLumber Beige 60 × 15 R11 P5 (GT615531R). Genkan: dCalavera Noce 60 × 15 R11 (GT615502R). Service yard: keramik biasa.", "Plint dari potongan granit yang sama, tinggi 7–8 cm."]},
+    {"topic": "Lantai & cat", "items": ["Cat semua dinding interior dan plafon: Jotun 12302 Champagne White, finishing matte/eggshell yang bisa dilap; dinding KM di atas keramik pakai cat anti-jamur warna sama.", "Lantai semua ruang kering lt 1 dan lt 2 (ruang keluarga, dapur, makan, studio, musholla, lemari genkan, gudang, 3 kamar, walk-in, hall): RomanGranit dSaumlaki Beige 90 × 15 matt R10 P2 (GT912245R), satu batch/kode shade, papan memanjang searah sisi panjang ruangan, sambungan acak/geser 1/3 (bukan setengah), nat 2 mm beige.", "Kamar mandi (3 KM): lantai area kering (wastafel, kloset, seluruh KM tamu) RomanGranit dCascade Smoke 60 × 60 (GT602459R); lantai area shower di balik kaca (KM bersama ±0,78 × 1,5 m, KM dalam ±1,0 × 0,73 m) dTectona Pine 60 × 15 R11 P4 (GT615526R), dipasang memanjang ke arah floor drain/linear drain, 1–1,5 cm lebih rendah dari area kering dengan batas tepat di garis kaca. Dinding KM: dAlmazora Perla 60 × 30 polished (GT639759FR) setinggi 1,8 m (6 baris tidur), nat putih keabuan; lantai nat abu.", "Wudhu dan balkon: RomanGranit dLumber Beige 60 × 15 R11 P5 (GT615531R). Genkan: dCalavera Noce 60 × 15 R11 (GT615502R). Service yard: keramik biasa.", "Plint dari potongan granit yang sama, tinggi 7–8 cm."]},
     {"topic": "Tangga", "items": ["Lantai ke lantai 3,15 m (plafon bersih 2,80 m + plenum/plat). Tangga melayang seperempat putaran: 10 anak tangga + 3 anak tangga putar (winder) + 4 anak tangga + naik ke lantai 2 = 18 optrede @17,5 cm, antrede 25 cm (2 × 17,5 + 25 = 60 cm).", "Kaki tangga maju 50 cm ke genkan (sisi timur); jarak anak tangga pertama ke dinding depan/pintu utama P1 ±1,0 m.", "Anak tangga putar: lebar pijakan ±25 cm di garis jalan 50 cm dari sisi dalam; sisi dalam sempit, beri pegangan tangan di dinding.", "Gudang bawah tangga 0,88 × 2,95 m, tinggi ±1,9 m di bawah anak tangga putar (turun mengikuti tangga), pintu P13 80 × 190 cm dari studio. Beri lampu + saklar di dalam. Tangga ditumpu dinding timur/balok besi (dihitung kontraktor).", "KM tamu di bawah potongan atas tangga: tinggi bebas ±2,7–2,9 m di atas kloset."]},
     {"topic": "AC & listrik", "items": ["5 AC split inverter Daikin: studio ½ PK, kamar 2 ½ PK, kamar 3 ½ PK, ruang keluarga + makan 2 PK (Beta Inverter FTKE); kamar utama 1 PK (Alpha Inverter FTKH). Posisi unit dalam (AC) dan unit luar (OU) sesuai denah.", "Ruang keluarga menghadap barat: kalau PL1 tanpa peneduh, naikkan AC ruang keluarga ke 2½ PK; dengan roster + kanopi + kaca low-e, 2 PK cukup.", "Unit luar: studio, kamar 2, kamar 3 di dinding belakang (service yard); ruang keluarga dan kamar utama di dinding carport di bawah kanopi. Tidak ada unit luar di fasad yang menghadap jalan.", "Saat pembangunan: pipa tembaga tertanam dengan insulasi (armaflex) dalam selongsong PVC, kabel AC, dan pipa buang air AC ke floor drain/taman untuk setiap AC — jangan pasang belakangan (harus bongkar dinding/plafon).", "Setiap AC punya stopkontak/titik listrik sendiri dekat unit dalam (±2,3 m dari lantai) dan jalur MCB terpisah di panel.", "Daya PLN minimal 4.400 VA, disarankan 5.500 VA (5 AC + PC + dapur bisa ±4–5 kW saat bersamaan).", "Bracket unit luar galvanis/stainless; lantai 2 dipasang dari sisi luar dengan akses servis (tangga/scaffold) — sisakan ruang ±30 cm di depan kipas."]}
   ],

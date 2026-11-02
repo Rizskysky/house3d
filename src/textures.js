@@ -51,6 +51,7 @@ const PATTERNS = {
   // porcelain wood-look planks (one tile = 2 planks long, `rows` planks wide), 1/3 staggered joints, thin grout
   plank120(ctx, r) { plankTiles(ctx, r, 12, 'rgba(150,130,105,0.75)'); },   // scale 2.4 → 120 × 20 cm
   plank60(ctx, r) { plankTiles(ctx, r, 8, 'rgba(150,130,105,0.75)'); },     // scale 1.2 → 60 × 15 cm
+  plank90(ctx, r) { plankTiles(ctx, r, 12, 'rgba(150,135,110,0.7)'); },     // scale 1.8 → 90 × 15 cm
   // wall tile 60 × 30 (tile scale 1.2: 2 across, 4 up), soft marble cloud, thin light grout
   wallTile(ctx, r) {
     base(ctx, 246);
