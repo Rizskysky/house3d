@@ -104,15 +104,22 @@ export function buildHouse(data, state) {
         if (hi - lo < 0.02) continue;
         const wallH = w.h || (L[w.level] && L[w.level].h) || 2.4, hMax = Math.min(tileH, wallH), t = (THICK[w.kind] || 0.15) / 2;
         // spans along the edge with their tile height (0 = gap at a door, sill height under a window)
-        const cuts = (w.open || []).map((o) => ({ a: s0 + o.at, b: s0 + o.at + o.w, h: o.type === 'window' ? Math.min(o.sill ?? 0.9, hMax) : 0 }))
+        // tiles also continue above a door/window head when the tile height reaches past it
+        const cuts = (w.open || []).map((o) => ({ a: s0 + o.at, b: s0 + o.at + o.w, h: o.type === 'window' ? Math.min(o.sill ?? 0.9, hMax) : 0, head: o.head ?? 2.1 }))
           .filter((o) => o.b > lo && o.a < hi).sort((p, q) => p.a - q.a);
         const pieces = []; let cur = lo;
-        for (const o of cuts) { if (o.a > cur) pieces.push([cur, o.a, hMax]); pieces.push([Math.max(o.a, cur), Math.min(o.b, hi), o.h]); cur = Math.max(cur, o.b); }
-        if (cur < hi) pieces.push([cur, hi, hMax]);
-        for (const [pa, pb, ph] of pieces) {
-          if (ph < 0.02 || pb - pa < 0.01) continue;
+        for (const o of cuts) {
+          if (o.a > cur) pieces.push([cur, o.a, 0, hMax]);
+          const pa = Math.max(o.a, cur), pb = Math.min(o.b, hi);
+          pieces.push([pa, pb, 0, o.h]);
+          if (hMax > o.head) pieces.push([pa, pb, o.head, hMax]);
+          cur = Math.max(cur, o.b);
+        }
+        if (cur < hi) pieces.push([cur, hi, 0, hMax]);
+        for (const [pa, pb, z0, z1] of pieces) {
+          if (z1 - z0 < 0.02 || pb - pa < 0.01) continue;
           const off = c + inward * t, r = ax === 'x' ? [off, pa, off + inward * th, pb] : [pa, off, pb, off + inward * th];
-          box(r, lz(f.level), ph, tm, { noShadow: true });
+          box(r, lz(f.level) + z0, z1 - z0, tm, { noShadow: true });
         }
       }
     }
