@@ -74,30 +74,15 @@ const PATTERNS = {
     blotches(ctx, r, 60, 60, 160, 6, 0.012);
     grid(ctx, 2, 4, 'rgba(185,178,165,0.55)', 2);
   },
-  // the same tile laid vertically (30 across × 60 up: 4 across, 2 up at scale 1.2)
-  plainWallV(ctx, r) {
-    base(ctx, 248);
-    blotches(ctx, r, 60, 60, 160, 6, 0.012);
-    grid(ctx, 4, 2, 'rgba(185,178,165,0.55)', 2);
-  },
-  // salt & pepper floor tile 30 × 30 (tile scale 1.2: 4 × 4), fine light/dark grain, warm grout
-  saltPepper30(ctx, r) {
-    base(ctx, 240);
-    const n = 4, s = SIZE / n;
-    for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) { ctx.fillStyle = grey(236 + r() * 8); ctx.fillRect(i * s, j * s, s, s); }
-    for (let i = 0; i < 16000; i++) {
-      const g = r() < 0.55 ? 150 + r() * 40 : 250;
-      dot(ctx, r() * SIZE, r() * SIZE, 0.35 + r() * 0.5, `rgba(${g},${g},${g - 4},${0.2 + r() * 0.35})`);
+  // matt terrazzo floor tile 60 × 60 (tile scale 1.2: 2 × 2), fine grey/beige chips, grout in the tile colour
+  terrazzo60(ctx, r) {
+    base(ctx, 246);
+    blotches(ctx, r, 50, 40, 140, 8, 0.02);
+    for (let i = 0; i < 14000; i++) {
+      const g = 150 + r() * 80, w = r() < 0.3 ? 6 : 0;
+      dot(ctx, r() * SIZE, r() * SIZE, 0.4 + r() * r() * 1.2, `rgba(${g + w},${g},${g - 6},${0.25 + r() * 0.35})`);
     }
-    grid(ctx, n, n, 'rgba(160,145,120,0.6)', 2);
-  },
-  // structured matt floor tile 40 × 40 (tile scale 1.2: 3 × 3), sandy grain, warm grout
-  structTile40(ctx, r) {
-    base(ctx, 238);
-    const n = 3, s = SIZE / n;
-    for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) { ctx.fillStyle = grey(232 + r() * 10); ctx.fillRect(i * s, j * s, s, s); blotchesIn(ctx, r, i * s, j * s, s, 10, 0.05); }
-    speckle(ctx, r, 22000, 1, 0.18);
-    grid(ctx, n, n, 'rgba(160,145,120,0.6)', 2);
+    grid(ctx, 2, 2, 'rgba(175,168,155,0.55)', 2);
   },
   // stone-look floor tile 60 × 60 (tile scale 1.2: 2 × 2), fine grain and soft relief, thin dark grout
   stoneTile60(ctx, r) {
