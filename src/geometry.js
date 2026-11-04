@@ -139,6 +139,19 @@ export function buildHouse(data, state) {
     return M(kind === 'boundary' ? 'boundary' : kind === 'low' ? 'plasterExt' : kind === 'ext' ? 'plasterExt' : 'plaster');
   }
   if (show.level('lt1')) for (const b of data.facadeBands || []) box(b.rect, b.z, b.h, M(b.mat));
+  // anti-rain louvre bands (ventilation slot under the garden roof): black frame + sloped-looking blades
+  if (show.roof({ type: 'glass' })) for (const lv of data.louvres || []) {
+    const horiz = Math.abs(lv.a[1] - lv.b[1]) < 1e-6, blk = M('black');
+    const s0 = horiz ? Math.min(lv.a[0], lv.b[0]) : Math.min(lv.a[1], lv.b[1]);
+    const len = horiz ? Math.abs(lv.b[0] - lv.a[0]) : Math.abs(lv.b[1] - lv.a[1]), c = horiz ? lv.a[1] : lv.a[0];
+    const rect = (p0, p1, t, off = 0) => horiz ? [s0 + p0, c - t / 2 + off, s0 + p1, c + t / 2 + off] : [c - t / 2 + off, s0 + p0, c + t / 2 + off, s0 + p1];
+    for (let p = 0; p <= len - 0.04 + 1e-6; p += Math.max(len / Math.round(len / 1.0), 0.5)) box(rect(p, p + 0.04, 0.08), lv.z, lv.h, blk);
+    box(rect(len - 0.04, len, 0.08), lv.z, lv.h, blk);
+    for (let zz = lv.z + 0.03; zz < lv.z + lv.h - 0.04; zz += 0.065) {
+      box(rect(0, len, 0.025, -0.02), zz, 0.04, blk, { noShadow: true });
+      box(rect(0, len, 0.025, 0.02), zz + 0.02, 0.04, blk, { noShadow: true });
+    }
+  }
 
   // ---------- stairs ----------
   for (const st of data.stairs || []) {
@@ -574,7 +587,7 @@ function gable(r, roofMat, slatMat, backMat, root, add, box) {
 
 function glassCanopy(r, M, box) {
   const [x0, y0, x1, y1] = norm(r.rect);
-  box(r.rect, r.z, 0.025, M('glass'));
+  box(r.rect, r.z, 0.025, M(r.mat || 'glass'));
   const f = 0.05, blk = M('black');
   box([x0, y0, x1, y0 + f], r.z - 0.04, 0.06, blk);
   box([x0, y1 - f, x1, y1], r.z - 0.04, 0.06, blk);
