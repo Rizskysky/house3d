@@ -219,7 +219,8 @@ export function ceilingSVG(data, level, { scale = 100 } = {}) {
         const vert = sd.endsWith('x'), lx = sd === '-x' ? x0 + w : sd === '+x' ? x1 - w : 0, ly = sd === '-y' ? y0 + w : sd === '+y' ? y1 - w : 0;
         out.push(vert ? `<line x1="${f(lx)}" y1="${f(y0 + 0.05)}" x2="${f(lx)}" y2="${f(y1 - 0.05)}" ${LED}/>` : `<line x1="${f(x0 + 0.05)}" y1="${f(ly)}" x2="${f(x1 - 0.05)}" y2="${f(ly)}" ${LED}/>`);
       }
-      text(cx, cy + 0.32, `datar ${hlab(c.z)} · LED di ujung plafon`, 'font-size="0.12" text-anchor="middle" fill="#4A4741" class="halo"');
+      if (x1 - x0 > 2.5) text(cx, cy + 0.32, `datar ${hlab(c.z)} · LED di ujung plafon`, 'font-size="0.12" text-anchor="middle" fill="#4A4741" class="halo"');
+      else { text(cx, cy + 0.3, `datar ${hlab(c.z)}`, 'font-size="0.11" text-anchor="middle" fill="#4A4741" class="halo"'); text(cx, cy + 0.44, 'garis LED tanam', 'font-size="0.1" text-anchor="middle" fill="#4A4741" class="halo"'); }
     } else {
       r(x0, y0, x1 - x0, y1 - y0, 'fill="#FFFFFF" stroke="#8F8A80" stroke-width="0.01"');
       text(cx, cy + 0.32, `datar ${hlab(c.z)}`, 'font-size="0.12" text-anchor="middle" fill="#4A4741" class="halo"');
