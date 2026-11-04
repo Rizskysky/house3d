@@ -68,11 +68,12 @@ const PATTERNS = {
     }
     grid(ctx, 2, 4, 'rgba(170,168,160,0.55)', 2);
   },
-  // plain matt wall tile 60 × 30 laid horizontally (tile scale 1.2: 2 across, 4 up), barely-there tone shift, grout in the tile colour
-  plainWall(ctx, r) {
+  // matt salt & pepper wall tile 60 × 60 (tile scale 1.2: 2 × 2), very fine grain, grout in the tile colour
+  plainWall60(ctx, r) {
     base(ctx, 248);
-    blotches(ctx, r, 60, 60, 160, 6, 0.012);
-    grid(ctx, 2, 4, 'rgba(185,178,165,0.55)', 2);
+    blotches(ctx, r, 40, 60, 160, 5, 0.012);
+    for (let i = 0; i < 6000; i++) { const g = 200 + r() * 40; dot(ctx, r() * SIZE, r() * SIZE, 0.35 + r() * 0.3, `rgba(${g},${g - 2},${g - 6},${0.15 + r() * 0.2})`); }
+    grid(ctx, 2, 2, 'rgba(185,176,165,0.55)', 2);
   },
   // matt terrazzo floor tile 60 × 60 (tile scale 1.2: 2 × 2), fine grey/beige chips, grout in the tile colour
   terrazzo60(ctx, r) {
