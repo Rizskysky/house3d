@@ -91,6 +91,14 @@ const PATTERNS = {
     }
     grid(ctx, n, n, 'rgba(160,145,120,0.6)', 2);
   },
+  // structured matt floor tile 40 × 40 (tile scale 1.2: 3 × 3), sandy grain, warm grout
+  structTile40(ctx, r) {
+    base(ctx, 238);
+    const n = 3, s = SIZE / n;
+    for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) { ctx.fillStyle = grey(232 + r() * 10); ctx.fillRect(i * s, j * s, s, s); blotchesIn(ctx, r, i * s, j * s, s, 10, 0.05); }
+    speckle(ctx, r, 22000, 1, 0.18);
+    grid(ctx, n, n, 'rgba(160,145,120,0.6)', 2);
+  },
   // stone-look floor tile 60 × 60 (tile scale 1.2: 2 × 2), fine grain and soft relief, thin dark grout
   stoneTile60(ctx, r) {
     base(ctx, 236);
