@@ -90,6 +90,13 @@ const PATTERNS = {
     blotches(ctx, r, 120, 30, 90, 8, 0.025);
     speckle(ctx, r, 9000, 1, 0.05);
   },
+  // kamprot: sprayed rough plaster, dense blobs of different sizes
+  kamprot(ctx, r) {
+    base(ctx, 228);
+    blotches(ctx, r, 80, 30, 90, 20, 0.05);
+    for (let i = 0; i < 5200; i++) { const g = 150 + r() * 105; dot(ctx, r() * SIZE, r() * SIZE, 0.8 + r() * 3.2, `rgba(${g | 0},${g | 0},${g | 0},${0.35 + r() * 0.5})`); }
+    speckle(ctx, r, 6000, 1.2, 0.25);
+  },
   concrete(ctx, r) {
     base(ctx, 238);
     blotches(ctx, r, 120, 30, 100, 30, 0.05);

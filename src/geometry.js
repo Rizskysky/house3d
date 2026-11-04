@@ -132,7 +132,7 @@ export function buildHouse(data, state) {
     const cut = show.cutLevel === w.level && w.kind !== 'boundary' && w.kind !== 'low' && w.kind !== 'roster';
     const h = cut ? Math.min(full, CUT_HEIGHT) : full;
     if (w.kind === 'roster') { rosterWall(w, lz(w.level), h, M, box); continue; }
-    buildWall(w, lz(w.level), h, THICK[w.kind] || 0.15, wallMat(w.kind), M, box);
+    buildWall(w, lz(w.level), h, THICK[w.kind] || 0.15, w.mat ? M(w.mat) : wallMat(w.kind), M, box);
   }
   function wallMat(kind) {
     return M(kind === 'boundary' ? 'boundary' : kind === 'low' ? 'plasterExt' : kind === 'ext' ? 'plasterExt' : 'plaster');
@@ -197,7 +197,8 @@ export function buildHouse(data, state) {
     const ceilingShown = l.level === 'lt1' ? show.slabs
       : l.level === 'lt2' ? state.view === 'all' && state.roof
       : state.view !== 'lt1';                                  // site: carport canopy
-    const cutAway = l.kind !== 'up' && (!ceilingShown || show.cutLevel === l.level);
+    const wallLamp = l.kind === 'up' || l.kind === 'updown';
+    const cutAway = !wallLamp && (!ceilingShown || show.cutLevel === l.level);
     const [x, y] = l.at, z = lz(l.level) + l.z;
     const glow = lampMaterial();
     if (cutAway || l.kind === 'strip') { /* light only: hidden LED strip or cut view */ } else if (l.kind === 'pendant') {
@@ -207,6 +208,19 @@ export function buildHouse(data, state) {
       bulb.position.set(x, z + 0.03, y); bulb.userData.lamp = true; add(bulb, { shadow: false });
       const ceiling = lz(l.level) + (l.ceiling || 3.25);
       box([x - 0.005, y - 0.005, x + 0.005, y + 0.005], z + 0.18, ceiling - z - 0.18, M('black'), { noShadow: true });
+    } else if (l.kind === 'updown') {                       // up-down wall washer on an outer wall face (-x side)
+      box([x - 0.07, y - 0.035, x, y + 0.035], z - 0.08, 0.16, M('black'));
+      for (const zz of [z + 0.075, z - 0.08]) {
+        const g = box([x - 0.06, y - 0.025, x - 0.01, y + 0.025], zz, 0.005, glow, { noShadow: true }); g.userData.lamp = true;
+      }
+      for (const dir of [1, -1]) {
+        const sp = new THREE.SpotLight(l.color || '#FFD9A8', l.power || 5, l.range || 3, 0.42, 0.6, 2);
+        sp.position.set(x - 0.09, z + dir * 0.09, y);
+        sp.target.position.set(x - 0.02, z + dir * 2, y);
+        sp.userData.nightOnly = true; sp.visible = false;
+        root.add(sp); root.add(sp.target);
+      }
+      continue;
     } else if (l.kind === 'up') {
       const m = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.08, 12), glow);
       m.position.set(x, z, y); m.userData.lamp = true; add(m, { shadow: false });
