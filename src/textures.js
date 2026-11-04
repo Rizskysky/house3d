@@ -68,6 +68,29 @@ const PATTERNS = {
     }
     grid(ctx, 2, 4, 'rgba(170,168,160,0.55)', 2);
   },
+  // plain matt wall tile 60 × 30 laid horizontally (tile scale 1.2: 2 across, 4 up), barely-there tone shift, grout in the tile colour
+  plainWall(ctx, r) {
+    base(ctx, 248);
+    blotches(ctx, r, 60, 60, 160, 6, 0.012);
+    grid(ctx, 2, 4, 'rgba(185,178,165,0.55)', 2);
+  },
+  // the same tile laid vertically (30 across × 60 up: 4 across, 2 up at scale 1.2)
+  plainWallV(ctx, r) {
+    base(ctx, 248);
+    blotches(ctx, r, 60, 60, 160, 6, 0.012);
+    grid(ctx, 4, 2, 'rgba(185,178,165,0.55)', 2);
+  },
+  // salt & pepper floor tile 30 × 30 (tile scale 1.2: 4 × 4), fine light/dark grain, warm grout
+  saltPepper30(ctx, r) {
+    base(ctx, 240);
+    const n = 4, s = SIZE / n;
+    for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) { ctx.fillStyle = grey(236 + r() * 8); ctx.fillRect(i * s, j * s, s, s); }
+    for (let i = 0; i < 16000; i++) {
+      const g = r() < 0.55 ? 150 + r() * 40 : 250;
+      dot(ctx, r() * SIZE, r() * SIZE, 0.35 + r() * 0.5, `rgba(${g},${g},${g - 4},${0.2 + r() * 0.35})`);
+    }
+    grid(ctx, n, n, 'rgba(160,145,120,0.6)', 2);
+  },
   // stone-look floor tile 60 × 60 (tile scale 1.2: 2 × 2), fine grain and soft relief, thin dark grout
   stoneTile60(ctx, r) {
     base(ctx, 236);

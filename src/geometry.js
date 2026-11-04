@@ -91,7 +91,8 @@ export function buildHouse(data, state) {
   // ---------- wall tiles inside wet rooms (floors with wallTile: {mat, h}) ----------
   for (const f of data.floors || []) {
     if (!f.wallTile || !show.level(f.level)) continue;
-    const [x0, y0, x1, y1] = norm(f.rect), th = 0.008;
+    // a wallTile on a smaller floor inside a wet room (e.g. the shower) sits a hair in front of the room's own tiles
+    const [x0, y0, x1, y1] = norm(f.rect), th = 0.008 + (f.wallTile.layer || 0) * 0.003;
     const tileH = show.cutLevel === f.level ? Math.min(f.wallTile.h, CUT_HEIGHT) : f.wallTile.h, tm = M(f.wallTile.mat);
     const edges = [['x', x0, y0, y1, 1], ['x', x1, y0, y1, -1], ['y', y0, x0, x1, 1], ['y', y1, x0, x1, -1]];
     for (const [ax, c, e0, e1, inward] of edges) {
