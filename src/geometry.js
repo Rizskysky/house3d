@@ -74,9 +74,11 @@ export function buildHouse(data, state) {
     }
     if (!c.cove) { box(c.rect, z, c.t, mat); continue; }
     // drop ceiling: lowered perimeter band, raised centre panel, hidden LED strip in the cove between them
-    const [x0, y0, x1, y1] = norm(c.rect), b = c.cove.band, drop = c.cove.drop, up = c.cove.raise;
-    const zb = lz(c.level) + drop, ix0 = x0 + b, iy0 = y0 + b, ix1 = x1 - b, iy1 = y1 - b;
-    for (const r of [[x0, y0, x1, iy0], [x0, iy1, x1, y1], [x0, iy0, ix0, iy1], [ix1, iy0, x1, iy1]]) box(r, zb, z - zb + c.t, mat);
+    // band can be one width or per side ({"-x": 0, ...}); a 0 side puts the step and its LED right on that edge
+    // (e.g. above a shower glass, with the LED resting on the neighbouring ceiling)
+    const [x0, y0, x1, y1] = norm(c.rect), bw = coveBands(c.cove.band), drop = c.cove.drop, up = c.cove.raise;
+    const zb = lz(c.level) + drop, ix0 = x0 + bw['-x'], iy0 = y0 + bw['-y'], ix1 = x1 - bw['+x'], iy1 = y1 - bw['+y'];
+    for (const r of [[x0, y0, x1, iy0], [x0, iy1, x1, y1], [x0, iy0, ix0, iy1], [ix1, iy0, x1, iy1]]) if (r[2] - r[0] > 0.005 && r[3] - r[1] > 0.005) box(r, zb, z - zb + c.t, mat);
     box([ix0, iy0, ix1, iy1], z + up, c.t, mat);                                   // raised centre
     const s = 0.02;                                                                // cove sides up to the raised panel
     for (const r of [[ix0, iy0, ix1, iy0 + s], [ix0, iy1 - s, ix1, iy1], [ix0, iy0, ix0 + s, iy1], [ix1 - s, iy0, ix1, iy1]]) box(r, z, up, mat);
@@ -618,4 +620,11 @@ function label(text) {
 function roundRect(ctx, x, y, w, h, r) {
   ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
   ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+}
+
+// cove band widths per side from a number or a {"-x", "+x", "-y", "+y"} object (missing sides use .all or 0.5)
+export function coveBands(b) {
+  if (typeof b === 'number') return { '-x': b, '+x': b, '-y': b, '+y': b };
+  const d = b.all ?? 0.5;
+  return { '-x': b['-x'] ?? d, '+x': b['+x'] ?? d, '-y': b['-y'] ?? d, '+y': b['+y'] ?? d };
 }

@@ -201,12 +201,15 @@ export function ceilingSVG(data, level, { scale = 100 } = {}) {
   for (const c of ceilings) {
     const [x0, y0, x1, y1] = norm(c.rect), cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
     if (c.cove) {
-      const b = c.cove.band;
+      const bv = c.cove.band, bw = typeof bv === 'number' ? { '-x': bv, '+x': bv, '-y': bv, '+y': bv } : { '-x': bv['-x'] ?? bv.all ?? 0.5, '+x': bv['+x'] ?? bv.all ?? 0.5, '-y': bv['-y'] ?? bv.all ?? 0.5, '+y': bv['+y'] ?? bv.all ?? 0.5 };
+      const ix0 = x0 + bw['-x'], iy0 = y0 + bw['-y'], iw = x1 - bw['+x'] - ix0, ih = y1 - bw['+y'] - iy0;
       r(x0, y0, x1 - x0, y1 - y0, 'fill="url(#band)" stroke="#8F8A80" stroke-width="0.01"');
-      r(x0 + b, y0 + b, x1 - x0 - 2 * b, y1 - y0 - 2 * b, 'fill="#FFFFFF" stroke="#6B665E" stroke-width="0.012"');
-      r(x0 + b - 0.05, y0 + b - 0.05, x1 - x0 - 2 * b + 0.1, y1 - y0 - 2 * b + 0.1, LED);
-      text(cx, y0 + b * 0.62, `drop ${hlab(c.cove.drop)}`, 'font-size="0.12" text-anchor="middle" fill="#4A4741" class="halo"');
-      text(cx, cy + 0.32, `tengah ${hlab(c.z + c.cove.raise)} · LED tersembunyi`, 'font-size="0.12" text-anchor="middle" fill="#4A4741" class="halo"');
+      r(ix0, iy0, iw, ih, 'fill="#FFFFFF" stroke="#6B665E" stroke-width="0.012"');
+      r(ix0 - 0.05, iy0 - 0.05, iw + 0.1, ih + 0.1, LED);
+      const small = ih < 1.2;
+      text(cx, small ? cy + 0.27 : y0 + bw['-y'] * 0.62, small ? `trap ${hlab(c.cove.drop)} → ${hlab(c.z + c.cove.raise)}` : `drop ${hlab(c.cove.drop)}`, 'font-size="0.11" text-anchor="middle" fill="#4A4741" class="halo"');
+      if (!small) text(cx, cy + 0.32, `tengah ${hlab(c.z + c.cove.raise)} · LED tersembunyi`, 'font-size="0.12" text-anchor="middle" fill="#4A4741" class="halo"');
+      else text(cx, cy + 0.41, 'LED tersembunyi', 'font-size="0.1" text-anchor="middle" fill="#4A4741" class="halo"');
     } else if (c.slot) {
       const w = c.slot.w ?? 0.15, sides = c.slot.sides || [], has = (sd) => sides.includes(sd) || sides.includes('all');
       r(x0, y0, x1 - x0, y1 - y0, 'fill="#FFFFFF" stroke="#8F8A80" stroke-width="0.01"');
