@@ -96,6 +96,13 @@ export function buildHouse(data, state) {
     // a wallTile on a smaller floor inside a wet room (e.g. the shower) sits a hair in front of the room's own tiles
     const [x0, y0, x1, y1] = norm(f.rect), th = 0.008 + (f.wallTile.layer || 0) * 0.003;
     const tileH = show.cutLevel === f.level ? Math.min(f.wallTile.h, CUT_HEIGHT) : f.wallTile.h, tm = M(f.wallTile.mat);
+    const trimM = f.wallTile.trim ? M(f.wallTile.trim) : null;
+    // is there a wall with constant `axis` = coord on this level that passes the point `at` on the other axis?
+    const wallAlong = (level, axis, coord, at) => (data.walls || []).some((w) => {
+      if (w.level !== level) return false;
+      const i = axis === 'x' ? 0 : 1, j = 1 - i;
+      return Math.abs(w.a[i] - coord) < 1e-6 && Math.abs(w.b[i] - coord) < 1e-6 && Math.min(w.a[j], w.b[j]) - 1e-6 <= at && at <= Math.max(w.a[j], w.b[j]) + 1e-6;
+    });
     const edges = [['x', x0, y0, y1, 1], ['x', x1, y0, y1, -1], ['y', y0, x0, x1, 1], ['y', y1, x0, x1, -1]];
     for (const [ax, c, e0, e1, inward] of edges) {
       for (const w of data.walls || []) {
@@ -119,10 +126,20 @@ export function buildHouse(data, state) {
           cur = Math.max(cur, o.b);
         }
         if (cur < hi) pieces.push([cur, hi, 0, hMax]);
+        const off = c + inward * t, along = (pa, pb, d) => ax === 'x' ? [off, pa, off + inward * d, pb] : [pa, off, pb, off + inward * d];
         for (const [pa, pb, z0, z1] of pieces) {
           if (z1 - z0 < 0.02 || pb - pa < 0.01) continue;
-          const off = c + inward * t, r = ax === 'x' ? [off, pa, off + inward * th, pb] : [pa, off, pb, off + inward * th];
-          box(r, lz(f.level) + z0, z1 - z0, tm, { noShadow: true });
+          box(along(pa, pb, th), lz(f.level) + z0, z1 - z0, tm, { noShadow: true });
+          // edge trim on the top of a part-height tile (tile stops below the ceiling, paint above)
+          if (trimM && z1 >= hMax - 1e-6 && hMax < (f.wallTile.ceil ?? wallH) - 0.01) box(along(pa, pb, th + 0.004), lz(f.level) + z1 - 0.01, 0.012, trimM, { noShadow: true });
+        }
+        // vertical trim where a taller tile zone (shower) steps down to the room's tile height at an open edge (glass line)
+        if (trimM && f.wallTile.stepFrom != null && hMax > f.wallTile.stepFrom) {
+          for (const end of [lo, hi]) {
+            const edge = Math.abs(end - e0) < 1e-6 ? e0 : Math.abs(end - e1) < 1e-6 ? e1 : null;
+            if (edge === null || wallAlong(f.level, ax === 'x' ? 'y' : 'x', edge, c)) continue;
+            box(along(end - 0.006, end + 0.006, th + 0.004), lz(f.level) + f.wallTile.stepFrom, hMax - f.wallTile.stepFrom, trimM, { noShadow: true });
+          }
         }
       }
     }

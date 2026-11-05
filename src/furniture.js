@@ -339,7 +339,9 @@ const BUILDERS = {
     k.cyl('black', 0, -D / 2 + 0.06, h, h + 0.26, 0.012);
     k.box('black', [-0.012, 0.012], [h + 0.24, h + 0.26], [-D / 2 + 0.06, -D / 2 + 0.16]);
     const mw = Math.min(W - 0.08, 0.6);
-    k.box('mirror', [-mw / 2, mw / 2], [h + 0.25, h + 0.95], [-D / 2 - 0.005, -D / 2 + 0.012], 0.01);
+    // mirror height can be pinned so it stays clear of a part-height wall tile edge (mirrorTop / mirrorBottom, metres from floor)
+    const mBot = it.mirrorBottom ?? (it.mirrorTop != null ? it.mirrorTop - 0.6 : h + 0.25), mTop = it.mirrorTop ?? mBot + 0.7;
+    k.box('mirror', [-mw / 2, mw / 2], [mBot, mTop], [-D / 2 - 0.005, -D / 2 + 0.012], 0.01);
   },
 
   fridge(k, W, D, h, it) {
