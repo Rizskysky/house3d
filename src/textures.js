@@ -96,6 +96,20 @@ const PATTERNS = {
     speckle(ctx, r, 14000, 1, 0.16);
     grid(ctx, n, n, 'rgba(70,70,68,0.6)', 3);
   },
+  // fluted wall panel (vertical flutes, scale 0.6 → 20 flutes = 3 cm pitch), light wood grain running up the panel
+  fluted(ctx, r) {
+    base(ctx, 236);
+    ctx.save(); ctx.translate(SIZE, 0); ctx.rotate(Math.PI / 2);        // grain along canvas y (vertical on walls)
+    grainBlock(ctx, r, 0, 0, SIZE, SIZE, 234, 0);
+    ctx.restore();
+    const n = 20, p = SIZE / n;
+    for (let i = 0; i < n; i++) {
+      const x = i * p;
+      ctx.fillStyle = 'rgba(255,255,255,0.10)'; ctx.fillRect(x + 2, 0, p * 0.35, SIZE);        // rounded crown catches light
+      ctx.fillStyle = 'rgba(60,40,20,0.10)'; ctx.fillRect(x + p * 0.62, 0, p * 0.28, SIZE);    // flank in shade
+      line(ctx, x + 1, 0, x + 1, SIZE, 'rgba(60,40,20,0.55)', 3);                              // groove
+    }
+  },
   // furniture / joinery: continuous grain, no seams
   wood(ctx, r) {
     base(ctx, 240);

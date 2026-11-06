@@ -113,25 +113,34 @@ export function buildHouse(data, state) {
         const lo = Math.max(e0, s0), hi = Math.min(e1, s0 + len);
         if (hi - lo < 0.02) continue;
         const wallH = w.h || (L[w.level] && L[w.level].h) || 2.4, hMax = Math.min(tileH, wallH), t = (THICK[w.kind] || 0.15) / 2;
-        // spans along the edge with their tile height (0 = gap at a door, sill height under a window)
-        // tiles also continue above a door/window head when the tile height reaches past it
-        const cuts = (w.open || []).map((o) => ({ a: s0 + o.at, b: s0 + o.at + o.w, h: o.type === 'window' ? Math.min(o.sill ?? 0.9, hMax) : 0, head: o.head ?? 2.1 }))
+        // spans along the edge that are solid wall between heights A and B (gap at a door up to its head,
+        // gap at a window between sill and head); a finish continues above a door/window head when it reaches past it
+        const cuts = (w.open || []).map((o) => ({ a: s0 + o.at, b: s0 + o.at + o.w, sill: o.type === 'window' ? (o.sill ?? 0.9) : 0, head: o.head ?? 2.1 }))
           .filter((o) => o.b > lo && o.a < hi).sort((p, q) => p.a - q.a);
-        const pieces = []; let cur = lo;
-        for (const o of cuts) {
-          if (o.a > cur) pieces.push([cur, o.a, 0, hMax]);
-          const pa = Math.max(o.a, cur), pb = Math.min(o.b, hi);
-          pieces.push([pa, pb, 0, o.h]);
-          if (hMax > o.head) pieces.push([pa, pb, o.head, hMax]);
-          cur = Math.max(cur, o.b);
-        }
-        if (cur < hi) pieces.push([cur, hi, 0, hMax]);
+        const solid = (A, B) => {
+          const out = []; let cur = lo;
+          for (const o of cuts) {
+            if (o.a > cur) out.push([cur, o.a, A, B]);
+            const pa = Math.max(o.a, cur), pb = Math.min(o.b, hi);
+            if (o.sill > A) out.push([pa, pb, A, Math.min(o.sill, B)]);
+            if (B > o.head) out.push([pa, pb, Math.max(A, o.head), B]);
+            cur = Math.max(cur, o.b);
+          }
+          if (cur < hi) out.push([cur, hi, A, B]);
+          return out.filter(([pa, pb, z0, z1]) => z1 - z0 >= 0.02 && pb - pa >= 0.01);
+        };
+        const pieces = solid(0, hMax);
         const off = c + inward * t, along = (pa, pb, d) => ax === 'x' ? [off, pa, off + inward * d, pb] : [pa, off, pb, off + inward * d];
+        // wall panel above a part-height tile, up to the ceiling (sits just behind any taller tile zone such as the shower)
+        const ceilH = Math.min(f.wallTile.ceil ?? wallH, wallH, show.cutLevel === f.level ? CUT_HEIGHT : Infinity);
+        if (f.wallTile.above && ceilH > hMax + 0.02) {
+          const pm = M(f.wallTile.above);
+          for (const [pa, pb, z0, z1] of solid(hMax, ceilH)) box(along(pa, pb, th + 0.004), lz(f.level) + z0, z1 - z0, pm, { noShadow: true });
+        }
         for (const [pa, pb, z0, z1] of pieces) {
-          if (z1 - z0 < 0.02 || pb - pa < 0.01) continue;
           box(along(pa, pb, th), lz(f.level) + z0, z1 - z0, tm, { noShadow: true });
-          // edge trim on the top of a part-height tile (tile stops below the ceiling, paint above)
-          if (trimM && z1 >= hMax - 1e-6 && hMax < (f.wallTile.ceil ?? wallH) - 0.01) box(along(pa, pb, th + 0.004), lz(f.level) + z1 - 0.01, 0.012, trimM, { noShadow: true });
+          // edge trim on the top of a part-height tile (tile stops below the ceiling, panel or paint above)
+          if (trimM && z1 >= hMax - 1e-6 && hMax < (f.wallTile.ceil ?? wallH) - 0.01) box(along(pa, pb, th + 0.007), lz(f.level) + z1 - 0.01, 0.014, trimM, { noShadow: true });
         }
         // vertical trim where a taller tile zone (shower) steps down to the room's tile height at an open edge (glass line)
         if (trimM && f.wallTile.stepFrom != null && hMax > f.wallTile.stepFrom) {
