@@ -8,7 +8,7 @@ const THREE = await import('three');
 
 const $ = (s) => document.querySelector(s);
 const phone = window.matchMedia('(max-width: 640px)').matches;
-const state = { view: 'all', roof: true, cut: true, labels: false, context: true, camera: 'iso', time: 'pagi', night: false, quality: phone ? 'std' : 'high' };
+const state = { view: 'all', roof: true, cut: true, labels: false, context: true, camera: 'iso', time: 'pagi', night: false, quality: 'std' };
 const dataFile = 'data/house.json';
 
 // deep link: #lt1, #lt2, #all and/or a camera id, e.g. #lt1-top
