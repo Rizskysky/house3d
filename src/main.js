@@ -35,8 +35,13 @@ try {
 
 for (const part of location.hash.replace('#', '').split('-')) if (data.cameras[part]) state.camera = part;
 
-$('#version').textContent = data.meta.version;
-$('#area').textContent = `LB ±${data.meta.lb.total} m² · lantai 1 ±${data.meta.lb.lt1} m² · lantai 2 ±${data.meta.lb.lt2} m²`;
+{ // short version in the title; the long change notes stay folded until tapped
+  const [ver, date, ...notes] = data.meta.version.split(' · ');
+  $('#version').textContent = [ver, date].filter(Boolean).join(' · ');
+  $('#version-notes').textContent = notes.join(' · ');
+  if (!notes.length) $('#notes').replaceWith(Object.assign(document.createElement('p'), { textContent: $('#version').textContent }));
+}
+$('#area').textContent = `LB ±${data.meta.lb.total} m² · Lt1 ±${data.meta.lb.lt1} · Lt2 ±${data.meta.lb.lt2} m²`;
 
 // camera chips from data
 const camWrap = $('#cams');
