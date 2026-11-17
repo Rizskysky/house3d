@@ -9,7 +9,18 @@ const THREE = await import('three');
 const $ = (s) => document.querySelector(s);
 const phone = window.matchMedia('(max-width: 640px)').matches;
 const state = { view: 'all', roof: true, cut: true, labels: false, context: true, camera: 'iso', time: 'pagi', night: false, quality: 'std' };
-const dataFile = 'data/house.json';
+// design versions: ?versi=eksperimen loads an alternative data file; the main design stays untouched
+const VERSIONS = { utama: 'data/house.json', eksperimen: 'data/house-eksperimen.json' };
+const versi = VERSIONS[new URLSearchParams(location.search).get('versi')] ? new URLSearchParams(location.search).get('versi') : 'utama';
+const dataFile = VERSIONS[versi];
+document.querySelectorAll('[data-versi]').forEach((b) => {
+  b.setAttribute('aria-pressed', String(b.dataset.versi === versi));
+  b.addEventListener('click', () => { if (b.dataset.versi !== versi) location.href = `${location.pathname}${b.dataset.versi === 'utama' ? '' : '?versi=' + b.dataset.versi}${location.hash}`; });
+});
+if (versi !== 'utama') {
+  document.body.dataset.versi = versi;
+  document.querySelectorAll('a.doclink').forEach((a) => { a.href = `docs.html?versi=${versi}`; });
+}
 
 // deep link: #lt1, #lt2, #all and/or a camera id, e.g. #lt1-top
 for (const part of location.hash.replace('#', '').split('-')) {

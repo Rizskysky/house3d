@@ -68,7 +68,10 @@ td.code { font-weight: 600; color: var(--accent); white-space: nowrap; }
 <script type="module">
 const bust = `?v=${Date.now()}`;
 const { planSVG, ceilingSVG, openingSchedule } = await import(`./src/plan.js${bust}`);
-const data = await (await fetch('data/house.json', { cache: 'no-cache' })).json();
+const versi = new URLSearchParams(location.search).get('versi') === 'eksperimen' ? 'eksperimen' : 'utama';
+const data = await (await fetch(versi === 'eksperimen' ? 'data/house-eksperimen.json' : 'data/house.json', { cache: 'no-cache' })).json();
+const imgDir = versi === 'eksperimen' ? 'docs/img/eksp' : 'docs/img';
+if (versi !== 'utama') { document.querySelector('.toolbar a').href = './?versi=' + versi; document.title += ' (eksperimen)'; }
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
 const num = (v, d = 2) => v.toLocaleString('id-ID', { minimumFractionDigits: d, maximumFractionDigits: d });
 const norm = ([a, b, c, d]) => [Math.min(a, c), Math.min(b, d), Math.max(a, c), Math.max(b, d)];
@@ -87,7 +90,7 @@ const roomTable = (levels) => `<table class="rooms"><thead><tr><th>Ruang</th><th
 const lb = data.meta.lb;
 const cover = `<h1>Rumah Japandi Tropis</h1>
   <p class="lede">Dokumen kontraktor: denah, daftar pintu & jendela, dan catatan teknis. Dibuat otomatis dari data model 3D, jadi selalu sama dengan model.</p>
-  <img class="hero" src="docs/img/all-corner.jpg" alt="Tampak dari tikungan jalan">
+  <img class="hero" src="${imgDir}/all-corner.jpg" alt="Tampak dari tikungan jalan">
   <div class="stats"><div><b>9 × 14 m</b><span>tanah, posisi hook</span></div><div><b>±${lb.total} m²</b><span>luas bangunan</span></div>
     <div><b>±${lb.lt1} m²</b><span>lantai 1</span></div><div><b>±${lb.lt2} m²</b><span>lantai 2</span></div></div>
   <div class="cols">${roomTable(['lt1'])}${roomTable(['lt2', 'site'])}</div>`;
@@ -111,9 +114,9 @@ for (const n of data.notes || []) {
   notePages[notePages.length - 1].push(noteHtml(n)); used += len;
 }
 
-const renders = [['all-corner-malam', 'Tampak tikungan, malam'], ['all-living', 'Ruang keluarga, dapur, meja makan'], ['all-garden', 'Taman dan deck dari dalam'],
+const renders = [['all-corner-malam', 'Tampak tikungan, malam'], ['all-living', 'Ruang keluarga, dapur, meja makan'], ['all-garden', versi === 'eksperimen' ? 'Taman depan dari deck' : 'Taman dan deck dari dalam'],
   ['lt1-iso', 'Potongan lantai 1'], ['lt2-iso', 'Potongan lantai 2'], ['all-corner', 'Tampak tikungan, siang']]
-  .map(([f, c]) => `<figure><img src="docs/img/${f}.jpg" alt="${c}"><figcaption>${c}</figcaption></figure>`).join('');
+  .map(([f, c]) => `<figure><img src="${imgDir}/${f}.jpg" alt="${c}"><figcaption>${c}</figcaption></figure>`).join('');
 
 document.getElementById('doc').innerHTML =
   page('Ringkasan', cover, 'ukuran dalam meter, as dinding') +
@@ -123,7 +126,8 @@ document.getElementById('doc').innerHTML =
   page('Denah Plafon Lantai 2', `<div class="plan-wrap">${ceilingSVG(data, 'lt2')}</div>${ceilLegend}`, 'tinggi dari lantai jadi · 1:100 di A4') +
   page('Pintu & Jendela', `<table class="sched"><thead><tr><th>Kode</th><th>Jenis</th><th>Lantai</th><th class="n">Lebar</th><th class="n">Tinggi</th><th class="n">Ambang</th><th>Keterangan</th></tr></thead><tbody>${sched}</tbody></table>`, 'meter; tinggi = tinggi bukaan, ambang = tinggi dari lantai') +
   notePages.map((ns, i) => page(notePages.length > 1 ? `Catatan Teknis (${i + 1}/${notePages.length})` : 'Catatan Teknis', `<div class="notes">${ns.join('')}</div>`)).join('') +
-  page('Tampak 3D', `<div class="renders">${renders}</div>`, 'render dari model 3D');
+  page('Tampak 3D', `<div class="renders">${renders}</div>`, 'render dari model 3D') +
+  (versi === 'eksperimen' ? page('Sketsa Taman Depan', `<img src="${imgDir}/sketsa-taman.svg" alt="Sketsa denah dan tampak taman depan" style="width:100%;display:block">`, 'versi eksperimen') : '');
 document.body.dataset.ready = 'true';
 </script>
 </body>

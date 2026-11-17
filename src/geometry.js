@@ -542,12 +542,32 @@ function rosterWall(w, z, h, M, box) {
   const rect = (p0, p1) => horiz ? [s0 + p0, c - t / 2, s0 + p1, c + t / 2] : [c - t / 2, s0 + p0, c + t / 2, s0 + p1];
   const plinth = w.plinth ?? 0.6, beam = 0.15, cell = w.cell ?? 0.2, bar = 0.07;
   const mat = M(w.mat || 'plasterExt'), base = M(w.baseMat || 'plasterExt');
-  box(rect(0, len), z, plinth, base);
   box(rect(0, len), z + h - beam, beam, mat);
   const top = h - beam;
-  for (let p = 0; p <= len - bar + 1e-6; p += cell) box(rect(p, Math.min(p + bar, len)), z + plinth, top - plinth, mat);
-  box(rect(len - bar, len), z + plinth, top - plinth, mat);
-  for (let zz = plinth + cell; zz < top - bar / 2; zz += cell) box(rect(0, len), z + zz - bar / 2, bar, mat);
+  // openings (doors/gates) in the screen: full-height gap up to `head`, a lintel and solid jambs around it
+  const ops = [...(w.open || [])].sort((a, b) => a.at - b.at);
+  const spans = []; let cur = 0;
+  for (const o of ops) { if (o.at > cur) spans.push([cur, o.at]); cur = o.at + o.w; }
+  if (cur < len) spans.push([cur, len]);
+  for (const [a, b] of spans) {
+    if (b - a < 0.01) continue;
+    box(rect(a, b), z, plinth, base);
+    for (let p = a; p <= b - bar + 1e-6; p += cell) box(rect(p, Math.min(p + bar, b)), z + plinth, top - plinth, mat);
+    box(rect(b - bar, b), z + plinth, top - plinth, mat);
+    for (let zz = plinth + cell; zz < top - bar / 2; zz += cell) box(rect(a, b), z + zz - bar / 2, bar, mat);
+  }
+  for (const o of ops) {
+    const p0 = o.at, p1 = o.at + o.w, head = Math.min(o.head ?? 2.1, top);
+    box(rect(p0 - 0.06, p0), z, top, base); box(rect(p1, p1 + 0.06), z, top, base);   // jambs
+    box(rect(p0, p1), z + head, 0.12, base);                                              // lintel
+    if (top - head - 0.12 > 0.05) for (let p = p0; p <= p1 - bar + 1e-6; p += cell) box(rect(p, Math.min(p + bar, p1)), z + head + 0.12, top - head - 0.12, mat);
+    if (o.type === 'gate') {                                                              // closed slatted leaf, black frame
+      const slat = horiz ? (pa, pb) => [s0 + pa, c - 0.025, s0 + pb, c + 0.025] : (pa, pb) => [c - 0.025, s0 + pa, c + 0.025, s0 + pb];
+      for (let p = p0 + 0.03; p < p1 - 0.05; p += 0.11) box(slat(p, Math.min(p + 0.07, p1 - 0.03)), z + 0.05, head - 0.08, M(o.leaf || 'teak'));
+      for (const zz of [0.03, head - 0.06]) box(rect(p0, p1), z + zz, 0.03, M('black'));
+      box(rect(p0, p0 + 0.03), z, head, M('black')); box(rect(p1 - 0.03, p1), z, head, M('black'));
+    }
+  }
 }
 
 function tableLegs(rect, z, h, mat, box) {

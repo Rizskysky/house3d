@@ -476,6 +476,16 @@ const BUILDERS = {
     led.userData.lamp = true; led.castShadow = false;
   },
 
+  // tall round garden pot (ribbed terracotta/cement look) with soil and white pebbles on top; the plant itself is a `plants` entry
+  pot(k, W, D, h, it) {
+    const r = Math.min(W, D) / 2;
+    k.cyl(it.mat || 'clay', 0, 0, 0, h * 0.12, r * 0.72, r * 0.62, 28);
+    k.cyl(it.mat || 'clay', 0, 0, h * 0.12, h * 0.7, r, r * 0.72, 28);
+    k.cyl(it.mat || 'clay', 0, 0, h * 0.7, h, r * 0.9, r, 28);
+    k.cyl('soil', 0, 0, h - 0.04, h - 0.02, r * 0.84, r * 0.84, 24);
+    for (let i = 0; i < 9; i++) { const a = i * 0.7, rr = r * (0.25 + (i % 3) * 0.2); k.ball('white', Math.cos(a) * rr, h - 0.015, Math.sin(a) * rr, 0.025, 1, 0.6, 1, 0); }
+  },
+
   // raised planter box with soil and a mix of tropical plants
   planter(k, W, D, h, it) {
     const wall = 0.06, base = it.mat || 'plasterExt';
