@@ -80,7 +80,7 @@ Opening `type` values: `door` (gap; with `hinge` `start`/`end`, `side` ±1 and o
 | URL | Data | What |
 |---|---|---|
 | `./` | `data/house.json` | main design |
-| `./?versi=eksperimen` | `data/house-eksperimen.json` | front garden experiment: garden runs to the front boundary, corner garden removed, L-bench at the front, roster with doors P14 (street) and P15 (carport) |
+| `./?versi=eksperimen` | `data/house-eksperimen.json` | garden + front terrace experiment: corner garden becomes a paved *teras depan* (same floor as the carport, open to it, solid walls on both street sides) with the L-bench and pot tree; the old garden roster stays and gets door P14; inner garden cleared to deck + lawn |
 
 The **Versi desain** switch in the panel flips between them, and `docs.html?versi=eksperimen` draws the documents (plus `docs/img/eksp/` renders and the garden sketch) for the experiment. Roster walls (`kind: "roster"`) accept `open` like other walls; a `gate` opening draws a closed slatted leaf. Furniture type `pot` is a tall round garden pot (put the tree in `plants`).
 

@@ -114,7 +114,7 @@ for (const n of data.notes || []) {
   notePages[notePages.length - 1].push(noteHtml(n)); used += len;
 }
 
-const renders = [['all-corner-malam', 'Tampak tikungan, malam'], ['all-living', 'Ruang keluarga, dapur, meja makan'], ['all-garden', versi === 'eksperimen' ? 'Taman depan dari deck' : 'Taman dan deck dari dalam'],
+const renders = [['all-corner-malam', 'Tampak tikungan, malam'], ['all-living', 'Ruang keluarga, dapur, meja makan'], ['all-garden', versi === 'eksperimen' ? 'Taman dari deck ke pintu P14' : 'Taman dan deck dari dalam'],
   ['lt1-iso', 'Potongan lantai 1'], ['lt2-iso', 'Potongan lantai 2'], ['all-corner', 'Tampak tikungan, siang']]
   .map(([f, c]) => `<figure><img src="${imgDir}/${f}.jpg" alt="${c}"><figcaption>${c}</figcaption></figure>`).join('');
 
