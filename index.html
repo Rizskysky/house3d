@@ -100,7 +100,6 @@ body.walking #panel, body.walking .title, body.walking #info { display: none; }
   .title { max-width: calc(100vw - 32px); padding: 8px 12px; }
   .title h1 { font-size: 17px; }
 }
-body[data-versi="eksperimen"] .title h1::after { content: " · Eksperimen"; color: #B5562A; font-size: 0.7em; }
 </style>
 <script type="importmap">
 { "imports": {
@@ -120,13 +119,6 @@ body[data-versi="eksperimen"] .title h1::after { content: " · Eksperimen"; colo
 
 <section id="panel" data-open="true" aria-label="Kontrol tampilan">
   <button id="panel-toggle" type="button" aria-expanded="true">Kontrol tampilan <span aria-hidden="true">▾</span></button>
-  <div class="group">
-    <span>Versi desain</span>
-    <div class="seg two" role="group" aria-label="Versi desain">
-      <button type="button" data-versi="utama">Utama</button>
-      <button type="button" data-versi="eksperimen" title="Taman dimajukan ke depan, taman pojok dihapus">Eksperimen</button>
-    </div>
-  </div>
   <div class="group">
     <span>Lantai</span>
     <div class="seg" role="group" aria-label="Pilih lantai">

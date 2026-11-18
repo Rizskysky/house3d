@@ -68,10 +68,8 @@ td.code { font-weight: 600; color: var(--accent); white-space: nowrap; }
 <script type="module">
 const bust = `?v=${Date.now()}`;
 const { planSVG, ceilingSVG, openingSchedule } = await import(`./src/plan.js${bust}`);
-const versi = new URLSearchParams(location.search).get('versi') === 'eksperimen' ? 'eksperimen' : 'utama';
-const data = await (await fetch(versi === 'eksperimen' ? 'data/house-eksperimen.json' : 'data/house.json', { cache: 'no-cache' })).json();
-const imgDir = versi === 'eksperimen' ? 'docs/img/eksp' : 'docs/img';
-if (versi !== 'utama') { document.querySelector('.toolbar a').href = './?versi=' + versi; document.title += ' (eksperimen)'; }
+const data = await (await fetch('data/house.json', { cache: 'no-cache' })).json();
+const imgDir = 'docs/img';
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
 const num = (v, d = 2) => v.toLocaleString('id-ID', { minimumFractionDigits: d, maximumFractionDigits: d });
 const norm = ([a, b, c, d]) => [Math.min(a, c), Math.min(b, d), Math.max(a, c), Math.max(b, d)];
@@ -114,7 +112,7 @@ for (const n of data.notes || []) {
   notePages[notePages.length - 1].push(noteHtml(n)); used += len;
 }
 
-const renders = [['all-corner-malam', 'Tampak tikungan, malam'], ['all-living', 'Ruang keluarga, dapur, meja makan'], ['all-garden', versi === 'eksperimen' ? 'Taman dari deck ke pintu P14' : 'Taman dan deck dari dalam'],
+const renders = [['all-corner-malam', 'Tampak tikungan, malam'], ['all-living', 'Ruang keluarga, dapur, meja makan'], ['all-garden', 'Taman dari deck ke pintu P14'], ['teras-depan', 'Teras depan'],
   ['lt1-iso', 'Potongan lantai 1'], ['lt2-iso', 'Potongan lantai 2'], ['all-corner', 'Tampak tikungan, siang']]
   .map(([f, c]) => `<figure><img src="${imgDir}/${f}.jpg" alt="${c}"><figcaption>${c}</figcaption></figure>`).join('');
 
@@ -127,7 +125,7 @@ document.getElementById('doc').innerHTML =
   page('Pintu & Jendela', `<table class="sched"><thead><tr><th>Kode</th><th>Jenis</th><th>Lantai</th><th class="n">Lebar</th><th class="n">Tinggi</th><th class="n">Ambang</th><th>Keterangan</th></tr></thead><tbody>${sched}</tbody></table>`, 'meter; tinggi = tinggi bukaan, ambang = tinggi dari lantai') +
   notePages.map((ns, i) => page(notePages.length > 1 ? `Catatan Teknis (${i + 1}/${notePages.length})` : 'Catatan Teknis', `<div class="notes">${ns.join('')}</div>`)).join('') +
   page('Tampak 3D', `<div class="renders">${renders}</div>`, 'render dari model 3D') +
-  (versi === 'eksperimen' ? page('Sketsa Taman Depan', `<img src="${imgDir}/sketsa-taman.svg" alt="Sketsa denah dan tampak taman depan" style="width:100%;display:block">`, 'versi eksperimen') : '');
+  page('Sketsa Taman + Teras Depan', `<img src="${imgDir}/sketsa-taman.svg" alt="Sketsa denah taman + teras depan dan tampak roster dengan pintu P14" style="width:100%;display:block">`, 'detail taman, teras depan, pintu P14');
 document.body.dataset.ready = 'true';
 </script>
 </body>

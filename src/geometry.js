@@ -561,7 +561,19 @@ function rosterWall(w, z, h, M, box) {
     box(rect(p0 - 0.06, p0), z, top, base); box(rect(p1, p1 + 0.06), z, top, base);   // jambs
     box(rect(p0, p1), z + head, 0.12, base);                                              // lintel
     if (top - head - 0.12 > 0.05) for (let p = p0; p <= p1 - bar + 1e-6; p += cell) box(rect(p, Math.min(p + bar, p1)), z + head + 0.12, top - head - 0.12, mat);
-    if (o.type === 'gate') {                                                              // closed slatted leaf, black frame
+    if (o.type === 'gate' && o.leaf === 'roster') {                                       // roster-pattern leaf: steel frame + grid, same colour as the screen
+      const leaf = horiz ? (pa, pb) => [s0 + pa, c - 0.03, s0 + pb, c + 0.03] : (pa, pb) => [c - 0.03, s0 + pa, c + 0.03, s0 + pb];
+      const fr = 0.05, lb = 0.05, lc = 0.18;
+      box(leaf(p0 + 0.01, p0 + 0.01 + fr), z + 0.02, head - 0.04, mat); box(leaf(p1 - 0.01 - fr, p1 - 0.01), z + 0.02, head - 0.04, mat);
+      box(leaf(p0 + 0.01, p1 - 0.01), z + 0.02, fr, mat); box(leaf(p0 + 0.01, p1 - 0.01), z + head - 0.02 - fr, fr, mat);
+      box(leaf(p0 + 0.01, p1 - 0.01), z + 0.55, fr, mat);                                 // kick rail level with the plinth line
+      const n = Math.max(1, Math.round((p1 - p0 - 2 * fr) / lc)), step = (p1 - p0 - 0.02 - 2 * fr) / n;
+      for (let i = 1; i < n; i++) { const p = p0 + 0.01 + fr + i * step; box(leaf(p - lb / 2, p + lb / 2), z + 0.55 + fr, head - 0.6 - 2 * fr, mat); }
+      for (let zz = 0.55 + fr + lc; zz < head - 0.1; zz += lc) box(leaf(p0 + 0.01, p1 - 0.01), z + zz, lb, mat);
+      box(leaf(p0 + 0.06, p1 - 0.06), z + 0.08, 0.45, base);                               // solid lower panel
+      const hx = o.hinge === 'right' ? p0 + 0.09 : p1 - 0.09;
+      box(horiz ? [s0 + hx - 0.015, c - 0.06, s0 + hx + 0.015, c + 0.06] : [c - 0.06, s0 + hx - 0.015, c + 0.06, s0 + hx + 0.015], z + 0.98, 0.14, M('black'));
+    } else if (o.type === 'gate') {                                                       // closed slatted leaf, black frame
       const slat = horiz ? (pa, pb) => [s0 + pa, c - 0.025, s0 + pb, c + 0.025] : (pa, pb) => [c - 0.025, s0 + pa, c + 0.025, s0 + pb];
       for (let p = p0 + 0.03; p < p1 - 0.05; p += 0.11) box(slat(p, Math.min(p + 0.07, p1 - 0.03)), z + 0.05, head - 0.08, M(o.leaf || 'teak'));
       for (const zz of [0.03, head - 0.06]) box(rect(p0, p1), z + zz, 0.03, M('black'));

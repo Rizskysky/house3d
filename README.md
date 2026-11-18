@@ -73,16 +73,9 @@ Furniture `type` values: `bed`, `wardrobe`, `openWardrobe`, `kitchen` (with work
 
 Opening `type` values: `door` (gap; with `hinge` `start`/`end`, `side` ±1 and optional `leaf` material it gets a leaf drawn open 90°), `slide` (`panel`: `glass` or a material), `bifold` (`panels`, `out`: +1/−1 side the folded stack swings to), `sliding` (`leaves`: list of `fixed`/`slide` panes; fixed panes on the outer track toward `out`, slide panes drawn open behind the neighbouring fixed pane), `swing` (`leaves`: list of `fixed`/`swing` panes; swing leaves are drawn opened 180° toward `out`, flat against the neighbouring fixed pane), `window` (glass between `sill` and `head`; a `note` containing "kisi" adds wooden louvers), `gate` (wooden slats), `opening` (plain gap).
 
-## Design versions
+## Notes on data types
 
-`data/house.json` is the main design. Alternatives live next to it and are opened with a query string, so the main design is never touched:
-
-| URL | Data | What |
-|---|---|---|
-| `./` | `data/house.json` | main design |
-| `./?versi=eksperimen` | `data/house-eksperimen.json` | garden + front terrace experiment: corner garden becomes a paved *teras depan* (same floor as the carport, open to it, solid walls on both street sides) with the L-bench and pot tree; the old garden roster stays and gets door P14; inner garden cleared to deck + lawn |
-
-The **Versi desain** switch in the panel flips between them, and `docs.html?versi=eksperimen` draws the documents (plus `docs/img/eksp/` renders and the garden sketch) for the experiment. Roster walls (`kind: "roster"`) accept `open` like other walls; a `gate` opening draws a closed slatted leaf. Furniture type `pot` is a tall round garden pot (put the tree in `plants`).
+Roster walls (`kind: "roster"`) accept `open` like other walls; a `gate` opening draws a closed slatted leaf, or a roster-pattern leaf with `"leaf": "roster"`. Furniture type `pot` is a tall round garden pot (put the tree in `plants`).
 
 ## Viewer controls
 
